@@ -1,0 +1,7 @@
+name: app
+services:
+- name: ycphacks
+  github:
+    repo: YCPHacks/ycphacks
+    branch: main
+    deploy_on_push: true
