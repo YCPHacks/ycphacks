@@ -5,3 +5,13 @@ services:
     repo: YCPHacks/ycphacks
     branch: main
     deploy_on_push: true
+  http_port: 3000
+databases:
+- name: db-mysql-nyc1-29905
+  engine: MYSQL
+  version: "8"
+  production: true
+  cluster_name: db-mysql-nyc1-29905
+  db_name: defaultdb
+  db_user: app_user
+region: nyc
