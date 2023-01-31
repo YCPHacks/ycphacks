@@ -1,4 +1,7 @@
 extends layout
 
 block content
-  p Hello, world!
+  if isAuthenticated
+    include includes/dashboard
+  else
+    include includes/frontpage
