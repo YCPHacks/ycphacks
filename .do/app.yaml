@@ -6,6 +6,7 @@ services:
     branch: main
     deploy_on_push: true
   http_port: 3000
+  source_dir: src
 databases:
 - name: db-mysql-nyc1-29905
   engine: MYSQL
