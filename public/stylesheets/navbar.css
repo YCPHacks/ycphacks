@@ -1,0 +1,43 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    background: #eaefeb;
+    /*font: 400 15px/1.8 "Lato", sans-serif;*/
+
+}
+
+/*york college green*/
+.navbar{
+    background: #39b54a !important;
+}
+.navbarLink.nav-link, .dropdown-toggle, .navbar-brand, .nav-link.dropdown-toggle{
+    color:white;
+}
+
+.dropdown-item{
+    color:black;
+}
+
+
+
+/* ------SCROLL BAR------*/
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    /*background: #e3f1e3;*/
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: grey;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+/*-----------------------*/
