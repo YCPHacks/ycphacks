@@ -10,4 +10,6 @@ app.use('/static', express.static('public'));
 
 app.use(router);
 
+// REG: TODO -- Error-handling middleware
+
 export { app }
