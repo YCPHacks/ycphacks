@@ -1,54 +1,57 @@
-a.nav-link{
+body{
+
+}
+
+a.nav-link {
     color: black;
     margin-top: 2px;
 }
 
-:root{
+:root {
     --font-size-small: 0.75rem;
     --font-size-medium: 1rem;
     --font-size-large: 1.25rem;
 }
-:root{
-    font-family: sans-serif;
-    /*font-size: 18px;*/
-}
-.bd-example-row [class^="col"], .bd-example-cols [class^="col"]>*, .bd-example-cssgrid [class*="grid"]>*{
-    background-color: rgba(25, 176, 123, 0.54);
-    border-radius: 10px;
+
+:root {
+    font-family: system-ui;
 }
 
-/*.card{*/
-/*    position: absolute;*/
-/*    display: inline-block !important;*/
-/*    margin: auto;*/
-/*}*/
+.bd-example-row [class^="col"], .bd-example-cols [class^="col"] > *, .bd-example-cssgrid [class*="grid"] > * , .container-sm.overflow-x-scroll{
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    border-radius: 5px;
+}
 
-button.nav-link{
+
+button.nav-link {
     color: black !important;
 }
 
 /* --- MOBILE VIEW --- */
-@media (max-width:500px){
+@media (max-width: 500px) {
     .nav-pills .nav-link {
         font-size: 0.75rem;
         line-height: normal;
     }
-    label.form-check-label, .text-muted, .form-control{
+
+    label.form-check-label, .text-muted, .form-control {
         font-size: var(--font-size-small);
     }
-    .row{
+
+    .row {
         padding: 0 !important;
     }
 }
 
+
 /* --- Page width > 500px --- */
-.row{
+.row {
     margin-right: 0 !important;
     padding: 1rem;
 }
 
 /* --- Containers with admin options --- */
-.container1{
+.container1 {
     margin-top: 10px;
     padding: 1em;
     height: auto;
@@ -59,7 +62,7 @@ button.nav-link{
 }
 
 /* try to fix magic number*/
-.scrollspy-example-2{
+.scrollspy-example-2 {
     height: 90vh !important;
 }
 
@@ -89,45 +92,52 @@ button.save {
     touch-action: manipulation;
     white-space: nowrap;
 }
+
 button.save:active {
     border-color: #4a4a4a;
     outline: 0;
 }
+
 button.save:focus {
     border-color: #485fc7;
     outline: 0;
 }
+
 button.save:hover {
     border-color: #b5b5b5;
 }
+
 button.save:focus:not(:active) {
     box-shadow: rgba(72, 95, 199, .25) 0 0 0 .125em;
 }
 
 
-
-
-
 /*team management stuff*/
-button{
+button {
     border: none;
     background: none;
 }
-.btn-primary{
+
+.btn-primary {
     margin-left: 10px;
 }
-button:hover{
-    color:blue;
+
+button:hover {
+    color: blue;
 }
-.modal-body{
+
+.modal-body {
     text-align: center;
 }
-img#output{
+
+img#output {
     border-radius: 10px;
 }
-img#output{
+
+img#output {
     margin-right: 1rem;
 }
-input.form-control.popup{
+
+input.form-control.popup {
     margin-top: 1rem;
 }
