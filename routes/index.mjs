@@ -23,4 +23,16 @@ router.get('/', (req, res) => {
   res.status(200).render('index');
 });
 
+router.get('/gallery', (req, res) => {
+  res.status(200).render('gallery');
+});
+
+router.get('/judging', (req, res) => {
+  res.status(200).render('judging');
+});
+
+router.get('/past_events', (req, res) => {
+  res.status(200).render('past_events');
+});
+
 export { router }
