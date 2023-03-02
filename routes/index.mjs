@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
   res.status(200).render('index');
 });
 
-router.get('/hardware', (req, res) => {
+router.get('/hardware', async (req, res) => {
   const { access_token, token_type } = req.oidc.accessToken;
 
   const url = 'https://starfish-app-amrfh.ondigitalocean.app/api/v1/hardware';
