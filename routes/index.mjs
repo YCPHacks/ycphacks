@@ -9,7 +9,7 @@ router.use(auth({
   authRequired: false,
   authorizationParams: {
     response_type: 'code',
-    scope: 'openid profile email'
+    scope: 'openid profile email read:hardware create:hardware'
   }
 }));
 
