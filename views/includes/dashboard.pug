@@ -172,26 +172,25 @@ html
                                 button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
                                 button.btn.btn-primary(type='button') Understood
 
-                - const data = [["5be5a912-a730-11ed-91d9-ac99fa1c98aa","wire","yes","wire",2,"yes","2023-02-07T16:42:46.000Z","2023-02-07T16:42:46.000Z","ralphs moms house"],["5be5a9f8-a730-11ed-91d9-ac99fa1c98aa","mouse","yes","mice",2,"yes","2023-02-07T16:42:46.000Z","2023-02-07T16:42:46.000Z","ralphs moms house"],["5be5aa48-a730-11ed-91d9-ac99fa1c98aa","computer","yes","computer",2,"no","2023-02-07T16:42:46.000Z","2023-02-07T16:42:46.000Z","ralphs moms house"]];
+                // - const data = [["5be5a912-a730-11ed-91d9-ac99fa1c98aa","wire","yes","wire",2,"yes","2023-02-07T16:42:46.000Z","2023-02-07T16:42:46.000Z","ralphs moms house"],["5be5a9f8-a730-11ed-91d9-ac99fa1c98aa","mouse","yes","mice",2,"yes","2023-02-07T16:42:46.000Z","2023-02-07T16:42:46.000Z","ralphs moms house"],["5be5aa48-a730-11ed-91d9-ac99fa1c98aa","computer","yes","computer",2,"no","2023-02-07T16:42:46.000Z","2023-02-07T16:42:46.000Z","ralphs moms house"]];
 
-                script.
-                    async function hardware() {
-
-                        const url = "https://starfish-app-amrfh.ondigitalocean.app/api/v1/hardware";
-
-                        const options = {
-                            method: 'GET'
-                        };
-
-                        const response = await fetch(url, options);
-
-                        const json = await response.json();
-
-                        console.log(json);
-                    }
+                //script.
+                //    async function hardware() {
+                //
+                //        const url = "https://starfish-app-amrfh.ondigitalocean.app/api/v1/hardware";
+                //
+                //        const options = {
+                //            method: 'GET'
+                //        };
+                //
+                //        const response = await fetch(url, options);
+                //
+                //        const json = await response.json();
+                //
+                //        console.log(json);
+                //    }
 
                 .container-sm.overflow-x-scroll.mt-3
-                    button.btn(onclick="hardware()") hardware call
                     table.table.table-striped.table-bordered
                         thead
                             tr
@@ -205,12 +204,30 @@ html
                                 th(scope='col') Handle
                                 th(scope='col') Handle
                         tbody
-
-                            each item of data
+                            each item of hardware
                                 tr
                                     //th(scope='row') id
                                     each value of item
                                         td=value
+
+                    //table.table.table-striped.table-bordered
+                    //    thead
+                    //        tr
+                    //            th(scope='col') id
+                    //            th(scope='col') Name
+                    //            th(scope='col') Last
+                    //            th(scope='col') Handle
+                    //            th(scope='col') First
+                    //            th(scope='col') Last
+                    //            th(scope='col') Handle
+                    //            th(scope='col') Handle
+                    //            th(scope='col') Handle
+                    //    tbody
+                    //        each item of data
+                    //            tr
+                    //                //th(scope='row') id
+                    //                each value of item
+                    //                    td=value
 
             #nav-prizes.tab-pane.fade(role='tabpanel', aria-labelledby='nav-prizes-tab', tabindex='0') ...
             #nav-projects.tab-pane.fade(role='tabpanel', aria-labelledby='nav-projects-tab', tabindex='0') projects
