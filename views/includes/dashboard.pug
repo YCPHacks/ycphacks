@@ -187,7 +187,7 @@ html
 
                         const json = await response.json();
 
-                        res.locals.hardware = json;
+                        // res.locals.hardware = json;
 
                         console.log(json);
                     }
@@ -207,11 +207,11 @@ html
                                 th(scope='col') Handle
                                 th(scope='col') Handle
                         tbody
-                            each item of hardware
-                                tr
-                                    //th(scope='row') id
-                                    each value of item
-                                        td=value
+                            // each item of hardware
+                            //     tr
+                            //         //th(scope='row') id
+                            //         each value of item
+                            //             td=value
 
             #nav-prizes.tab-pane.fade(role='tabpanel', aria-labelledby='nav-prizes-tab', tabindex='0') ...
             #nav-projects.tab-pane.fade(role='tabpanel', aria-labelledby='nav-projects-tab', tabindex='0') projects
