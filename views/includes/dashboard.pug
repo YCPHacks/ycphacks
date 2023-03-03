@@ -187,6 +187,8 @@ html
 
                         const json = await response.json();
 
+                        res.locals.hardware = json;
+
                         console.log(json);
                     }
 
@@ -205,8 +207,7 @@ html
                                 th(scope='col') Handle
                                 th(scope='col') Handle
                         tbody
-
-                            each item of data
+                            each item of hardware
                                 tr
                                     //th(scope='row') id
                                     each value of item
