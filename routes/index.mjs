@@ -1,9 +1,11 @@
 import express from 'express';
-
+import cors from 'cors';
 import pkg from 'express-openid-connect';
 const { auth, requiresAuth } = pkg;
 
 const router = express.Router();
+
+router.use(cors());
 
 router.use(auth({
   authRequired: false,
