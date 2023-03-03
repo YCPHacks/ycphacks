@@ -19,7 +19,14 @@ router.use((req, res, next) => {
   next();
 });
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  const url = 'https://starfish-app-amrfh.ondigitalocean.app/api/v1/hardware';
+
+  const response = await fetch(url);
+  const result   = await response.json();
+  
+  res.locals.hardware = result;
+
   res.status(200).render('index');
 });
 
