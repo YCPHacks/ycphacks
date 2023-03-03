@@ -1,10 +1,8 @@
 import express from 'express';
 
 import { router } from './routes/index.mjs';
-import cors from 'cors';
-const app = express();
 
-app.use(cors());
+const app = express();
 
 app.set('view engine', 'pug');
 
