@@ -198,12 +198,12 @@ html
                             // creates a table row
                             const row = document.createElement("tr");
 
-                            for (const col of row) {
+                            // for (const col of row) {
                                 const cell = document.createElement("td");
                                 const cellText = document.createTextNode(col.toString());
                                 cell.appendChild(cellText);
                                 row.appendChild(cell);
-                            }
+                            // }
 
                             // add the row to the end of the table body
                             tblBody.appendChild(row);
