@@ -1,38 +1,33 @@
 import express from 'express';
 
 import pkg from 'express-openid-connect';
-const { auth, requiresAuth } = pkg;
+const { auth } = pkg;
 
 const router = express.Router();
 
 router.use(auth({
-  authRequired: false,
   authorizationParams: {
     response_type: 'code',
-    scope: 'openid profile email read:hardware create:hardware'
+    audience: 'https://api',
+    scope: 'openid profile email read:hardware',
+    prompt: 'consent'
   }
 }));
 
-router.use((req, res, next) => {
-  res.locals.isAuthenticated = req.oidc.isAuthenticated();
+router.get('/', async (req, res) => {
+  const { access_token, token_type } = req.oidc.accessToken;
 
-  next();
+  const url = 'http://localhost:3001/api/v1/hardware';
+  const options = {
+    headers: {
+      'Authorization': `${token_type} ${access_token}`
+    }
+  };
+
+  const response = await fetch(url, options);
+  const data     = await response.json();
+
+  res.status(200).json(data);
 });
 
-router.get('/', (req, res) => {
-  res.status(200).render('index');
-});
-
-router.get('/gallery', (req, res) => {
-  res.status(200).render('gallery');
-});
-
-router.get('/judging', (req, res) => {
-  res.status(200).render('judging');
-});
-
-router.get('/past_events', (req, res) => {
-  res.status(200).render('past_events');
-});
-
-export { router }
+export { router };

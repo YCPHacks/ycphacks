@@ -1,4 +1,6 @@
-import http from 'node:http';
+import 'dotenv/config';
+
+import http from 'http';
 
 import { app } from './app.mjs';
 
