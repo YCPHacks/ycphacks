@@ -32,7 +32,6 @@ body{
     display: flex;
     justify-content: space-between;
     border-radius:10px;
-    background-color: #97cd8a;
 }
 .carousel-item-container .dixie{
     justify-content: center;
