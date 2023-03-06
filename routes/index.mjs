@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { fetch } from 'undici'
+import { fetch } from 'undici';
 
 import pkg from 'express-openid-connect';
 const { auth } = pkg;
@@ -19,7 +19,7 @@ router.use(auth({
 router.get('/', async (req, res) => {
   const { access_token, token_type } = req.oidc.accessToken;
 
-  const url = 'https://starfish-app-amrfh.ondigitalocean.app/api/v1/hardware';
+  const url = `${process.env.API_BASE_URL}/api/v1/hardware`;
   const options = {
     headers: {
       'Authorization': `${token_type} ${access_token}`
@@ -27,9 +27,9 @@ router.get('/', async (req, res) => {
   };
 
   const response = await fetch(url, options);
-  const data     = await response.json();
+  const result   = await response.json();
 
-  res.status(200).json(data);
+  res.status(200).json(result);
 });
 
 export { router };
