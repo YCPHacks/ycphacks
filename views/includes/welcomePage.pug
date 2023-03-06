@@ -25,27 +25,40 @@ html
             .container.p-3.shadow
                 ul#myTab.nav.nav-tabs.nav-justified(role='tablist')
                     li.nav-item(role='presentation')
-                        button#home-tab.nav-link.link-dark.active(data-bs-toggle='tab', data-bs-target='#home-tab-pane', type='button', role='tab', aria-controls='home-tab-pane', aria-selected='true') Friday
+                        button#fri-tab.nav-link.link-dark.active(data-bs-toggle='tab', data-bs-target='#fri-tab-pane', type='button', role='tab', aria-controls='home-tab-pane', aria-selected='true') Friday
                     li.nav-item(role='presentation')
-                        button#profile-tab.nav-link.link-dark(data-bs-toggle='tab', data-bs-target='#profile-tab-pane', type='button', role='tab', aria-controls='profile-tab-pane', aria-selected='false') Saturday
+                        button#sat-tab.nav-link.link-dark(data-bs-toggle='tab', data-bs-target='#sat-tab-pane', type='button', role='tab', aria-controls='profile-tab-pane', aria-selected='false') Saturday
                     li.nav-item(role='presentation')
-                        button#contact-tab.nav-link.link-dark(data-bs-toggle='tab', data-bs-target='#contact-tab-pane', type='button', role='tab', aria-controls='contact-tab-pane', aria-selected='false') Sunday
+                        button#sun-tab.nav-link.link-dark(data-bs-toggle='tab', data-bs-target='#sun-tab-pane', type='button', role='tab', aria-controls='contact-tab-pane', aria-selected='false') Sunday
                 #myTabContent.tab-content
-                    #home-tab-pane.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='home-tab', tabindex='0')
-
+                    #fri-tab-pane.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='home-tab', tabindex='0')
+                        - const friday = [["Event","1000","Business Center"],["Event","1000","Business Center"],["Event","1000","Business Center"],["Event","1000","Business Center"]];
                         table.table.table-striped
                             thead
                                 tr
                                     th(scope='col') Event
                                     th(scope='col') Time
                                     th(scope='col') Location
-                            //tbody
-                            //    each item of data
-                            //        tr
-                            //            each value of item
-                            //                td(style="width: 5px;")=value
-                    #profile-tab-pane.tab-pane.fade(role='tabpanel', aria-labelledby='profile-tab', tabindex='0') ...
-                    #contact-tab-pane.tab-pane.fade(role='tabpanel', aria-labelledby='contact-tab', tabindex='0') ...
+                            tbody
+                                each item of friday
+                                    tr
+                                        each value of item
+                                            td(style="width: 5px;")=value
+
+                    #sat-tab-pane.tab-pane.fade(role='tabpanel', aria-labelledby='profile-tab', tabindex='0')
+                        - const saturday = [["Event","1000","Business Center"],["Event","1000","Business Center"],["Event","1000","Business Center"],["Event","1000","Business Center"]];
+                        table.table.table-striped
+                            thead
+                                tr
+                                    th(scope='col') Event
+                                    th(scope='col') Time
+                                    th(scope='col') Location
+                            tbody
+                                each item of saturday
+                                    tr
+                                        each value of item
+                                            td(style="width: 5px;")=value
+                    #sun-tab-pane.tab-pane.fade(role='tabpanel', aria-labelledby='contact-tab', tabindex='0') ...
             // END OF SCHEDULE
 
             h1.display-5.my-5 FAQ
