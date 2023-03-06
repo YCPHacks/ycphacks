@@ -110,3 +110,7 @@ input.form-control.popup {
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgba(127, 204, 135, 0.51) !important;
 }
+
+.row{
+    margin: 0;
+}
