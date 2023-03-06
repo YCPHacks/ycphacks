@@ -1,5 +1,7 @@
 import express from 'express';
 
+import { fetch } from 'undici'
+
 import pkg from 'express-openid-connect';
 const { auth } = pkg;
 
