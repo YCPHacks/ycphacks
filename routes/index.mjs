@@ -19,7 +19,7 @@ router.use(auth({
 router.get('/', async (req, res) => {
   const { access_token, token_type } = req.oidc.accessToken;
 
-  const url = 'http://localhost:3001/api/v1/hardware';
+  const url = 'https://starfish-app-amrfh.ondigitalocean.app/api/v1/hardware';
   const options = {
     headers: {
       'Authorization': `${token_type} ${access_token}`
