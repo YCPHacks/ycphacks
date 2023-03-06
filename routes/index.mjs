@@ -19,7 +19,7 @@ router.use(auth({
 router.get('/', async (req, res) => {
   const { access_token, token_type } = req.oidc.accessToken;
 
-  const url = `${process.env.API_BASE_URL}/hardware`;
+  const url = `${process.env.API_DOMAIN}/api/v1/hardware`;
   const options = {
     headers: {
       'Authorization': `${token_type} ${access_token}`
