@@ -16,7 +16,7 @@ router.use(auth({
   }
 }));
 
-router.get('/', async (req, res) => {
+router.get('/hardware', async (req, res) => {
   const { access_token, token_type } = req.oidc.accessToken;
 
   const url = `${process.env.API_DOMAIN}/api/v1/hardware`;
