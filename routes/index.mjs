@@ -1,35 +1,66 @@
 import express from 'express';
 
-import { fetch } from 'undici';
-
-import pkg from 'express-openid-connect';
-const { auth } = pkg;
-
 const router = express.Router();
 
-router.use(auth({
-  authorizationParams: {
-    response_type: 'code',
-    audience: 'https://api',
-    scope: 'openid profile email read:hardware',
-    prompt: 'consent'
-  }
-}));
+router.get('/', async (req, res) => {
+  res.status(200).render('welcomePage');
+});
 
-router.get('/hardware', async (req, res) => {
-  const { access_token, token_type } = req.oidc.accessToken;
+router.get('/gallery', async (req, res) => {
+  res.status(200).render('gallery');
+});
 
-  const url = `${process.env.API_DOMAIN}/api/v1/hardware`;
-  const options = {
-    headers: {
-      'Authorization': `${token_type} ${access_token}`
-    }
-  };
+router.get('/judgingCriteria', async (req, res) => {
+  res.status(200).render('judgingCriteria');
+});
 
-  const response = await fetch(url, options);
+router.get('/pastEvents', async (req, res) => {
+  res.status(200).render('pastEvents');
+});
+router.get('/sponsor', async (req, res) => {
+  res.status(200).render('sponsor');
+});
+router.get('/dashboard', async (req, res) => {
+  res.status(200).render('dashboard');
+});
+
+
+// ---- DASHBOARD FUNCTIONALITY
+
+router.get('/dashboard/event_applications', async (req, res) => {
+  const url = 'https://faas-nyc1-2ef2e6cc.doserverless.co/api/v1/web/fn-93c2815b-d2e8-4fba-bf30-c6d0b1d4e791/event_applications/listEventApplications';
+
+  const response = await fetch(url);
   const result   = await response.json();
 
-  res.status(200).json(result);
+  res.locals.application = result.data;
+
+  res.status(200).render('event_applications');
+});
+
+
+router.get('/dashboard/hardware', async (req, res) => {
+  const url = 'https://faas-nyc1-2ef2e6cc.doserverless.co/api/v1/web/fn-93c2815b-d2e8-4fba-bf30-c6d0b1d4e791/hardware/listHardwareItems';
+  const response = await fetch(url);
+  const result   = await response.json();
+  res.locals.data = result.data;
+  res.status(200).render('hardware');
+});
+
+router.post('/dashboard/hardware', async (req, res) => {
+  const { name, link, category, status, location } = req.body;
+  const url = 'https://faas-nyc1-2ef2e6cc.doserverless.co/api/v1/web/fn-93c2815b-d2e8-4fba-bf30-c6d0b1d4e791/hardware/createHardwareItem';
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      name, link, category, status, location
+    })
+  };
+  const response = await fetch(url, options);
+  res.redirect('/dashboard/hardware');
 });
 
 export { router };

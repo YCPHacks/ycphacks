@@ -1,0 +1,73 @@
+:root{
+    --color: #333;
+}
+
+body {
+    font-family: 'Red Hat Text', sans-serif;
+
+}
+
+.container {
+    text-align: center;
+    color: var(--color);
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #8eb5da 0%, #1bb144 100%);    background-size: cover;
+
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 3rem;
+}
+
+p {
+    max-width: 52ch;
+    line-height: 1.5;
+    padding: 1em;
+    color: white;
+}
+
+a {
+    display: inline-block;
+    padding: 1em 3.5em;
+    background-color: var(--color);
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 0.3em;
+    font-weight: 700;
+    letter-spacing: .5px;
+    font-size: .875rem;
+}
+
+.blank,
+.other {
+    width: 100%;
+    min-height: 2px;
+    background-color: white
+}
+
+.second {
+    background-image:url('../images/dust_texture.svg');
+    background-attachment: fixed;
+    height: 1200px;
+}
+
+h3 {
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-top: 1em;
+}
+
+
+
+.second {
+    flex-direction: row;
+    gap: 1.6em;
+}
+

@@ -1,0 +1,69 @@
+html
+    head
+        include includes/dashboardBar
+
+        link(rel='stylesheet', type='text/css', href='/static/stylesheets/dashboard.css')
+
+
+
+    body
+
+
+
+        h1.m-2 Event Applications
+            .container-md.text-center.p-2.border
+                button.btn(type='button')
+                    | All
+                    span.badge.text-bg-primary.m-1 4
+
+                button.btn(type='button')
+                    | Undecided
+                    span.badge.text-bg-secondary.m-1 4
+
+                button.btn(type='button')
+                    | Accepted
+                    span.badge.text-bg-success.m-1 4
+
+                button.btn(type='button')
+                    | Denied
+                    span.badge.text-bg-danger.m-1 4
+
+                button.btn(type='button')
+                    | Flagged
+                    span.badge.text-bg-warning.m-1 4
+
+            .container-md.text-center.p-2.my-3.border
+
+                form.d-flex(role='search')
+                    input.form-control.me-2(type='search', placeholder='Search', aria-label='Search')
+                    button.btn.btn-outline-success.mx-1(type='submit') Search
+                    button.btn.btn-outline-success.mx-1(type='submit') Download CSV
+
+            - var x = 0;
+            .container-sm.overflow-x-scroll.mt-3.p-3
+                table.table.table-striped.table-bordered.my-4
+                    thead
+                        tr
+                            th user id
+                            th created at
+                            th updated at
+                            th status
+                            th age
+                            th country
+                            th school
+                            th education level
+                            th underrepresented group
+                            th gender
+                            th race
+                            th sexual orientation
+                            th major
+                            th t-shirt size
+                            th food restrictions
+                    tbody
+                        each item of application
+                            - x++
+                            tr
+                                each column of item
+                                    td= column
+                //h4 Event Applications:
+                //h5= x

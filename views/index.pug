@@ -1,7 +1,26 @@
 extends layout
 
 block content
-  if isAuthenticated
-    include includes/dashboard
-  else
-    include includes/welcomePage
+  table
+    thead
+      tr
+        th(colspan="5") Hardware
+      tr
+        th name
+        th link
+        th category
+        th status
+        th location
+    tbody
+      each item of data
+        tr
+          each column of item
+            td= column
+
+  form(method="POST" action="/dashboard/hardware")
+    input(type="text" name="name" value="name")
+    input(type="text" name="link" value="link")
+    input(type="text" name="category" value="other")
+    input(type="text" name="status" value="available")
+    input(type="text" name="location" value="here")
+    button(type="submit") Create hardware item
