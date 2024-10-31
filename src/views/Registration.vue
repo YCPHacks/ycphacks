@@ -165,7 +165,7 @@ export default {
 
       const formData = { ...this.form };
 
-      fetch('http://localhost:3000/registration/register', {
+      fetch('http://localhost:3000/user/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
