@@ -17,9 +17,4 @@ export default {
 </script>
 
 <style>
-/* Global styles */
-body {
-  margin: 0;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-}
 </style>

@@ -1,13 +1,11 @@
 <template>
   <div class="container my-5">
 
-    <!-- Background Video -->
     <video class="bg-video" autoplay loop muted playsinline>
       <source src="/bg.mp4" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
 
-    <!-- Conditional Rendering for Success Message -->
     <div v-if="isRegistered" class="card p-4 text-center shadow-sm">
       <div class="text-success">
         <i class="bi bi-check-circle" style="font-size: 3rem;"></i>
@@ -15,9 +13,7 @@
       </div>
     </div>
 
-    <!-- Registration Form -->
     <div v-else class="card p-4 shadow-sm position-relative">
-      <!-- Loading Spinner -->
       <div v-if="isLoading" class="loading-overlay">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
@@ -25,46 +21,51 @@
       </div>
 
       <form v-if="!isLoading" @submit.prevent="handleSubmit">
-        <h3 class="mb-4">YCP Hacks Registration</h3>
+        <h3 class="mb-4">Create an Account</h3>
 
-        <!-- Basic Details Section -->
         <div class="row mb-3">
           <div class="col">
-            <label for="firstName" class="form-label">First Name</label>
+            <label for="firstName" class="form-label">First Name <label class="required">*</label></label>
             <input v-model="form.firstName" type="text" class="form-control" aria-label="First name" required/>
           </div>
           <div class="col mb-3">
-            <label for="lastName" class="form-label">Last Name</label>
+            <label for="lastName" class="form-label">Last Name <label class="required">*</label></label>
             <input v-model="form.lastName" type="text" class="form-control" aria-label="Last name" required/>
           </div>
         </div>
 
-        <!-- New School Field -->
         <div class="mb-3">
-          <label for="school" class="form-label">School</label>
-          <input v-model="form.school" type="text" id="school" class="form-control" required />
-        </div>
-
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
+          <label for="email" class="form-label">Email <label class="required">*</label></label>
           <input v-model="form.email" type="email" id="email" class="form-control" required />
         </div>
 
         <div class="row mb-3">
           <div class="col">
-            <label for="phoneNumber" class="form-label">Phone Number</label>
+            <label for="firstName" class="form-label">Password <label class="required">*</label></label>
+            <input v-model="form.password" type="password" class="form-control" aria-label="Password" required/>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="school" class="form-label">School <label class="required">*</label></label>
+          <input v-model="form.school" type="text" id="school" class="form-control" required />
+        </div>
+
+        <div class="row mb-3">
+          <div class="col">
+            <label for="phoneNumber" class="form-label">Phone Number <label class="required">*</label></label>
             <input v-model="form.phoneNumber" type="tel" id="phoneNumber" class="form-control" required />
           </div>
 
           <div class="col">
-            <label for="dob" class="form-label">Date of Birth</label>
+            <label for="dob" class="form-label">Date of Birth <label class="required">*</label></label>
             <input v-model="form.dob" type="date" id="dob" class="form-control" required />
           </div>
         </div>
 
         <div class="row mb-3">
           <div class="col">
-            <label for="gender" class="form-label">Gender</label>
+            <label for="gender" class="form-label">Gender <label class="required">*</label></label>
             <select v-model="form.gender" id="gender" class="form-select" required>
               <option disabled value="">--</option>
               <option>Male</option>
@@ -75,8 +76,21 @@
           </div>
 
           <div class="col">
-            <label for="tshirtSize" class="form-label">T-Shirt Size</label>
-            <select v-model="form.tshirtSize" id="tshirtSize" class="form-select" required>
+            <label for="gender" class="form-label">Pronouns <label class="required"></label></label>
+            <select v-model="form.pronouns" id="gender" class="form-select" required>
+              <option disabled value="">--</option>
+
+              <!-- if we ever need to add any other pronouns they go here -->
+              <option>he/him/his</option>
+              <option>she/her/her</option>
+              <option>they/them/their</option>
+              <option>ze/hir/hir</option>
+            </select>
+          </div>
+
+          <div class="col">
+            <label for="tshirtSize" class="form-label">T-Shirt Size <label class="required">*</label></label>
+            <select v-model="form.tShirtSize" id="tshirtSize" class="form-select" required>
               <option disabled value="">--</option>
               <option>XS</option>
               <option>S</option>
@@ -90,8 +104,13 @@
 
         <div class="row mb-3">
           <div class="col">
-            <label for="country" class="form-label">Country of residence</label>
-            <input v-model="form.country" type="text" id="country" class="form-control" required />
+            <label for="country" class="form-label">Country of residence <label class="required">*</label></label>
+            <select v-model="form.country" id="tshirtSize" class="form-select" required>
+              <option>USA</option>
+              <option>Mexico</option>
+              <option>Canada</option>
+              <option>Other</option>
+            </select>
           </div>
           <div class="col">
             <label for="hackathonsAttended" class="form-label">Hackathons Attended</label>
@@ -108,14 +127,14 @@
         <div class="form-check mb-3">
           <input v-model="form.mlhCodeOfConduct" type="checkbox" id="mlhCodeOfConduct" class="form-check-input" required/>
           <label class="form-check-label" for="mlhCodeOfConduct">
-            I have read and agree to the <a class="link" target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct.</a>
+            I have read and agree to the <a class="link" target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct.</a> <label class="required">*</label>
           </label>
         </div>
 
         <div class="form-check mb-3">
           <input v-model="form.mlhPrivacyPolicy" type="checkbox" id="mlhPrivacyPolicy" class="form-check-input" required />
           <label class="form-check-label" for="mlhPrivacyPolicy">
-            I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a> I further agree to the terms of both the <a class="link" href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank">MLH Contest Terms and Conditions</a> and the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a>
+            I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a> I further agree to the terms of both the <a class="link" href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank">MLH Contest Terms and Conditions</a> and the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a>  <label class="required">*</label>
           </label>
         </div>
 
@@ -142,12 +161,14 @@ export default {
         firstName: '',
         lastName: '',
         email: '',
+        password: '',
         phoneNumber: '',
         school: '',
+        pronouns: '',
         dob: '',
         gender: '',
         country: 'USA',
-        tshirtSize: '',
+        tShirtSize: '',
         dietaryRestrictions: '',
         hackathonsAttended: 0,
         mlhCodeOfConduct: true,
@@ -165,6 +186,7 @@ export default {
 
       const formData = { ...this.form };
 
+      console.log(formData)
       fetch('http://localhost:3000/user/create', {
         method: 'POST',
         headers: {
@@ -215,6 +237,10 @@ export default {
 
 .error {
   padding: 5px;
+  color: red;
+}
+
+.required {
   color: red;
 }
 
