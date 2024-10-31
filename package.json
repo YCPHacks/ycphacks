@@ -9,7 +9,6 @@
     "preview": "vite preview --hosr --port 4174"
   },
   "dependencies": {
-    "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "bootstrap-vue-3": "^0.5.1",
     "vue": "^3.4.29",
