@@ -9,7 +9,7 @@
     <div class="intro">
       <div class="container">
         <div class="main-header">
-          <img id="fountain" src="../assets/fountainWhite.png"/>
+          <!-- <img id="fountain" src="../assets/fountainWhite.png"/> -->
           <h1>YCP Hacks</h1>
           <h2>November 1 - 3, 2024</h2>
           <h2>York College of Pennsylvania</h2>
@@ -41,7 +41,7 @@
   <div class="green-box">
     <div class="container1" style="margin: auto; text-align: center;">
       <div style="float: left; font-size: 75px; margin-right: 50px;">
-        <img id="fountain2" src="../assets/fountainWhite.png" style="width: 125px; height: 115px; margin-bottom: 0px;" />
+        <!-- <img id="fountain2" src="../assets/fountainWhite.png" style="width: 125px; height: 115px; margin-bottom: 0px;" /> -->
         <br />2021<br /> Recap Video
       </div>
       <div style="float: right;">
@@ -50,7 +50,7 @@
     </div>
     <div class="container1" style="margin: auto; text-align: center;">
       <div style="float: left; font-size: 75px; margin-right: 50px;">
-        <img id="fountain2" src="../assets/fountainWhite.png" style="width: 125px; height: 115px; margin-bottom: 0px;" />
+        <!-- <img id="fountain2" src="../assets/fountainWhite.png" style="width: 125px; height: 115px; margin-bottom: 0px;" /> -->
         <br />2017<br /> Recap Video
       </div>
       <div style="float: right;">
@@ -486,7 +486,7 @@ a {
     width: 100%;
     max-width: 960px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 38px 20px;
     box-sizing: border-box;
 }
 
@@ -560,7 +560,7 @@ img{
     width: 100%;
     max-width: 960px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 38px 20px;
     box-sizing: border-box;
 }
 
@@ -611,9 +611,6 @@ h1 {
 .sponsors{
   background-color:#ccffcc;
 }
-/* main-sponsors{
-  background-color: #ccffcc
-} */
 .question{
   background-color: #ccffcc;
 }
@@ -643,10 +640,30 @@ h1 {
     width: 100%;
     max-width: 960px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 38px 20px;
     box-sizing: border-box;
 }
 .register-button {
-
+  display: inline-block;
+  background-color: white;
+  color: black;
+  font-size: 20px;
+  padding: 15px 30px;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-top: 20px;
+  z-index: 10; /* Ensure it's above the video */
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
+
+.register-button:hover {
+  background-color: white;
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+.register-button:active {
+  transform: scale(0.95); /* Slightly pressed-in effect */
+}
+
+
 </style>

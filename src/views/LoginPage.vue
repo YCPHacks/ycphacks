@@ -1,40 +1,36 @@
 <template>
   <div class="login-page">
     <div class="container">
-      <div class="header">
-        <h1>YCP HACKS!</h1>
-        <p>Don't have an account? <a href="#">Sign up</a></p>
-      </div>
-
+      <h1>Welcome to <span class="brand">YCP HACKS</span></h1>
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
-          <label for="username">Username</label>
-          <input type="email" id="username" v-model="username" placeholder="email@example.com" required />
+          <label for="username">Email</label>
+          <input
+            type="email"
+            id="username"
+            v-model="username"
+            placeholder="email@example.com"
+            required
+          />
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <div class="password-container">
-            <input 
-              :type="showPassword ? 'text' : 'password'" 
-              id="password" 
-              v-model="password" 
-              placeholder="Password" 
-              required 
-            />
-            <span class="show-password" @click="togglePasswordVisibility">
-              {{ showPassword ? '🙈' : '👁️' }}
-            </span>
-          </div>
+          <input
+            :type="showPassword ? 'text' : 'password'"
+            id="password"
+            v-model="password"
+            placeholder="Password"
+            required
+          />
         </div>
 
-        <div class="form-group remember-me">
-          <input type="checkbox" id="rememberMe" v-model="rememberMe" />
-          <label for="rememberMe">Remember me</label>
-          <a href="#" class="forgot-password">Forgot password?</a>
-        </div>
+        <button type="submit" class="btn">Sign In</button>
 
-        <button type="submit">Sign In</button>
+        <p class="footer-text">
+          <a href="#">Forgot password?</a> | 
+          <router-link to="/register">Sign up</router-link>
+        </p>
       </form>
     </div>
   </div>
@@ -46,7 +42,6 @@ export default {
     return {
       username: '',
       password: '',
-      rememberMe: false,
       showPassword: false,
     };
   },
@@ -55,7 +50,6 @@ export default {
       const formData = {
         username: this.username,
         password: this.password,
-        rememberMe: this.rememberMe,
       };
 
       fetch("http://localhost:3000/login/login", {
@@ -68,115 +62,122 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           console.log("Login successful:", data);
-          // Handle successful login here
         })
         .catch((error) => {
           console.error("Login failed:", error);
-          // Handle error here
         });
-    },
-    togglePasswordVisibility() {
-      this.showPassword = !this.showPassword;
     },
   },
 };
 </script>
 
 <style scoped>
-html, body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
   height: 100%;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #6a5acd, #32cd32);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-page {
-  height: 100vh; /* Full height */
   display: flex;
-  justify-content: flex-start; /* Align to the left */
-  align-items: center; /* Center vertically */
-  background-color: #32cd32; /* Green background */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .container {
-  max-width: 400px; /* Max width of the form */
-  width: 100%; /* Full width on smaller screens */
-  padding: 20px;
-  margin: 20px; /* Add margin for spacing */
-  background-color: transparent; /* No background */
-  color: #fff;
-  text-align: left; /* Align text to the left */
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
-.header h1 {
-  font-size: 2em;
-  margin-bottom: 5px;
+.container h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
 }
 
-.header p {
-  font-size: 0.9em;
-}
-
-.header a {
-  color: #e0e0e0;
-  text-decoration: underline;
+.brand {
+  color: #4caf50;
+  font-weight: bold;
 }
 
 .form-group {
   margin-bottom: 15px;
+  text-align: left;
 }
 
 label {
-  font-size: 1em;
-  color: #fff; /* Label color */
   display: block;
-}
-
-.password-container {
-  position: relative; 
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 input[type="email"],
 input[type="password"] {
   width: 100%;
   padding: 10px;
-  font-size: 1em;
-  border-radius: 5px;
   border: 1px solid #ddd;
-  box-sizing: border-box;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 10px;
 }
 
-.show-password {
-  position: absolute;
-  right: 10px;
-  top: 35%; /* Center the icon vertically */
-  cursor: pointer;
-  font-size: 1.2em;
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #4caf50;
+  outline: none;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.4);
 }
 
-button {
+.btn {
   width: 100%;
-  padding: 10px;
-  background-color: #6a5acd; /* Similar purple color for button */
-  color: #fff;
-  font-size: 1.2em;
+  padding: 12px;
+  background: linear-gradient(135deg, #4caf50, #32cd32);
   border: none;
   border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: transform 0.3s, background-color 0.3s;
 }
 
-button:hover {
-  background-color: #5b4bbf;
+.btn:hover {
+  background: linear-gradient(135deg, #32cd32, #4caf50);
+  transform: translateY(-2px);
 }
 
-.remember-me {
-  display: flex;
-  align-items: center;
-  font-size: 0.9em;
-  justify-content: space-between;
+.footer-text {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #555;
 }
 
-.forgot-password {
-  color: #e0e0e0;
-  text-decoration: underline;
+.footer-text a,
+.footer-text router-link {
+  color: #6a5acd;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.footer-text a:hover,
+.footer-text router-link:hover {
+  color: #4caf50;
 }
 </style>
