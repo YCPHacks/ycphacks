@@ -3,6 +3,14 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 
+import crypto from 'crypto-browserify'
+
+if (!globalThis.crypto) {
+  globalThis.crypto = {
+    getRandomValues: (arr) => crypto.randomFillSync(arr)
+  }
+}
+
 export default defineConfig({
   plugins: [vue()],
   resolve: {
