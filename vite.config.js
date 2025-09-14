@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 
 // Polyfill crypto.getRandomValues for Vite build
+import crypto from 'crypto';
 if (!globalThis.crypto) {
   globalThis.crypto = {
     getRandomValues: (arr) => crypto.randomFillSync(arr)
