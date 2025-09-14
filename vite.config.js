@@ -3,15 +3,8 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-import crypto from 'crypto'
 
-// Polyfill crypto.getRandomValues globally
-if (!globalThis.crypto) {
-  globalThis.crypto = {
-    getRandomValues: (arr) => crypto.randomFillSync(arr)
-  }
-}
-
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
   resolve: {
@@ -25,7 +18,11 @@ export default defineConfig({
         global: 'globalThis'
       },
       plugins: [
-        NodeGlobalsPolyfillPlugin({ process: true, buffer: true }),
+        NodeGlobalsPolyfillPlugin({
+          process: true,
+          buffer: true,
+          crypto: true
+        }),
         NodeModulesPolyfillPlugin()
       ]
     }
@@ -33,7 +30,11 @@ export default defineConfig({
   build: {
     rollupOptions: {
       plugins: [
-        NodeGlobalsPolyfillPlugin({ process: true, buffer: true }),
+        NodeGlobalsPolyfillPlugin({
+          process: true,
+          buffer: true,
+          crypto: true
+        }),
         NodeModulesPolyfillPlugin()
       ]
     }
