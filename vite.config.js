@@ -5,29 +5,36 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-  ],
+  plugins: [vue()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-      crypto: 'crypto-browserify' // polyfill for crypto
+      '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        global: 'globalThis',
+        global: 'globalThis'
       },
       plugins: [
         NodeGlobalsPolyfillPlugin({
+          process: true,
           buffer: true,
-          crypto: true
         }),
-      ],
-    },
+      ]
+    }
+  },
+  build: {
+    rollupOptions: {
+      plugins: [
+        NodeGlobalsPolyfillPlugin({
+          process: true,
+          buffer: true,
+        }),
+      ]
+    }
   },
   server: {
-    port: 8080,
+    port: 8080
   }
 })
