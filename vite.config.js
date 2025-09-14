@@ -2,9 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
   resolve: {
@@ -14,32 +12,27 @@ export default defineConfig({
   },
   optimizeDeps: {
     esbuildOptions: {
-      define: {
-        global: 'globalThis'
-      },
+      define: { global: 'globalThis' },
       plugins: [
         NodeGlobalsPolyfillPlugin({
-          process: true,
           buffer: true,
-          crypto: true
-        }),
-        NodeModulesPolyfillPlugin()
+          process: true,
+          crypto: true  // important for getRandomValues
+        })
       ]
     }
   },
   build: {
+    target: 'esnext',
     rollupOptions: {
       plugins: [
         NodeGlobalsPolyfillPlugin({
-          process: true,
           buffer: true,
+          process: true,
           crypto: true
-        }),
-        NodeModulesPolyfillPlugin()
+        })
       ]
     }
   },
-  server: {
-    port: 8080
-  }
+  server: { port: 8080 }
 })
