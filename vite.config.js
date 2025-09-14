@@ -2,9 +2,10 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
+import crypto from 'crypto'
 
-// Polyfill crypto.getRandomValues for Vite build
-import crypto from 'crypto';
+// Polyfill crypto.getRandomValues globally
 if (!globalThis.crypto) {
   globalThis.crypto = {
     getRandomValues: (arr) => crypto.randomFillSync(arr)
@@ -20,26 +21,24 @@ export default defineConfig({
   },
   optimizeDeps: {
     esbuildOptions: {
-      define: { global: 'globalThis' },
+      define: {
+        global: 'globalThis'
+      },
       plugins: [
-        NodeGlobalsPolyfillPlugin({
-          process: true,
-          buffer: true,
-        }),
-      ],
-    },
+        NodeGlobalsPolyfillPlugin({ process: true, buffer: true }),
+        NodeModulesPolyfillPlugin()
+      ]
+    }
   },
   build: {
     rollupOptions: {
       plugins: [
-        NodeGlobalsPolyfillPlugin({
-          process: true,
-          buffer: true,
-        }),
-      ],
-    },
+        NodeGlobalsPolyfillPlugin({ process: true, buffer: true }),
+        NodeModulesPolyfillPlugin()
+      ]
+    }
   },
   server: {
-    port: 8080,
-  },
+    port: 8080
+  }
 })
