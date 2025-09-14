@@ -18,11 +18,9 @@ jobs:
           node-version: '20'  # Adjust based on your project needs
 
       - name: Install dependencies
-        working-directory: ./ycphacks
         run: npm ci
 
       - name: Build project
-        working-directory: ./ycphacks
         run: npm run build
 
       # Optionally, verify if the build directory exists
