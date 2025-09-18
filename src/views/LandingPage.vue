@@ -294,17 +294,29 @@
 </div>
 </div>
 <div class="sponsors" id="sponsors">
-<div class="container">
-<div class="main-sponsors">
-<div class="header">
-<div class="circle" style="font-size:27px; width: 250px;">
-<p>2024 Sponsors</p>
+  <div class="container">
+    <div class="main-sponsors">
+      <div class="header">
+        <div class="circle" style="font-size:27px; width: 250px;">
+          <p>2024 Sponsors</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-</div>
-</div>
+
 <div class="sponsor-images" style="background-color:white;">
+  <div v-for="sponsor in sponsors" :key="sponsor.id" class="sponsor-card">
+    <img
+      v-if="sponsor.sponsor_image_url"
+      :src="sponsor.sponsor_image_url"
+      :alt="sponsor.name"
+      class="sponsor-logo"
+    />
+    <p>{{ sponsor.name }} - {{ sponsor.tier }}</p>
+  </div>
+</div>
+
 <!--
 <a href="https://mlh.io/seasons/2023/events" target="_blank"><img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\mlh-logo-color.svg" width="125" /></a>
 
@@ -325,14 +337,26 @@
 <a href="http://hackp.ac/mlh-StandOutStickers-hackathons" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\stickers.png"/> </a>
  -->
 
-</div>
-
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+import { getSponsors } from "@/services/sponsorService";
+
 export default {
   name: "LandingPage",
 };
+
+const sponsors = ref([]);
+
+onMounted(async () => {
+  try {
+    const res = await getSponsors();
+    sponsors.value = res.data
+  } catch (err) {
+    console.error("Error fetching sponsors:", err);
+  }
+});
 </script>
 
 <style scoped>
@@ -634,6 +658,17 @@ h1 {
 .sponsors .sponsor-images img {
     max-width: 200px;
     padding: 20px;
+}
+.sponsor-card {
+  text-align: center;
+  margin: 1rem;
+  display: inline-block;
+}
+.sponsor-logo {
+  max-width: 150px;
+  max-height: 100px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
 }
 .container {
     position: relative;
