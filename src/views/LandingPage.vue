@@ -190,119 +190,119 @@
 </div>
 
 <div class="faq" id="faq">
-<div class="container">
-<div class="header">
-<div class="circle">
-<p>FAQ</p>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="header">
+            <div class="circle">
+                <p>FAQ</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="question">
-<h3>What&#39;s a hackathon?</h3>
+    <h3>What&#39;s a hackathon?</h3>
 
-<p>A 36 hour event where you work together with a team to make something awesome. You don&#39;t need to know how to code or be a supreme hacker, just how to be creative! You can also get help from our mentors and speakers who will be attending.</p>
+    <p>A 36 hour event where you work together with a team to make something awesome. You don&#39;t need to know how to code or be a supreme hacker, just how to be creative! You can also get help from our mentors and speakers who will be attending.</p>
 
-<h3>Can I come?</h3>
+    <h3>Can I come?</h3>
 
-<p>We&#39;ll take any college student from anywhere on earth! We sadly cannot accept students under the age of 18. All students from outside of York College may be asked to attend online if Covid protocols change</p>
+    <p>We&#39;ll take any college student from anywhere on earth! We sadly cannot accept students under the age of 18. All students from outside of York College may be asked to attend online if Covid protocols change</p>
 
-<h3>Where is this going to be?</h3>
+    <h3>Where is this going to be?</h3>
 
-<p>The Willman Business Center of <a href="https://goo.gl/maps/UzhJ14rStMz" target="_blank">York College!</a> There will be free parking <a href="https://goo.gl/maps/p1itMccEKvx" target="_blank">in the adjacent lot for the entire weekend.</a></p>
+    <p>The Willman Business Center of <a href="https://goo.gl/maps/UzhJ14rStMz" target="_blank">York College!</a> There will be free parking <a href="https://goo.gl/maps/p1itMccEKvx" target="_blank">in the adjacent lot for the entire weekend.</a></p>
 
-<h3>When will this be?</h3>
+    <h3>When will this be?</h3>
 
-<p>November 1 - 3 2024</p>
+    <p>November 1 - 3 2024</p>
 
-<h3>Why?</h3>
+    <h3>Why?</h3>
 
-<p>Learn new things, meet new people, and tons of free food and swag.</p>
+    <p>Learn new things, meet new people, and tons of free food and swag.</p>
 
-<h3>Will you reimburse travel?</h3>
+    <h3>Will you reimburse travel?</h3>
 
-<p>If we get enough sponsors this season, we may offer it closer to the event date. At this time we cannot confirm it though. Apply and we&#39;ll email our applicants with more information as it becomes available.</p>
+    <p>If we get enough sponsors this season, we may offer it closer to the event date. At this time we cannot confirm it though. Apply and we&#39;ll email our applicants with more information as it becomes available.</p>
 
-<h3>I don&#39;t have a team so....</h3>
+    <h3>I don&#39;t have a team so....</h3>
 
-<p>Well you&#39;re in luck! We have tons of team building activities if you don&#39;t have a team to come with you. You can also work alone if you&#39;d like.</p>
+    <p>Well you&#39;re in luck! We have tons of team building activities if you don&#39;t have a team to come with you. You can also work alone if you&#39;d like.</p>
 
-<h3>But I can&#39;t code!</h3>
+    <h3>But I can&#39;t code!</h3>
 
-<p>We&#39;ll have tons of great workshops and mentors to help you learn and build something amazing!</p>
+    <p>We&#39;ll have tons of great workshops and mentors to help you learn and build something amazing!</p>
 
-<h3>How much does it cost?</h3>
+    <h3>How much does it cost?</h3>
 
-<p>Nothing! Registration is free and food will be provided for you. And of course, swag is free too.</p>
+    <p>Nothing! Registration is free and food will be provided for you. And of course, swag is free too.</p>
 
-<h3>Will there be hardware available?</h3>
+    <h3>Will there be hardware available?</h3>
 
-<p>Yes! Hardware will be provided.</p>
+    <p>Yes! Hardware will be provided.</p>
 
-<h3>What should I bring?</h3>
+    <h3>What should I bring?</h3>
 
-<p>ID, Clothing, sleeping bag, and any necessary tech (and chargers). And deodorant. Please.</p>
+    <p>ID, Clothing, sleeping bag, and any necessary tech (and chargers). And deodorant. Please.</p>
 
-<h3>Do I keep my Intellectual Property?</h3>
+    <h3>Do I keep my Intellectual Property?</h3>
 
-<p>Yes! Participants retain 100% of the intellectual property that they create during the event.</p>
+    <p>Yes! Participants retain 100% of the intellectual property that they create during the event.</p>
 
-<h3>Are there any rules?</h3>
+    <h3>Are there any rules?</h3>
 
-<p>You can find the MLH code of conduct <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" target="_blank">here</a>.</p>
+    <p>You can find the MLH code of conduct <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" target="_blank">here</a>.</p>
 
-<h3>You didn&#39;t answer my question!</h3>
+    <h3>You didn&#39;t answer my question!</h3>
 
-<p>Send it to us at <a href="mailto:info@ycphacks.io">info@ycphacks.io!</a>.</p>
-</div>
+    <p>Send it to us at <a href="mailto:info@ycphacks.io">info@ycphacks.io!</a>.</p>
+    </div>
 </div>
 
 <div class="prizes" id="prizes">
-<div class="container">
-<div class="header">
-<div class="circle" style="font-size:32px">
-<p>PRIZES</p>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="header">
+            <div class="circle" style="font-size:32px">
+                <p>PRIZES</p>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="row">
-<div class="prize-titles" style="text-align:center;">
-<h3 style="font-size:30px">Quest 3</h3>
-<h3 style="font-size:30px">Smart TV</h3>
-<h3 style="font-size:30px">Quest 2</h3>
-<h3 style="font-size:30px">Nintendo Switch</h3>
-<h3 style="font-size:30px">Creality Ender 3D Printer</h3>
-<h3 style="font-size:30px">TECBOSS 3D Pen and filament</h3>
-<h3 style="font-size:30px">Beats Solo 3 Headphones</h3>
-<h3 style="font-size:30px">Amazon Echo</h3>
-<h3 style="font-size:30px">Apple Homepod Mini</h3>
-<h3 style="font-size:30px">Google Nest Speaker</h3>
-<h3 style="font-size:30px">Beats Pill</h3>
-<h3 style="font-size:30px">Gaming Keyboard and Mouse</h3>
-<h3 style="font-size:30px">Gaming Chair</h3>
-<h3 style="font-size:30px">Arduino Starter Kit</h3>
-<h3 style="font-size:30px">Google Swag!</h3>
-<h3 style="font-size:30px">$200+ in gift cards</h3>
-<h3 style="font-size:30px">$1000+ in cash prizes</h3>
-<h3 style="font-size:30px">Sponsored Hacks to Come!</h3>
-<h3 style="font-size:30px"> </h3>
+    <div class="prize-titles" style="text-align:center;">
+    <h3 style="font-size:30px">Quest 3</h3>
+    <h3 style="font-size:30px">Smart TV</h3>
+    <h3 style="font-size:30px">Quest 2</h3>
+    <h3 style="font-size:30px">Nintendo Switch</h3>
+    <h3 style="font-size:30px">Creality Ender 3D Printer</h3>
+    <h3 style="font-size:30px">TECBOSS 3D Pen and filament</h3>
+    <h3 style="font-size:30px">Beats Solo 3 Headphones</h3>
+    <h3 style="font-size:30px">Amazon Echo</h3>
+    <h3 style="font-size:30px">Apple Homepod Mini</h3>
+    <h3 style="font-size:30px">Google Nest Speaker</h3>
+    <h3 style="font-size:30px">Beats Pill</h3>
+    <h3 style="font-size:30px">Gaming Keyboard and Mouse</h3>
+    <h3 style="font-size:30px">Gaming Chair</h3>
+    <h3 style="font-size:30px">Arduino Starter Kit</h3>
+    <h3 style="font-size:30px">Google Swag!</h3>
+    <h3 style="font-size:30px">$200+ in gift cards</h3>
+    <h3 style="font-size:30px">$1000+ in cash prizes</h3>
+    <h3 style="font-size:30px">Sponsored Hacks to Come!</h3>
+    <h3 style="font-size:30px"> </h3>
 
-<div class="prize-inner">
-</div>
-</div>
+        <div class="prize-inner">
+        </div>
+    </div>
 </div>
 <div class="sponsors" id="sponsors">
-<div class="container">
-<div class="main-sponsors">
-<div class="header">
-<div class="circle" style="font-size:27px; width: 250px;">
-<p>2024 Sponsors</p>
-</div>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="main-sponsors">
+            <div class="header">
+                <div class="circle" style="font-size:27px; width: 250px;">
+                    <p>2024 Sponsors</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="sponsor-images" style="background-color:white;">
 <!--
@@ -330,6 +330,8 @@
 </template>
 
 <script>
+import { ref, onMounted } from "vue";
+
 export default {
   name: "LandingPage",
 };
