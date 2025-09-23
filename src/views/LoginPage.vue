@@ -56,7 +56,7 @@ export default {
         });
 
         // Redirect after successful login
-        this.$router.push('/');
+        this.$router.push('/activities');
       } catch (err) {
         console.warn('Login failed:', err.message);
 
@@ -67,7 +67,7 @@ export default {
             await this.$store.dispatch('validateWithToken');
             // Redirect if token is valid
             if (this.$store.getters.isLoggedIn) {
-              this.$router.push('/');
+              this.$router.push('/activities');
             }
           } catch (tokenErr) {
             console.error('Token invalid:', tokenErr.message);
