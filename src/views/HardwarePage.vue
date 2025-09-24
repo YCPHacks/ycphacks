@@ -2,25 +2,25 @@
   <div class="container-fluid">
     <div class="row">
       <!-- TOC Sidebar -->
-      <aside class="col-3">
-        <div class="p-3 border rounded bg-light mt-5 toc-box">
-          <h2 class="fs-5 fw-bold mb-3">Hardware Contents</h2>
-          <ul class="list-unstyled">
-            <li v-for="section in hardwareSections" :key="section.id" class="mb-2">
-              <a
-                :href="'#' + section.id"
-                class="text-primary text-decoration-none"
-              >
-                {{ section.title }}
-              </a>
-            </li>
-          </ul>
+      <aside class="col-md-3">
+        <div class="p-3 border rounded bg-light toc-box">
+            <h2 class="fs-5 fw-bold mb-3">Hardware Contents</h2>
+            <ul class="list-unstyled">
+              <li v-for="section in hardwareSections" :key="section.id" class="mb-2">
+                <a
+                  :href="'#' + section.id"
+                  class="text-primary text-decoration-none"
+                >
+                  {{ section.title }}
+                </a>
+              </li>
+            </ul>
         </div>
-      </aside>
+       </aside>
 
       <!-- Main Content -->
-      <main class="col-9">
-        <div class="p-4 border rounded bg-white shadow-sm mt-3 main-box">
+      <main class="col-md-9">
+        <div class="p-4 border rounded bg-white shadow-sm main-box">
           <!-- Search Bar -->
           <div class="mb-4">
             <input
@@ -123,16 +123,17 @@ export default {
 </script>
 
 <style scoped>
-/* TOC pushed down more */
+/* TOC pushed down even more */
 .toc-box {
-  margin-top: 6rem !important; /* adjust as needed */
+  margin-top: 12rem !important; /* increase this if you want it lower */
 }
 
-/* Main content pushed down a little */
+/* Main content slightly lower */
 .main-box {
-  margin-top: 2rem !important;
+  margin-top: 6rem !important;
 }
-/* Sidebar fixed on left */
+
+/* Sidebar min width */
 aside {
   min-width: 200px;
 }
@@ -143,8 +144,5 @@ aside {
 }
 .hardware-card:hover {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-.page-container {
-  margin-top: 2rem; /* adjust as needed */
 }
 </style>
