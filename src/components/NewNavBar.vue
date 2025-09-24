@@ -116,6 +116,8 @@ export default {
 .nav {
   display: flex;
   gap: 20px;
+  margin-right: 0;
+  margin-left: auto;
 }
 
 .nav-link {
