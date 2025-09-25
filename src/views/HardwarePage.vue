@@ -76,40 +76,14 @@
 </template>
 
 <script>
+import hardwareService from "@/services/hardwareService";
+
 export default {
   name: "HardwarePage",
   data() {
     return {
       searchQuery: "",
-      hardwareSections: [
-        {
-          id: "arduino",
-          title: "Arduino",
-          items: [
-            {
-              name: "Arduino Uno",
-              image: "/images/arduino-uno.png",
-              description: "A microcontroller board based on the ATmega328P, great for beginners."
-            },
-            {
-              name: "Arduino Mega",
-              image: "/images/arduino-mega.png",
-              description: "A larger board with more pins and memory, ideal for complex projects."
-            }
-          ]
-        },
-        {
-          id: "raspberry-pi",
-          title: "Raspberry Pi",
-          items: [
-            {
-              name: "Raspberry Pi 4",
-              image: "/images/raspberry-pi4.png",
-              description: "A powerful single-board computer used for IoT and embedded systems."
-            }
-          ]
-        }
-      ]
+      hardwareSections: []
     };
   },
   computed: {
@@ -125,6 +99,43 @@ export default {
           )
         }))
         .filter(section => section.items.length > 0);
+    }
+  },
+  mounted() {
+    this.fetchHardware();
+  },
+  methods: {
+    async fetchHardware() {
+      try {
+        const res = await hardwareService.getHardware();
+        console.log("Raw backend data:", res);
+
+        let hardwareArray = [];
+
+        if (Array.isArray(res)) {
+          hardwareArray = res;
+        } else if (typeof res === "object" && res !== null) {
+          hardwareArray = Object.keys(res).map(title => ({
+            title,
+            products: res[title]
+          }));
+        } else {
+          console.warn("Unexpected backend response:", res);
+          return;
+        }
+
+        this.hardwareSections = hardwareArray.map(group => ({
+          id: group.title.toLowerCase().replace(/\s+/g, "-"),
+          title: group.title,
+          items: group.items.map(p => ({
+            name: p.hardwareName,
+            description: p.description || "No description available.",
+            image: p.imageUrl || null
+          }))
+        }));
+      } catch (err) {
+        console.error("Failed to fetch hardware:", err);
+      }
     }
   }
 };
