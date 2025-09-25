@@ -128,7 +128,7 @@ export default {
           id: group.title.toLowerCase().replace(/\s+/g, "-"),
           title: group.title,
           items: group.items.map(p => ({
-            name: p.hardwareName,
+            name: p.subtitle,
             description: p.description || "No description available.",
             image: p.imageUrl || null
           }))
