@@ -154,6 +154,8 @@
 </template>
 
 <script>
+import store from '../store/store.js';
+
 export default {
   data() {
     return {
@@ -163,14 +165,18 @@ export default {
         email: '',
         password: '',
         phoneNumber: '',
-        school: '',
-        pronouns: '',
-        dob: '',
+        age: 0,
         gender: '',
         country: 'USA',
         tShirtSize: '',
         dietaryRestrictions: '',
+        school: '',
+        major: '',
+        graduationYear: 0,
+        levelOfStudy: '',
         hackathonsAttended: 0,
+        linkedInUrl: '',
+        pronouns: '',
         mlhCodeOfConduct: true,
         mlhPrivacyPolicy: true,
         mlhEmails: false
@@ -181,35 +187,19 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       this.isLoading = true;
-
       const formData = { ...this.form };
 
-      console.log(formData)
-      fetch('http://localhost:3000/user/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.message === 'Registration successful') {
-              this.isRegistered = true;
-              this.errors = '';
-            } else {
-              this.errors = data.message;
-            }
-          })
-          .catch((error) => {
-            console.error('Error during registration:', error);
-            this.errors = 'An error occurred during registration. Please try again.';
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
+      const result = await store.dispatch('registerUser', formData);
+
+      if (result.success) {
+        this.isRegistered = true;
+      } else {
+        this.errors = result.message;
+      }
+
+      this.isLoading = false;
     }
   }
 };
