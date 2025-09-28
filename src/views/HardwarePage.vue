@@ -90,15 +90,16 @@ export default {
     filteredSections() {
       if (!this.searchQuery) return this.hardwareSections;
       const query = this.searchQuery.toLowerCase();
-      return this.hardwareSections
-        .map(section => ({
-          ...section,
-          items: section.items.filter(item =>
-            item.name.toLowerCase().includes(query) ||
-            item.description.toLowerCase().includes(query)
-          )
-        }))
-        .filter(section => section.items.length > 0);
+      return this.hardwareSections = res.map(group => ({
+         id: group.id,
+         title: group.title,
+         items: group.items.map(p => ({
+           name: p.subtitle || p.name,  // show subtitle as card title
+           description: p.description || "No description available.",
+           image: p.image || null
+         }))
+      }));
+
     }
   },
   mounted() {
