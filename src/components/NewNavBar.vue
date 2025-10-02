@@ -16,6 +16,7 @@
         <div class="nav-right" v-if="isLoggedIn">
           <a class="nav-link" href="/activities">Activities</a>
           <a class="nav-link" href="/hardware">Hardware</a>
+          <a class="nav-link" href="/categories">Hack Categories</a>
           <div class="dropdown">
             <button class="dropdown-button">Menu ▾</button>
             <ul class="dropdown-menu">
