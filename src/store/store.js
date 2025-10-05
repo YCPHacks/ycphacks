@@ -38,11 +38,8 @@ export default createStore({
                 body: JSON.stringify(formData)
             });
 
-            console.log(response);
-            console.log(response.json);
-
             const data = await response.json();
-            if (data.message === 'Registration successful') {
+            if (response.ok) {
                 commit('setUser', new UserAdapter(data.data));
                 return { success: true, message: data.message };
             } else {

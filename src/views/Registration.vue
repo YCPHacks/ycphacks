@@ -1,382 +1,387 @@
 <template>
-  <div>
-    <b-alert show>SHOW ALERT</b-alert>
-    <b-alert
-        :show="dismissCountDown"
-        :dismissible="true"
-        variant="success"
-        @dismissed="dismissCountDown=0"
-        @dismiss-count-down="countDownChanged"
-    >
-      <p>You have been successfully registered! You are being redirected to the landing page {{ dismissCountDown }} seconds...</p>
-      <b-progress
-        variant="success"
-        :max="dismissSeconds"
-        :value="dismissCountDown"
-        height="4px"
+  <div class="container my-5">
+
+    <video class="bg-video" autoplay loop muted playsinline>
+      <source src="/bg.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <div v-if="isRegistered" class="card p-4 text-center shadow-sm">
+      <b-alert
+          v-if="showAlert"
+          :modelValue="dismissCountDown"
+          variant="success"
+          @close-countdown="dismissSeconds = $event"
       >
-      </b-progress>
-    </b-alert>
+        <p>You have been successfully registered! You are being redirected to the landing page {{ dismissSeconds / 1000 }} seconds...</p>
+        <b-progress
+            variant="success"
+            :max="dismissCountDown"
+            :value="dismissSeconds"
+            height="4px"
+        >
+        </b-progress>
+      </b-alert>
+      <div class="text-success">
+        <i class="bi bi-check-circle" style="font-size: 3rem;"></i>
+        <h4 class="mt-3">Successfully Registered</h4>
+      </div>
+    </div>
 
-    <div class="container my-5">
-
-      <video class="bg-video" autoplay loop muted playsinline>
-        <source src="/bg.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-
-      <div v-if="isRegistered" class="card p-4 text-center shadow-sm">
-        <div class="text-success">
-          <i class="bi bi-check-circle" style="font-size: 3rem;"></i>
-          <h4 class="mt-3">Successfully Registered</h4>
+    <div v-else class="card p-4 shadow-sm position-relative">
+      <div v-if="isLoading" class="loading-overlay">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
         </div>
       </div>
 
-      <div v-else class="card p-4 shadow-sm position-relative">
-        <div v-if="isLoading" class="loading-overlay">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+      <div v-if="showAlert">
+        <b-alert
+            :modelValue="showAlert"
+            :dismissible="true"
+            variant="danger"
+        >
+          <p>Registration failed!</p>
+        </b-alert>
+      </div>
+
+      <b-form v-if="!isLoading" @submit.prevent="handleSubmit">
+        <h3 class="mb-4">Create an Account</h3>
+
+        <!-- First Name and Last Name -->
+        <div class="row">
+          <div class="col">
+            <b-form-group
+              class="form-label"
+              label="First Name *"
+              label-for="firstName"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.firstName"
+                  required>
+              </b-form-input>
+            </b-form-group>
           </div>
-        </div>
-
-        <b-form v-if="!isLoading" @submit.prevent="handleSubmit">
-          <h3 class="mb-4">Create an Account</h3>
-
-          <!-- First Name and Last Name -->
-          <div class="row">
-            <div class="col">
-              <b-form-group
+          <div class="col">
+            <b-form-group
                 class="form-label"
-                label="First Name *"
-                label-for="firstName"
-              >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.firstName"
-                    required>
-                </b-form-input>
-              </b-form-group>
-            </div>
+                label="Last Name *"
+                label-for="lastName"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.lastName"
+                  required>
+              </b-form-input>
+            </b-form-group>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="row">
+          <div class="col">
+            <b-form-group
+                class="form-label"
+                label="Email *"
+                label-for="email"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.email"
+                  type="email"
+                  required>
+              </b-form-input>
+            </b-form-group>
+          </div>
+        </div>
+
+        <!-- Password and Phone Number -->
+        <div class="row">
+          <div class="col-md-6">
+            <b-form-group
+                class="form-label"
+                label="Password *"
+                label-for="password"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.password"
+                  type="password"
+                  required>
+              </b-form-input>
+            </b-form-group>
+          </div>
+
+          <div class="col-md-6">
+            <b-form-group
+                class="form-label"
+                label="Phone Number *"
+                label-for="phoneNumber"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.phoneNumber"
+                  type="tel"
+                  required>
+              </b-form-input>
+            </b-form-group>
+          </div>
+        </div>
+
+        <!-- School -->
+        <div class="row">
+          <div class="col">
+            <b-form-group
+                class="form-label"
+                label="School *"
+                label-for="school"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.school"
+                  placeholder="York College of Pennsylvania"
+                  required>
+              </b-form-input>
+            </b-form-group>
+          </div>
+        </div>
+
+        <!-- Major -->
+        <transition name="fade">
+          <div v-if="form.school" class="row">
             <div class="col">
               <b-form-group
                   class="form-label"
-                  label="Last Name *"
-                  label-for="lastName"
-              >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.lastName"
-                    required>
-                </b-form-input>
-              </b-form-group>
-            </div>
-          </div>
-
-          <!-- Email -->
-          <div class="row">
-            <div class="col">
-              <b-form-group
-                  class="form-label"
-                  label="Email *"
-                  label-for="email"
-              >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.email"
-                    type="email"
-                    required>
-                </b-form-input>
-              </b-form-group>
-            </div>
-          </div>
-
-          <!-- Password and Phone Number -->
-          <div class="row">
-            <div class="col-md-6">
-              <b-form-group
-                  class="form-label"
-                  label="Password *"
-                  label-for="password"
-              >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.password"
-                    type="password"
-                    required>
-                </b-form-input>
-              </b-form-group>
-            </div>
-
-            <div class="col-md-6">
-              <b-form-group
-                  class="form-label"
-                  label="Phone Number *"
-                  label-for="phoneNumber"
-              >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.phoneNumber"
-                    type="tel"
-                    required>
-                </b-form-input>
-              </b-form-group>
-            </div>
-          </div>
-
-          <!-- School -->
-          <div class="row">
-            <div class="col">
-              <b-form-group
-                  class="form-label"
-                  label="School *"
-                  label-for="school"
-              >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.school"
-                    placeholder="York College of Pennsylvania"
-                    required>
-                </b-form-input>
-              </b-form-group>
-            </div>
-          </div>
-
-          <!-- Major -->
-          <transition name="fade">
-            <div v-if="form.school" class="row">
-              <div class="col">
-                <b-form-group
-                    class="form-label"
-                    label="Major"
-                    label-for="major"
-                >
-                  <b-form-select
-                      class="form-control"
-                      v-model="form.major"
-                      :options="options.majors"
-                  >
-                  </b-form-select>
-                </b-form-group>
-              </div>
-            </div>
-          </transition>
-
-          <!-- Level Of Study -->
-          <div class="row">
-            <div class="col">
-              <b-form-group
-                  class="form-label"
-                  label="Level of Study *"
-                  label-for="levelOfStudy"
+                  label="Major"
+                  label-for="major"
               >
                 <b-form-select
                     class="form-control"
-                    v-model="form.levelOfStudy"
-                    :options="options.levelsOfStudy"
+                    v-model="form.major"
+                    :options="options.majors"
                 >
                 </b-form-select>
               </b-form-group>
             </div>
           </div>
+        </transition>
 
-          <!-- Graduation Year and Country -->
-          <div class="row">
-            <div class="col-md-6">
-              <b-form-group
-                  class="form-label"
-                  label="Graduation Year"
-                  label-for="graduationYear"
+        <!-- Level Of Study -->
+        <div class="row">
+          <div class="col">
+            <b-form-group
+                class="form-label"
+                label="Level of Study *"
+                label-for="levelOfStudy"
+            >
+              <b-form-select
+                  class="form-control"
+                  v-model="form.levelOfStudy"
+                  :options="options.levelsOfStudy"
               >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.graduationYear"
-                    type="number"
-                    :min="1900"
-                    placeholder="2026"
-                >
-                </b-form-input>
-              </b-form-group>
-            </div>
+              </b-form-select>
+            </b-form-group>
+          </div>
+        </div>
 
-            <div class="col-md-6">
-              <b-form-group
-                  class="form-label"
-                  label="Country of residence *"
-                  label-for="country"
+        <!-- Graduation Year and Country -->
+        <div class="row">
+          <div class="col-md-6">
+            <b-form-group
+                class="form-label"
+                label="Graduation Year"
+                label-for="graduationYear"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.graduationYear"
+                  type="number"
+                  :min="1900"
+                  placeholder="2026"
               >
-                <b-form-select
-                    class="form-control"
-                    v-model="form.country"
-                    :options="options.countries"
-                    :required="true">
-                </b-form-select>
-              </b-form-group>
-            </div>
+              </b-form-input>
+            </b-form-group>
           </div>
 
-          <!-- Age, Gender, and Pronouns -->
-          <div class="row">
-            <div class="col-sm-4">
-              <b-form-group
-                  class="form-label"
-                  label="Age *"
-                  label-for="age"
-              >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.age"
-                    type="number"
-                    :min="0"
-                    required>
-                </b-form-input>
-              </b-form-group>
-            </div>
-
-            <div class="col-sm-4">
-              <b-form-group
-                  class="form-label"
-                  label="Gender *"
-                  label-for="gender"
-              >
-                <b-form-select
-                    class="form-control"
-                    v-model="form.gender"
-                    :options="options.genders"
-                    :required="true">
-                </b-form-select>
-              </b-form-group>
-            </div>
-
-            <div class="col-sm-4">
-              <b-form-group
-                  class="form-label"
-                  label="Pronouns"
-                  label-for="pronouns"
-              >
-                <b-form-select
-                    class="form-control"
-                    v-model="form.pronouns"
-                    :options="options.pronouns">
-                </b-form-select>
-              </b-form-group>
-            </div>
-          </div>
-
-          <!-- T-Shirt Size and Hackathons Attended -->
-          <div class="row">
-            <div class="col-sm-6">
-              <b-form-group
-                  class="form-label"
-                  label="T-Shirt Size *"
-                  label-for="tShirtSize"
-              >
-                <b-form-select
-                    class="form-control"
-                    v-model="form.tShirtSize"
-                    :options="options.tShirtSizes"
-                    :required="true">
-                </b-form-select>
-              </b-form-group>
-            </div>
-
-            <div class="col-sm-6">
-              <b-form-group
-                  class="form-label"
-                  label="Hackathons Attended"
-                  label-for="hackathonsAttended"
-              >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.hackathonsAttended"
-                    type="number"
-                    :min="0"
-                >
-                </b-form-input>
-              </b-form-group>
-            </div>
-          </div>
-
-          <!-- Dietary Restrictions -->
-          <div class="row">
-            <div class="col">
-              <b-form-group
-                  class="form-label"
-                  label="Dietary Restrictions"
-                  label-for="dietaryRestrictions"
-              >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.dietaryRestrictions"
-                >
-                </b-form-input>
-              </b-form-group>
-            </div>
-          </div>
-
-          <!-- LinkedIn URL -->
-          <div class="row">
-            <div class="col">
-              <b-form-group
-                  class="form-label"
-                  label="LinkedIn URL"
-                  label-for="linkedInUrl"
-              >
-                <b-form-input
-                    class="form-control"
-                    v-model="form.linkedInUrl"
-                    type="url"
-                >
-                </b-form-input>
-              </b-form-group>
-            </div>
-          </div>
-
-          <!-- MLH Code of Conduct -->
-          <div class="row">
-            <b-form-group class="form-check">
-              <b-form-checkbox
-                  class="form-check-input"
-                  v-model="form.mlhCodeOfConduct"
+          <div class="col-md-6">
+            <b-form-group
+                class="form-label"
+                label="Country of residence *"
+                label-for="country"
+            >
+              <b-form-select
+                  class="form-control"
+                  v-model="form.country"
+                  :options="options.countries"
                   :required="true">
-                <label class="form-check-label" for="mlhCodeOfConduct">
-                  I have read and agree to the <a class="link" target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>. *
-                </label>
-              </b-form-checkbox>
+              </b-form-select>
+            </b-form-group>
+          </div>
+        </div>
+
+        <!-- Age, Gender, and Pronouns -->
+        <div class="row">
+          <div class="col-sm-4">
+            <b-form-group
+                class="form-label"
+                label="Age *"
+                label-for="age"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.age"
+                  type="number"
+                  :min="0"
+                  required>
+              </b-form-input>
             </b-form-group>
           </div>
 
-          <!-- MLH Privacy Policy -->
-          <div class="row">
-            <b-form-group class="form-check">
-              <b-form-checkbox
-                  class="form-check-input"
-                  v-model="form.mlhPrivacyPolicy"
+          <div class="col-sm-4">
+            <b-form-group
+                class="form-label"
+                label="Gender *"
+                label-for="gender"
+            >
+              <b-form-select
+                  class="form-control"
+                  v-model="form.gender"
+                  :options="options.genders"
                   :required="true">
-                <label class="form-check-label" for="mlhPrivacyPolicy">
-                  I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a> I further agree to the terms of both the <a class="link" href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank">MLH Contest Terms and Conditions</a> and the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a>  <label class="required">*</label>
-                </label>
-              </b-form-checkbox>
+              </b-form-select>
             </b-form-group>
           </div>
 
-          <!-- MLH Emails -->
-          <div class="row">
-            <b-form-group class="form-check">
-              <b-form-checkbox
-                  class="form-check-input"
-                  v-model="form.mlhEmails">
-                <label class="form-check-label" for="mlhEmails">
-                  I authorize MLH to send me occasional emails about relevant events, career opportunities, and community announcements.
-                </label>
-              </b-form-checkbox>
+          <div class="col-sm-4">
+            <b-form-group
+                class="form-label"
+                label="Pronouns"
+                label-for="pronouns"
+            >
+              <b-form-select
+                  class="form-control"
+                  v-model="form.pronouns"
+                  :options="options.pronouns">
+              </b-form-select>
+            </b-form-group>
+          </div>
+        </div>
+
+        <!-- T-Shirt Size and Hackathons Attended -->
+        <div class="row">
+          <div class="col-sm-6">
+            <b-form-group
+                class="form-label"
+                label="T-Shirt Size *"
+                label-for="tShirtSize"
+            >
+              <b-form-select
+                  class="form-control"
+                  v-model="form.tShirtSize"
+                  :options="options.tShirtSizes"
+                  :required="true">
+              </b-form-select>
             </b-form-group>
           </div>
 
-          <!-- Submit Button -->
-          <b-button variant="success" type="submit" class="w-100">Submit</b-button>
-          <p class="error">{{ errors }}</p>
-        </b-form>
-      </div>
+          <div class="col-sm-6">
+            <b-form-group
+                class="form-label"
+                label="Hackathons Attended"
+                label-for="hackathonsAttended"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.hackathonsAttended"
+                  type="number"
+                  :min="0"
+              >
+              </b-form-input>
+            </b-form-group>
+          </div>
+        </div>
+
+        <!-- Dietary Restrictions -->
+        <div class="row">
+          <div class="col">
+            <b-form-group
+                class="form-label"
+                label="Dietary Restrictions"
+                label-for="dietaryRestrictions"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.dietaryRestrictions"
+              >
+              </b-form-input>
+            </b-form-group>
+          </div>
+        </div>
+
+        <!-- LinkedIn URL -->
+        <div class="row">
+          <div class="col">
+            <b-form-group
+                class="form-label"
+                label="LinkedIn URL"
+                label-for="linkedInUrl"
+            >
+              <b-form-input
+                  class="form-control"
+                  v-model="form.linkedInUrl"
+                  type="url"
+              >
+              </b-form-input>
+            </b-form-group>
+          </div>
+        </div>
+
+        <!-- MLH Code of Conduct -->
+        <div class="row">
+          <b-form-group class="form-check">
+            <b-form-checkbox
+                class="form-check-input"
+                v-model="form.mlhCodeOfConduct"
+                :required="true">
+              <label class="form-check-label" for="mlhCodeOfConduct">
+                I have read and agree to the <a class="link" target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>. *
+              </label>
+            </b-form-checkbox>
+          </b-form-group>
+        </div>
+
+        <!-- MLH Privacy Policy -->
+        <div class="row">
+          <b-form-group class="form-check">
+            <b-form-checkbox
+                class="form-check-input"
+                v-model="form.mlhPrivacyPolicy"
+                :required="true">
+              <label class="form-check-label" for="mlhPrivacyPolicy">
+                I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a> I further agree to the terms of both the <a class="link" href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank">MLH Contest Terms and Conditions</a> and the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a>  <label class="required">*</label>
+              </label>
+            </b-form-checkbox>
+          </b-form-group>
+        </div>
+
+        <!-- MLH Emails -->
+        <div class="row">
+          <b-form-group class="form-check">
+            <b-form-checkbox
+                class="form-check-input"
+                v-model="form.mlhEmails">
+              <label class="form-check-label" for="mlhEmails">
+                I authorize MLH to send me occasional emails about relevant events, career opportunities, and community announcements.
+              </label>
+            </b-form-checkbox>
+          </b-form-group>
+        </div>
+
+        <!-- Submit Button -->
+        <b-button variant="success" type="submit" class="w-100">Submit</b-button>
+        <p class="error">{{ errors }}</p>
+      </b-form>
     </div>
   </div>
 </template>
@@ -415,8 +420,9 @@ export default {
       isRegistered: false,
       isLoading: false,
       errors: '',
-      dismissSeconds: 10,
-      dismissCountDown: 0,
+      showAlert: false,
+      dismissSeconds: 0, // Variable to keep track of how long alert has been rendered
+      dismissCountDown: 5000, // Alert will last 5 seconds
 
       options: {
         countries: [
@@ -472,7 +478,6 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      this.showAlert();
       this.isLoading = true;
       const formData = { ...this.form };
 
@@ -485,13 +490,13 @@ export default {
       }
 
       this.isLoading = false;
-    },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown
-    },
-    showAlert() {
-      console.log("hello");
-      this.dismissCountDown = this.dismissSeconds
+      this.showAlert = true;
+
+      if (this.isRegistered) {
+        setTimeout(() => {
+          this.$router.push('/');
+        }, this.dismissCountDown);
+      }
     }
   }
 };
