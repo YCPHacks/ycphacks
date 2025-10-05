@@ -8,35 +8,37 @@
       </header>
   </div>
   <div class="container-fluid">
-    <table class="hardware-table">
-      <thead>
-        <tr>
-          <th>Hardware Name</th>
-          <th>Serial Number</th>
-          <th>Availability</th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-if="hardwareList && hardwareList.length > 0">
-          <tr v-for="item in hardwareList" :key="item.id">
-            <td>{{ item.name }}</td>
-            <td>{{ item.serialNumber }}</td>
-            <td>
-              <span :class="getAvailabilityClass(item.whoHasId)">
-                {{ getAvailabilityText(item.whoHasId) }}
-              </span>
-            </td>
-          </tr>
-        </template>
-        <template v-else>
+    <div class="table-wrapper">
+      <table class="hardware-table">
+        <thead>
           <tr>
-            <td colspan="3" class="no-data-row">
-              No hardware data to display.
-            </td>
+            <th>Hardware Name</th>
+            <th>Serial Number</th>
+            <th>Availability</th>
           </tr>
-        </template>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <template v-if="hardwareList && hardwareList.length > 0">
+            <tr v-for="item in hardwareList" :key="item.id">
+              <td>{{ item.name }}</td>
+              <td>{{ item.serialNumber }}</td>
+              <td>
+                <span :class="getAvailabilityClass(item.whoHasId)">
+                  {{ getAvailabilityText(item.whoHasId) }}
+                </span>
+              </td>
+            </tr>
+          </template>
+          <template v-else>
+            <tr>
+              <td colspan="3" class="no-data-row">
+                No hardware data to display.
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -116,10 +118,21 @@ body {
   padding: 20px;
 }
 
+.table-wrapper{
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .hardware-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  table-layout: fixed;
 }
 
 .hardware-table th,
@@ -127,11 +140,28 @@ body {
   border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .hardware-table th {
   background-color: #f2f2f2;
   font-weight: bold;
+  border-bottom: 2px solid #ddd;
+}
+
+.hardware-table th:nth-child(1),
+.hardware-table td:nth-child(1){
+  width: 60%;
+}
+.hardware-table th:nth-child(2),
+.hardware-table td:nth-child(2){
+  width: 20%;
+}
+.hardware-table th:nth-child(3),
+.hardware-table td:nth-child(3){
+  width: 20%;
 }
 
 /* Availability Status Styling */
