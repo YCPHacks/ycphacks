@@ -115,6 +115,21 @@ export default {
     this.fetchHardware();
   },
   methods: {
+    groupItemsByName(items){
+      const grouped = {};
+      items.forEach(item => {
+        const name = item.name;
+
+        if(!grouped[name]){
+          grouped[name] = {
+            name: name,
+            description: item.description,
+            image: item.image,
+          };
+        }
+      });
+      return Object.values(grouped);
+    },
     async fetchHardware() {
       try {
         const res = await hardwareService.getHardware();
@@ -134,15 +149,25 @@ export default {
           return;
         }
 
-        this.hardwareSections = hardwareArray.map(group => ({
-          id: group.title.toLowerCase().replace(/\s+/g, "-"),
-          title: group.title,
-          items: group.items.map(p => ({
-            name: p.subtitle,
-            description: p.description || "No description available.",
-            image: p.imageUrl || null
-          }))
-        }));
+        this.hardwareSections = hardwareArray.map(group => {
+            
+            // 1. Standardize the item structure from the raw API response
+            const rawItems = group.items.map(p => ({
+                name: p.subtitle,             // The name to group by
+                description: p.description || "No description available.",
+                image: p.imageUrl || null,
+            }));
+
+            // 2. Group the standardized items by name (deduplicate)
+            const groupedItems = this.groupItemsByName(rawItems);
+
+            // 3. Return the final section object
+            return {
+                id: group.title.toLowerCase().replace(/\s+/g, "-"),
+                title: group.title,
+                items: groupedItems
+            };
+        });
       } catch (err) {
         console.error("Failed to fetch hardware:", err);
       }
