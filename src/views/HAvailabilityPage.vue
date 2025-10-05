@@ -22,8 +22,8 @@
             <td>{{ item.name }}</td>
             <td>{{ item.serialNumber }}</td>
             <td>
-              <span :class="getAvailabilityClass(item.whoHasIt)">
-                {{ getAvailabilityText(item.whoHasIt) }}
+              <span :class="getAvailabilityClass(item.whoHasId)">
+                {{ getAvailabilityText(item.whoHasId) }}
               </span>
             </td>
           </tr>
@@ -50,8 +50,9 @@ const loading = ref(true);
 const error = ref(null);
 
 const getAvailabilityText = (whoHasId) => {
-    if(!whoHasId || String(whoHasId).trim() === ''){
-        return 'Available';
+  console.log('whoHasId received:', whoHasId, 'Type:', typeof whoHasId);
+    if(whoHasId === null){
+      return 'Available';
     }
     return 'Unavailable';
 }

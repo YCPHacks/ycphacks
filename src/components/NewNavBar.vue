@@ -1,32 +1,20 @@
 <template>
   <nav class="navbar">
-    <a
-      id="mlh-trust-badge"
-      style="display:block;max-width:100px;min-width:60px;position:fixed;left:0px;top:0;width:10%;z-index:10000"
-      href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2024-season&utm_content=white"
-      target="_blank"
-    >
-      <img
-        src="https://s3.amazonaws.com/logged-assets/trust-badge/2024/mlh-trust-badge-2024-white.svg"
-        alt="Major League Hacking 2024 Hackathon Season"
-        style="width:100%"
-      />
-    </a>
     <div class="nav">
         <div class="nav-right" v-if="isLoggedIn">
           <a class="nav-link" href="/activities">Activities</a>
           <div class="dropdown hardware-dropdown">
             <a class="dropdown-button nav-link" href="/hardware">Hardware ▾</a>
             <ul class="dropdown-menu hardware-menu">
-              <li><a class="nav-link" href="/hardwareAvailability">Availability</a></li>
+              <li><a class="nav-link" href="/hardware/availability">Availability</a></li>
             </ul>
           </div>
           
           <div class="dropdown">
             <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
             <ul class="dropdown-menu" v-if="menuDropdownVisible">
-              <li><a class="nav-link" href="/profile" @click="menuDropdownVisible = false">Profile</a></li>
-              <li><a class="nav-link" href="/logout" @click="menuDropdownVisible = false">Logout</a></li>
+              <li><a class="dropdown-menu nav-link" href="/profile" @click="menuDropdownVisible = false">Profile</a></li>
+              <li><a class="dropdown-menu nav-link" href="/logout" @click="menuDropdownVisible = false">Logout</a></li>
             </ul>
           </div>
         </div>

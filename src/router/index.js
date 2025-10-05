@@ -34,7 +34,7 @@ const routes = [
         component: HardwarePage,
     },
     {
-        path: '/hardwareAvailability',
+        path: '/hardware/availability',
         name: 'Hardware Availability',
         component: HAvailabilityPage
     }
