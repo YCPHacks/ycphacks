@@ -15,12 +15,18 @@
     <div class="nav">
         <div class="nav-right" v-if="isLoggedIn">
           <a class="nav-link" href="/activities">Activities</a>
-          <a class="nav-link" href="/hardware">Hardware</a>
+          <div class="dropdown hardware-dropdown">
+            <a class="dropdown-button nav-link" href="/hardware">Hardware ▾</a>
+            <ul class="dropdown-menu hardware-menu">
+              <li><a class="nav-link" href="/hardwareAvailability">Availability</a></li>
+            </ul>
+          </div>
+          
           <div class="dropdown">
-            <button class="dropdown-button">Menu ▾</button>
-            <ul class="dropdown-menu">
-              <li><a class="nav-link" href="/profile">Profile</a></li>
-              <li><a class="nav-link" href="/logout">Logout</a></li>
+            <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
+            <ul class="dropdown-menu" v-if="menuDropdownVisible">
+              <li><a class="nav-link" href="/profile" @click="menuDropdownVisible = false">Profile</a></li>
+              <li><a class="nav-link" href="/logout" @click="menuDropdownVisible = false">Logout</a></li>
             </ul>
           </div>
         </div>
@@ -33,14 +39,31 @@ export default {
   name: "NewNavBar",
   data() {
     return {
-      dropdownVisible: false,
+      menuDropdownVisible: false,
       isLoggedIn: true,
     };
   },
+  mounted(){
+    document.addEventListener('click', this.closeMenusOutside);
+  },
+  beforeUnmount(){
+    document.removeEventListener('click', this.closeMenusOutside);
+  },
   methods: {
-    toggleDropdown() {
-      this.dropdownVisible = !this.dropdownVisible;
-    },
+    closeMenusOutside(event){
+      const dropdownElements = this.$el.querySelectorAll('.dropdown');
+      let clickInsideDropdown = false;
+      dropdownElements.forEach (el => {
+        if(el.contains(event.target)){
+          clickInsideDropdown = true;
+        }
+      });
+
+      if(!clickInsideDropdown){
+        // this.hardwareDropdownVisible = false;
+        this.menuDropdownVisible = false;
+      }
+    }
   },
 };
 </script>
@@ -98,6 +121,7 @@ export default {
   margin: 0;
   border-radius: 4px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
 }
 
 .dropdown-menu li {
@@ -107,6 +131,8 @@ export default {
 .dropdown-menu .nav-link {
   color: white;
   text-decoration: none;
+  display: inline-block;
+  padding: 0;
 }
 
 .dropdown-menu .nav-link:hover {
@@ -127,5 +153,16 @@ export default {
 
 .nav-link:hover {
   text-decoration: underline;
+}
+
+.hardware-dropdown .hardware-menu{
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.hardware-dropdown:hover .hardware-menu{
+  display: block;
+  opacity: 1;
 }
 </style>

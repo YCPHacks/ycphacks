@@ -88,18 +88,27 @@ export default {
   },
   computed: {
     filteredSections() {
-      if (!this.searchQuery) return this.hardwareSections;
-      const query = this.searchQuery.toLowerCase();
-      return this.hardwareSections = res.map(group => ({
-         id: group.id,
-         title: group.title,
-         items: group.items.map(p => ({
-           name: p.subtitle || p.name,  // show subtitle as card title
-           description: p.description || "No description available.",
-           image: p.image || null
-         }))
-      }));
+      // If there is no search query, return the original, full list of hardware sections.
+      if (!this.searchQuery) {
+          return this.hardwareSections;
+      }
 
+      const query = this.searchQuery.toLowerCase();
+      
+      // 1. Map over the original sections
+      return this.hardwareSections
+          .map(section => ({
+              ...section, // Keep the existing section properties (id, title)
+              
+              // 2. Filter the items within the current section
+              items: section.items.filter(item => 
+                  // Check if the search query is in the item name or description
+                  item.name.toLowerCase().includes(query) ||
+                  item.description.toLowerCase().includes(query)
+              )
+          }))
+          // 3. Filter out any sections that are now empty (have no matching items)
+          .filter(section => section.items.length > 0);
     }
   },
   mounted() {
