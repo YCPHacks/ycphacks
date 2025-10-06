@@ -43,7 +43,7 @@ export default createStore({
                 commit('setUser', new UserAdapter(data.data));
                 return { success: true, message: data.message };
             } else {
-                return { success: false, message: data.message };
+                return { success: false, message: data.message, errors: data.errors };
             }
         } catch (error) {
             console.error('Error during registration:', error);

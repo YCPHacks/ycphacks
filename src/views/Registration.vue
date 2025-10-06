@@ -13,7 +13,7 @@
           variant="success"
           @close-countdown="dismissSeconds = $event"
       >
-        <p>You have been successfully registered! You are being redirected to the landing page {{ dismissSeconds / 1000 }} seconds...</p>
+        <span>You have been successfully registered! You are being redirected to the landing page {{ dismissSeconds / 1000 }} seconds...</span>
         <b-progress
             variant="success"
             :max="dismissCountDown"
@@ -37,11 +37,11 @@
 
       <div v-if="showAlert">
         <b-alert
-            :modelValue="showAlert"
+            v-model="showAlert"
             :dismissible="true"
             variant="danger"
         >
-          <p>Registration failed!</p>
+          <span>Registration failed!</span>
         </b-alert>
       </div>
 
@@ -61,6 +61,7 @@
                   v-model="form.firstName"
                   required>
               </b-form-input>
+              <p v-if="errors.firstName" class="text-danger">{{ errors.firstName }}</p>
             </b-form-group>
           </div>
           <div class="col">
@@ -74,6 +75,7 @@
                   v-model="form.lastName"
                   required>
               </b-form-input>
+              <p v-if="errors.lastName" class="text-danger">{{ errors.lastName }}</p>
             </b-form-group>
           </div>
         </div>
@@ -92,6 +94,7 @@
                   type="email"
                   required>
               </b-form-input>
+              <p v-if="errors.email" class="text-danger">{{ errors.email }}</p>
             </b-form-group>
           </div>
         </div>
@@ -110,6 +113,7 @@
                   type="password"
                   required>
               </b-form-input>
+              <p v-if="errors.password" class="text-danger">{{ errors.password }}</p>
             </b-form-group>
           </div>
 
@@ -125,6 +129,7 @@
                   type="tel"
                   required>
               </b-form-input>
+              <p v-if="errors.phoneNumber" class="text-danger">{{ errors.phoneNumber }}</p>
             </b-form-group>
           </div>
         </div>
@@ -143,6 +148,7 @@
                   placeholder="York College of Pennsylvania"
                   required>
               </b-form-input>
+              <p v-if="errors.school" class="text-danger">{{ errors.school }}</p>
             </b-form-group>
           </div>
         </div>
@@ -162,6 +168,7 @@
                     :options="options.majors"
                 >
                 </b-form-select>
+                <p v-if="errors.major" class="text-danger">{{ errors.major }}</p>
               </b-form-group>
             </div>
           </div>
@@ -181,6 +188,7 @@
                   :options="options.levelsOfStudy"
               >
               </b-form-select>
+              <p v-if="errors.levelsOfStudy" class="text-danger">{{ errors.levelsOfStudy }}</p>
             </b-form-group>
           </div>
         </div>
@@ -201,6 +209,7 @@
                   placeholder="2026"
               >
               </b-form-input>
+              <p v-if="errors.graduationYear" class="text-danger">{{ errors.graduationYear }}</p>
             </b-form-group>
           </div>
 
@@ -216,6 +225,7 @@
                   :options="options.countries"
                   :required="true">
               </b-form-select>
+              <p v-if="errors.country" class="text-danger">{{ errors.country }}</p>
             </b-form-group>
           </div>
         </div>
@@ -235,6 +245,7 @@
                   :min="0"
                   required>
               </b-form-input>
+              <p v-if="errors.age" class="text-danger">{{ errors.age }}</p>
             </b-form-group>
           </div>
 
@@ -250,6 +261,7 @@
                   :options="options.genders"
                   :required="true">
               </b-form-select>
+              <p v-if="errors.gender" class="text-danger">{{ errors.gender }}</p>
             </b-form-group>
           </div>
 
@@ -264,6 +276,7 @@
                   v-model="form.pronouns"
                   :options="options.pronouns">
               </b-form-select>
+              <p v-if="errors.pronouns" class="text-danger">{{ errors.pronouns }}</p>
             </b-form-group>
           </div>
         </div>
@@ -282,6 +295,7 @@
                   :options="options.tShirtSizes"
                   :required="true">
               </b-form-select>
+              <p v-if="errors.tShirtSize" class="text-danger">{{ errors.tShirtSize }}</p>
             </b-form-group>
           </div>
 
@@ -298,6 +312,7 @@
                   :min="0"
               >
               </b-form-input>
+              <p v-if="errors.hackathonsAttended" class="text-danger">{{ errors.hackathonsAttended }}</p>
             </b-form-group>
           </div>
         </div>
@@ -315,6 +330,7 @@
                   v-model="form.dietaryRestrictions"
               >
               </b-form-input>
+              <p v-if="errors.dietaryRestrictions" class="text-danger">{{ errors.dietaryRestrictions }}</p>
             </b-form-group>
           </div>
         </div>
@@ -333,6 +349,7 @@
                   type="url"
               >
               </b-form-input>
+              <p v-if="errors.linkedInUrl" class="text-danger">{{ errors.linkedInUrl }}</p>
             </b-form-group>
           </div>
         </div>
@@ -348,6 +365,7 @@
                 I have read and agree to the <a class="link" target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>. *
               </label>
             </b-form-checkbox>
+            <p v-if="errors.mlhCodeOfConduct" class="text-danger">{{ errors.mlhCodeOfConduct }}</p>
           </b-form-group>
         </div>
 
@@ -362,6 +380,7 @@
                 I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a> I further agree to the terms of both the <a class="link" href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank">MLH Contest Terms and Conditions</a> and the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a>  <label class="required">*</label>
               </label>
             </b-form-checkbox>
+            <p v-if="errors.mlhPrivacyPolicy" class="text-danger">{{ errors.mlhPrivacyPolicy }}</p>
           </b-form-group>
         </div>
 
@@ -375,12 +394,13 @@
                 I authorize MLH to send me occasional emails about relevant events, career opportunities, and community announcements.
               </label>
             </b-form-checkbox>
+            <p v-if="errors.mlhEmails" class="text-danger">{{ errors.mlhEmails }}</p>
           </b-form-group>
         </div>
 
         <!-- Submit Button -->
         <b-button variant="success" type="submit" class="w-100">Submit</b-button>
-        <p class="error">{{ errors }}</p>
+        <p class="error">{{ message }}</p>
       </b-form>
     </div>
   </div>
@@ -419,7 +439,8 @@ export default {
       },
       isRegistered: false,
       isLoading: false,
-      errors: '',
+      message: '',
+      errors: {},
       showAlert: false,
       dismissSeconds: 0, // Variable to keep track of how long alert has been rendered
       dismissCountDown: 5000, // Alert will last 5 seconds
@@ -486,9 +507,11 @@ export default {
       if (result.success) {
         this.isRegistered = true;
       } else {
-        this.errors = result.message;
+        this.message = result.message;
+        this.errors = result.errors;
       }
 
+      if (!this.errors) this.errors = {};
       this.isLoading = false;
       this.showAlert = true;
 
