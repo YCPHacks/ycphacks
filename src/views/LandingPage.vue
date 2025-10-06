@@ -297,7 +297,7 @@
       <div class="container">
           <div class="main-sponsors">
               <div class="header">
-                  <div class="circle" style="font-size:27px; width: 250px;">
+                  <div class="circle">
                       <p>{{ eventYear }} Sponsors</p>
                   </div>
               </div>
@@ -353,7 +353,7 @@ export default {
             logoUrl: s.image || null
           };
         });
-        console.log("Sponsor data loaded:", sponsors.value); 
+        // console.log("Sponsor data loaded:", sponsors.value); 
       }catch(err){
         console.error("Failed to fetch sponsors: ", err);
         sponsors.value = [];
@@ -465,8 +465,8 @@ a {
 
 .circle {
   display: inline-block;
-  width: 200px;
-  height: 100px;
+  width: 300px;
+  height: 120px;
   margin-top: 10px;
   margin-left: 20px;
   margin-right: 20px;
@@ -474,18 +474,16 @@ a {
   border: 6px solid #fff;
   text-align: center;
   color: white;
-  line-height: 100px;
+  line-height: 120px;
   font-size: 20px;
   transition: all 0.3s ease;
-  padding-bottom: 10%;
-
 }
 
 .about {
     position: relative;
     top: -650px;
     margin-bottom: -550px;
-    text-align: justify;
+    text-align: center;
     font-size: 18px;
     display: flex;
     align-items: center;
@@ -538,7 +536,9 @@ a {
     }
 }
 .header {
-    text-align: center;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
 }
 .circle p {
     font-size: 32px;
@@ -631,21 +631,25 @@ h1 {
 .schedule {
     margin-top: 50px;
     background-color:#93dda3;
+    text-align: center;
 }
 .schedule .header .circle {
     font-size: 40px;
 }
 .faq{
   background-color: #ccffcc;
+  text-align: center;
 }
 .prizes{
   background-color: #ccffcc;
+  text-align: center;
 }
 .prize-titles{
   background-color:#ccffcc;
 }
 .sponsors{
   background-color:#ccffcc;
+  text-align: center;
 }
 .question{
   background-color: #ccffcc;
@@ -657,6 +661,7 @@ h1 {
     -moz-transform: skew(20deg);
     -o-transform: skew(20deg);
     transform: skew(20deg);
+    white-space: nowrap;
 }
 #day-tag {
     font-size: 50px;
