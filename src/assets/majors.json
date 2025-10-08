@@ -1,0 +1,609 @@
+{
+  "rows": [
+    {
+      "rowid": 1,
+      "FOD1P": "1100",
+      "Major": "GENERAL AGRICULTURE",
+      "Major_Category": "Agriculture & Natural Resources"
+    },
+    {
+      "rowid": 2,
+      "FOD1P": "1101",
+      "Major": "AGRICULTURE PRODUCTION AND MANAGEMENT",
+      "Major_Category": "Agriculture & Natural Resources"
+    },
+    {
+      "rowid": 3,
+      "FOD1P": "1102",
+      "Major": "AGRICULTURAL ECONOMICS",
+      "Major_Category": "Agriculture & Natural Resources"
+    },
+    {
+      "rowid": 4,
+      "FOD1P": "1103",
+      "Major": "ANIMAL SCIENCES",
+      "Major_Category": "Agriculture & Natural Resources"
+    },
+    {
+      "rowid": 5,
+      "FOD1P": "1104",
+      "Major": "FOOD SCIENCE",
+      "Major_Category": "Agriculture & Natural Resources"
+    },
+    {
+      "rowid": 6,
+      "FOD1P": "1105",
+      "Major": "PLANT SCIENCE AND AGRONOMY",
+      "Major_Category": "Agriculture & Natural Resources"
+    },
+    {
+      "rowid": 7,
+      "FOD1P": "1106",
+      "Major": "SOIL SCIENCE",
+      "Major_Category": "Agriculture & Natural Resources"
+    },
+    {
+      "rowid": 8,
+      "FOD1P": "1199",
+      "Major": "MISCELLANEOUS AGRICULTURE",
+      "Major_Category": "Agriculture & Natural Resources"
+    },
+    {
+      "rowid": 9,
+      "FOD1P": "1302",
+      "Major": "FORESTRY",
+      "Major_Category": "Agriculture & Natural Resources"
+    },
+    {
+      "rowid": 10,
+      "FOD1P": "1303",
+      "Major": "NATURAL RESOURCES MANAGEMENT",
+      "Major_Category": "Agriculture & Natural Resources"
+    },
+    {
+      "rowid": 11,
+      "FOD1P": "6000",
+      "Major": "FINE ARTS",
+      "Major_Category": "Arts"
+    },
+    {
+      "rowid": 12,
+      "FOD1P": "6001",
+      "Major": "DRAMA AND THEATER ARTS",
+      "Major_Category": "Arts"
+    },
+    {
+      "rowid": 13,
+      "FOD1P": "6002",
+      "Major": "MUSIC",
+      "Major_Category": "Arts"
+    },
+    {
+      "rowid": 14,
+      "FOD1P": "6003",
+      "Major": "VISUAL AND PERFORMING ARTS",
+      "Major_Category": "Arts"
+    },
+    {
+      "rowid": 15,
+      "FOD1P": "6004",
+      "Major": "COMMERCIAL ART AND GRAPHIC DESIGN",
+      "Major_Category": "Arts"
+    },
+    {
+      "rowid": 16,
+      "FOD1P": "6005",
+      "Major": "FILM VIDEO AND PHOTOGRAPHIC ARTS",
+      "Major_Category": "Arts"
+    },
+    {
+      "rowid": 17,
+      "FOD1P": "6007",
+      "Major": "STUDIO ARTS",
+      "Major_Category": "Arts"
+    },
+    {
+      "rowid": 18,
+      "FOD1P": "6099",
+      "Major": "MISCELLANEOUS FINE ARTS",
+      "Major_Category": "Arts"
+    },
+    {
+      "rowid": 19,
+      "FOD1P": "1301",
+      "Major": "ENVIRONMENTAL SCIENCE",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 20,
+      "FOD1P": "3600",
+      "Major": "BIOLOGY",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 21,
+      "FOD1P": "3601",
+      "Major": "BIOCHEMICAL SCIENCES",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 22,
+      "FOD1P": "3602",
+      "Major": "BOTANY",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 23,
+      "FOD1P": "3603",
+      "Major": "MOLECULAR BIOLOGY",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 24,
+      "FOD1P": "3604",
+      "Major": "ECOLOGY",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 25,
+      "FOD1P": "3605",
+      "Major": "GENETICS",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 26,
+      "FOD1P": "3606",
+      "Major": "MICROBIOLOGY",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 27,
+      "FOD1P": "3607",
+      "Major": "PHARMACOLOGY",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 28,
+      "FOD1P": "3608",
+      "Major": "PHYSIOLOGY",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 29,
+      "FOD1P": "3609",
+      "Major": "ZOOLOGY",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 30,
+      "FOD1P": "3611",
+      "Major": "NEUROSCIENCE",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 31,
+      "FOD1P": "3699",
+      "Major": "MISCELLANEOUS BIOLOGY",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 32,
+      "FOD1P": "4006",
+      "Major": "COGNITIVE SCIENCE AND BIOPSYCHOLOGY",
+      "Major_Category": "Biology & Life Science"
+    },
+    {
+      "rowid": 33,
+      "FOD1P": "6200",
+      "Major": "GENERAL BUSINESS",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 34,
+      "FOD1P": "6201",
+      "Major": "ACCOUNTING",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 35,
+      "FOD1P": "6202",
+      "Major": "ACTUARIAL SCIENCE",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 36,
+      "FOD1P": "6203",
+      "Major": "BUSINESS MANAGEMENT AND ADMINISTRATION",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 37,
+      "FOD1P": "6204",
+      "Major": "OPERATIONS LOGISTICS AND E-COMMERCE",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 38,
+      "FOD1P": "6205",
+      "Major": "BUSINESS ECONOMICS",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 39,
+      "FOD1P": "6206",
+      "Major": "MARKETING AND MARKETING RESEARCH",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 40,
+      "FOD1P": "6207",
+      "Major": "FINANCE",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 41,
+      "FOD1P": "6209",
+      "Major": "HUMAN RESOURCES AND PERSONNEL MANAGEMENT",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 42,
+      "FOD1P": "6210",
+      "Major": "INTERNATIONAL BUSINESS",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 43,
+      "FOD1P": "6211",
+      "Major": "HOSPITALITY MANAGEMENT",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 44,
+      "FOD1P": "6212",
+      "Major": "MANAGEMENT INFORMATION SYSTEMS AND STATISTICS",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 45,
+      "FOD1P": "6299",
+      "Major": "MISCELLANEOUS BUSINESS & MEDICAL ADMINISTRATION",
+      "Major_Category": "Business"
+    },
+    {
+      "rowid": 46,
+      "FOD1P": "1901",
+      "Major": "COMMUNICATIONS",
+      "Major_Category": "Communications & Journalism"
+    },
+    {
+      "rowid": 47,
+      "FOD1P": "1902",
+      "Major": "JOURNALISM",
+      "Major_Category": "Communications & Journalism"
+    },
+    {
+      "rowid": 48,
+      "FOD1P": "1903",
+      "Major": "MASS MEDIA",
+      "Major_Category": "Communications & Journalism"
+    },
+    {
+      "rowid": 49,
+      "FOD1P": "1904",
+      "Major": "ADVERTISING AND PUBLIC RELATIONS",
+      "Major_Category": "Communications & Journalism"
+    },
+    {
+      "rowid": 50,
+      "FOD1P": "2001",
+      "Major": "COMMUNICATION TECHNOLOGIES",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 51,
+      "FOD1P": "2100",
+      "Major": "COMPUTER AND INFORMATION SYSTEMS",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 52,
+      "FOD1P": "2101",
+      "Major": "COMPUTER PROGRAMMING AND DATA PROCESSING",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 53,
+      "FOD1P": "2102",
+      "Major": "COMPUTER SCIENCE",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 54,
+      "FOD1P": "2105",
+      "Major": "INFORMATION SCIENCES",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 55,
+      "FOD1P": "2106",
+      "Major": "COMPUTER ADMINISTRATION MANAGEMENT AND SECURITY",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 56,
+      "FOD1P": "2107",
+      "Major": "COMPUTER NETWORKING AND TELECOMMUNICATIONS",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 57,
+      "FOD1P": "3700",
+      "Major": "MATHEMATICS",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 58,
+      "FOD1P": "3701",
+      "Major": "APPLIED MATHEMATICS",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 59,
+      "FOD1P": "3702",
+      "Major": "STATISTICS AND DECISION SCIENCE",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 60,
+      "FOD1P": "4005",
+      "Major": "MATHEMATICS AND COMPUTER SCIENCE",
+      "Major_Category": "Computers & Mathematics"
+    },
+    {
+      "rowid": 61,
+      "FOD1P": "2300",
+      "Major": "GENERAL EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 62,
+      "FOD1P": "2301",
+      "Major": "EDUCATIONAL ADMINISTRATION AND SUPERVISION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 63,
+      "FOD1P": "2303",
+      "Major": "SCHOOL STUDENT COUNSELING",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 64,
+      "FOD1P": "2304",
+      "Major": "ELEMENTARY EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 65,
+      "FOD1P": "2305",
+      "Major": "MATHEMATICS TEACHER EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 66,
+      "FOD1P": "2306",
+      "Major": "PHYSICAL AND HEALTH EDUCATION TEACHING",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 67,
+      "FOD1P": "2307",
+      "Major": "EARLY CHILDHOOD EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 68,
+      "FOD1P": "2308",
+      "Major": "SCIENCE AND COMPUTER TEACHER EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 69,
+      "FOD1P": "2309",
+      "Major": "SECONDARY TEACHER EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 70,
+      "FOD1P": "2310",
+      "Major": "SPECIAL NEEDS EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 71,
+      "FOD1P": "2311",
+      "Major": "SOCIAL SCIENCE OR HISTORY TEACHER EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 72,
+      "FOD1P": "2312",
+      "Major": "TEACHER EDUCATION: MULTIPLE LEVELS",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 73,
+      "FOD1P": "2313",
+      "Major": "LANGUAGE AND DRAMA EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 74,
+      "FOD1P": "2314",
+      "Major": "ART AND MUSIC EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 75,
+      "FOD1P": "2399",
+      "Major": "MISCELLANEOUS EDUCATION",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 76,
+      "FOD1P": "3501",
+      "Major": "LIBRARY SCIENCE",
+      "Major_Category": "Education"
+    },
+    {
+      "rowid": 77,
+      "FOD1P": "1401",
+      "Major": "ARCHITECTURE",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 78,
+      "FOD1P": "2400",
+      "Major": "GENERAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 79,
+      "FOD1P": "2401",
+      "Major": "AEROSPACE ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 80,
+      "FOD1P": "2402",
+      "Major": "BIOLOGICAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 81,
+      "FOD1P": "2403",
+      "Major": "ARCHITECTURAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 82,
+      "FOD1P": "2404",
+      "Major": "BIOMEDICAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 83,
+      "FOD1P": "2405",
+      "Major": "CHEMICAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 84,
+      "FOD1P": "2406",
+      "Major": "CIVIL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 85,
+      "FOD1P": "2407",
+      "Major": "COMPUTER ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 86,
+      "FOD1P": "2408",
+      "Major": "ELECTRICAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 87,
+      "FOD1P": "2409",
+      "Major": "ENGINEERING MECHANICS PHYSICS AND SCIENCE",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 88,
+      "FOD1P": "2410",
+      "Major": "ENVIRONMENTAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 89,
+      "FOD1P": "2411",
+      "Major": "GEOLOGICAL AND GEOPHYSICAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 90,
+      "FOD1P": "2412",
+      "Major": "INDUSTRIAL AND MANUFACTURING ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 91,
+      "FOD1P": "2413",
+      "Major": "MATERIALS ENGINEERING AND MATERIALS SCIENCE",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 92,
+      "FOD1P": "2414",
+      "Major": "MECHANICAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 93,
+      "FOD1P": "2415",
+      "Major": "METALLURGICAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 94,
+      "FOD1P": "2416",
+      "Major": "MINING AND MINERAL ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 95,
+      "FOD1P": "2417",
+      "Major": "NAVAL ARCHITECTURE AND MARINE ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 96,
+      "FOD1P": "2418",
+      "Major": "NUCLEAR ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 97,
+      "FOD1P": "2419",
+      "Major": "PETROLEUM ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 98,
+      "FOD1P": "2499",
+      "Major": "MISCELLANEOUS ENGINEERING",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 99,
+      "FOD1P": "2500",
+      "Major": "ENGINEERING TECHNOLOGIES",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 100,
+      "FOD1P": "2501",
+      "Major": "ENGINEERING AND INDUSTRIAL MANAGEMENT",
+      "Major_Category": "Engineering"
+    },
+    {
+      "rowid": 101,
+      "Major": "OTHER",
+      "Major_Category": "OTHER"
+    }
+  ]
+}

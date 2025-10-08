@@ -14,13 +14,13 @@
     </a>
     <div class="nav">
         <div class="nav-right" v-if="isLoggedIn">
-          <a class="nav-link" href="/activities">Activities</a>
-          <a class="nav-link" href="/hardware">Hardware</a>
+          <router-link class="nav-link" to="/activities">Activities</router-link>
+          <router-link class="nav-link" to="/hardware">Hardware</router-link>
           <div class="dropdown">
             <button class="dropdown-button">Menu ▾</button>
             <ul class="dropdown-menu">
-              <li><a class="nav-link" href="/profile">Profile</a></li>
-              <li><a class="nav-link" href="/logout">Logout</a></li>
+              <li><router-link class="nav-link" to="/profile">Profile</router-link></li>
+              <li><router-link class="nav-link" to="/logout">Logout</router-link></li>
             </ul>
           </div>
         </div>
