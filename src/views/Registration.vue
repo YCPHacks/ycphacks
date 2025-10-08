@@ -252,14 +252,13 @@
           <div class="col-sm-4">
             <b-form-group
                 class="form-label"
-                label="Gender *"
+                label="Gender"
                 label-for="gender"
             >
               <b-form-select
                   class="form-control"
                   v-model="form.gender"
-                  :options="options.genders"
-                  :required="true">
+                  :options="options.genders">
               </b-form-select>
               <p v-if="errors.gender" class="text-danger">{{ errors.gender }}</p>
             </b-form-group>
@@ -464,8 +463,7 @@ export default {
           { value: null, text: '-Select One-' },
           { value: "he/him/his", text: 'he/him/his' },
           { value: "she/her/her", text: 'she/her/her' },
-          { value: "they, them, their", text: 'they, them, their' },
-          { value: "ze, hir, hir", text: 'ze, hir, hir' }
+          { value: "they, them, their", text: 'they, them, their' }
         ],
         tShirtSizes: [
           { value: null, text: '-Select One-' },
