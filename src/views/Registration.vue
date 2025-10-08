@@ -13,7 +13,7 @@
           variant="success"
           @close-countdown="dismissSeconds = $event"
       >
-        <span>You have been successfully registered! You are being redirected to the landing page {{ dismissSeconds / 1000 }} seconds...</span>
+        <span>You have been successfully registered! You are being redirected to the landing page in {{ dismissSeconds/1000 }} {{ dismissSeconds/1000 === 1 ? 'second' : 'seconds' }}...</span>
         <b-progress
             variant="success"
             :max="dismissCountDown"
