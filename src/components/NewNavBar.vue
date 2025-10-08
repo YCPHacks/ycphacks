@@ -2,19 +2,19 @@
   <nav class="navbar">
     <div class="nav">
         <div class="nav-right" v-if="isLoggedIn">
-          <a class="nav-link" href="/activities">Activities</a>
+          <router-link class="nav-link" to="/activities">Activities</router-link>
           <div class="dropdown hardware-dropdown">
-            <a class="dropdown-button nav-link" href="/hardware">Hardware ▾</a>
+            <router-link class="dropdown-button nav-link" to="/hardware">Hardware ▾</router-link>
             <ul class="dropdown-menu hardware-menu">
-              <li><a class="nav-link" href="/hardware/availability">Availability</a></li>
+              <li><router-link class="nav-link" to="/hardware/availability">Availability</router-link></li>
             </ul>
           </div>
           
           <div class="dropdown">
             <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
             <ul class="dropdown-menu" v-if="menuDropdownVisible">
-              <li><a class="dropdown-menu nav-link" href="/profile" @click="menuDropdownVisible = false">Profile</a></li>
-              <li><a class="dropdown-menu nav-link" href="/logout" @click="menuDropdownVisible = false">Logout</a></li>
+              <li><router-link class="dropdown-menu nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
+              <li><router-link class="dropdown-menu nav-link" to="/logout" @click="menuDropdownVisible = false">Logout</router-link></li>
             </ul>
           </div>
         </div>
