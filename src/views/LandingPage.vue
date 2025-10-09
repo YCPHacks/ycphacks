@@ -296,7 +296,7 @@
     <div class="container">
       <div class="main-sponsors">
         <div class="header">
-          <div class="circle" style="font-size:27px; width: 250px;">
+          <div class="circle">
             <p>2024 Sponsors</p>
           </div>
         </div>
@@ -305,61 +305,73 @@
   </div>
 
   <div class="sponsor-images" style="background-color:white;">
-    <div v-for="sponsor in sponsors" :key="sponsor.id" class="sponsor-card">
-      <img
-        v-if="sponsor.sponsor_image_url"
-        :src="sponsor.sponsor_image_url"
-        :alt="sponsor.name"
-        class="sponsor-logo"
-      />
-      <p>{{ sponsor.name }} - {{ sponsor.tier }}</p>
-    </div>
+    <a
+      v-for="sponsor in sponsors"
+      :key="sponsor.name"
+      :href="sponsor.website"
+      target="_blank"
+      class="sponsor-link"
+    >
+      <template v-if="sponsor.logoUrl">
+        <img
+          :src="sponsor.logoUrl"
+          :alt="`${sponsor.name} Logo`"
+          class="sponsor-logo"
+        />
+      </template>
+      <template v-else>
+        <span class="sponsor-name">{{ sponsor.name }}</span>
+      </template>
+    </a>
+    <p v-if="sponsors.length === 0" style="padding: 30px; font-size: 20px; color: #64965d;">
+      Be the first! Contact us to become a sponsor.
+    </p>
   </div>
-
-  <!--
-  <a href="https://mlh.io/seasons/2023/events" target="_blank"><img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\mlh-logo-color.svg" width="125" /></a>
-
-  <a href="https://www.ycp.edu/academics/graham-school-of-business/" target="_blank"> <img class="desaturate" src="" width="400" /> </a>
-
-  <a href="https://www.dataforma.com/" target="_blank"> <img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\dataforma.png"/> </a>
-
-  <a href="https://www.jfti.com/" target="_blank"> <img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\jftaylor.png"/> </a>
-
-  <a href="https://biznewspa.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\biznewspa-small-version.png"/> </a>
-
-  <a href="https://www.johnsoncontrols.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\JohnsonControls.png"/> </a>
-
-  <a href="https://mrgcorp.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\mrg-labs-logo.png"/> </a>
-
-  <a href="https://csdavidson.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\CSDavidson-Logo-Horizontal-Full-Color.png"/> </a>
-
-  <a href="http://hackp.ac/mlh-StandOutStickers-hackathons" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\stickers.png"/> </a>
-   -->
 
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
-import { getSponsors } from "@/services/sponsorService";
-import { mapGetters } from 'vuex';
+import sponsorService from "@/services/sponsorService";
+import { mapGetters } from "vuex";
 
 export default {
   name: "LandingPage",
   computed: {
     ...mapGetters(['isLoggedIn'])
+  },
+  setup(){
+    const sponsors = ref([]);
+    const eventYear = ref(2024);
+    const CURRENT_EVENT_ID = 1;
+
+    const fetchSponsors = async () => {
+      try{
+        const rawData = await sponsorService.getSponsors(CURRENT_EVENT_ID);
+        
+        sponsors.value = rawData.map(s => {
+          return {
+            name: s.name,
+            website: s.website,
+            logoUrl: s.image || null
+          };
+        });
+        // console.log("Sponsor data loaded:", sponsors.value); 
+      }catch(err){
+        console.error("Failed to fetch sponsors: ", err);
+        sponsors.value = [];
+      }
+    };
+
+    onMounted(()=> {
+      fetchSponsors();
+    });
+    return {
+      sponsors, 
+      eventYear
+    };
   }
 };
-
-const sponsors = ref([]);
-
-onMounted(async () => {
-  try {
-    const res = await getSponsors();
-    sponsors.value = res.data
-  } catch (err) {
-    console.error("Error fetching sponsors:", err);
-  }
-});
 </script>
 
 <style scoped>
@@ -456,8 +468,8 @@ a {
 
 .circle {
   display: inline-block;
-  width: 200px;
-  height: 100px;
+  width: 300px;
+  height: 120px;
   margin-top: 10px;
   margin-left: 20px;
   margin-right: 20px;
@@ -465,18 +477,16 @@ a {
   border: 6px solid #fff;
   text-align: center;
   color: white;
-  line-height: 100px;
+  line-height: 120px;
   font-size: 20px;
   transition: all 0.3s ease;
-  padding-bottom: 10%;
-
 }
 
 .about {
     position: relative;
     top: -650px;
     margin-bottom: -550px;
-    text-align: justify;
+    text-align: center;
     font-size: 18px;
     display: flex;
     align-items: center;
@@ -529,7 +539,9 @@ a {
     }
 }
 .header {
-    text-align: center;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
 }
 .circle p {
     font-size: 32px;
@@ -622,21 +634,25 @@ h1 {
 .schedule {
     margin-top: 50px;
     background-color:#93dda3;
+    text-align: center;
 }
 .schedule .header .circle {
     font-size: 40px;
 }
 .faq{
   background-color: #ccffcc;
+  text-align: center;
 }
 .prizes{
   background-color: #ccffcc;
+  text-align: center;
 }
 .prize-titles{
   background-color:#ccffcc;
 }
 .sponsors{
   background-color:#ccffcc;
+  text-align: center;
 }
 .question{
   background-color: #ccffcc;
@@ -648,6 +664,7 @@ h1 {
     -moz-transform: skew(20deg);
     -o-transform: skew(20deg);
     transform: skew(20deg);
+    white-space: nowrap;
 }
 #day-tag {
     font-size: 50px;
@@ -703,5 +720,39 @@ h1 {
   transform: scale(0.95); /* Slightly pressed-in effect */
 }
 
+.sponsor-images{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  min-height: 200px;
+}
+
+.sponsor-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 20px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  transition: transform 0.2s;
+}
+
+.sponsor-logo {
+  max-width: 200px;
+  max-height: 80px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.sponsor-name{
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  padding: 10px;
+}
 
 </style>
