@@ -5,6 +5,7 @@ import Registration from '../views/Registration.vue';
 import LoginPage from '../views/LoginPage.vue';
 import ActivitiesPage from '../views/ActivitiesPage.vue';
 import HardwarePage from '../views/HardwarePage.vue';
+import HAvailabilityPage from '../views/HAvailabilityPage.vue'
 import CategoriesPage from '../views/CategoriesPage.vue';
 
 const routes = [
@@ -32,6 +33,11 @@ const routes = [
         path: '/hardware',
         name: 'Hardware',
         component: HardwarePage,
+    },
+    {
+        path: '/hardware/availability',
+        name: 'Hardware Availability',
+        component: HAvailabilityPage
     },
     {
         path: '/categories',

@@ -1,27 +1,23 @@
 <template>
   <nav class="navbar">
-    <a
-      id="mlh-trust-badge"
-      style="display:block;max-width:100px;min-width:60px;position:fixed;left:0px;top:0;width:10%;z-index:10000"
-      href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2024-season&utm_content=white"
-      target="_blank"
-    >
-      <img
-        src="https://s3.amazonaws.com/logged-assets/trust-badge/2024/mlh-trust-badge-2024-white.svg"
-        alt="Major League Hacking 2024 Hackathon Season"
-        style="width:100%"
-      />
-    </a>
     <div class="nav">
         <div class="nav-right" v-if="isLoggedIn">
+          <router-link class="nav-link" to="/activities">Activities</router-link>
+          <div class="dropdown hardware-dropdown">
+            <router-link class="dropdown-button nav-link" to="/hardware">Hardware ▾</router-link>
+            <ul class="dropdown-menu hardware-menu">
+              <li><router-link class="nav-link" to="/hardware/availability">Availability</router-link></li>
+            </ul>
+          </div>
+          
           <a class="nav-link" href="/activities">Activities</a>
           <a class="nav-link" href="/hardware">Hardware</a>
           <a class="nav-link" href="/categories">Hack Categories</a>
           <div class="dropdown">
-            <button class="dropdown-button">Menu ▾</button>
-            <ul class="dropdown-menu">
-              <li><a class="nav-link" href="/profile">Profile</a></li>
-              <li><a class="nav-link" href="/logout">Logout</a></li>
+            <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
+            <ul class="dropdown-menu" v-if="menuDropdownVisible">
+              <li><router-link class="dropdown-menu nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
+              <li><router-link class="dropdown-menu nav-link" to="/logout" @click="menuDropdownVisible = false">Logout</router-link></li>
             </ul>
           </div>
         </div>
@@ -34,14 +30,31 @@ export default {
   name: "NewNavBar",
   data() {
     return {
-      dropdownVisible: false,
+      menuDropdownVisible: false,
       isLoggedIn: true,
     };
   },
+  mounted(){
+    document.addEventListener('click', this.closeMenusOutside);
+  },
+  beforeUnmount(){
+    document.removeEventListener('click', this.closeMenusOutside);
+  },
   methods: {
-    toggleDropdown() {
-      this.dropdownVisible = !this.dropdownVisible;
-    },
+    closeMenusOutside(event){
+      const dropdownElements = this.$el.querySelectorAll('.dropdown');
+      let clickInsideDropdown = false;
+      dropdownElements.forEach (el => {
+        if(el.contains(event.target)){
+          clickInsideDropdown = true;
+        }
+      });
+
+      if(!clickInsideDropdown){
+        // this.hardwareDropdownVisible = false;
+        this.menuDropdownVisible = false;
+      }
+    }
   },
 };
 </script>
@@ -99,6 +112,7 @@ export default {
   margin: 0;
   border-radius: 4px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
 }
 
 .dropdown-menu li {
@@ -108,6 +122,8 @@ export default {
 .dropdown-menu .nav-link {
   color: white;
   text-decoration: none;
+  display: inline-block;
+  padding: 0;
 }
 
 .dropdown-menu .nav-link:hover {
@@ -128,5 +144,16 @@ export default {
 
 .nav-link:hover {
   text-decoration: underline;
+}
+
+.hardware-dropdown .hardware-menu{
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.hardware-dropdown:hover .hardware-menu{
+  display: block;
+  opacity: 1;
 }
 </style>
