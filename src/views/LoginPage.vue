@@ -38,6 +38,7 @@
 
 <script>
 export default {
+  name: "LoginPage",
   data() {
     return {
       username: '',
@@ -46,26 +47,33 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      const formData = {
-        username: this.username,
-        password: this.password,
-      };
-
-      fetch("http://localhost:3000/login/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Login successful:", data);
-        })
-        .catch((error) => {
-          console.error("Login failed:", error);
+    async handleSubmit() {
+      try {
+        // Attempt login with entered credentials
+        await this.$store.dispatch('loginUser', {
+          email: this.username,
+          password: this.password,
         });
+
+        // Redirect after successful login
+        this.$router.push('/activities');
+      } catch (err) {
+        console.warn('Login failed:', err.message);
+
+        // Optional: check if there’s a token and validate it
+        const token = localStorage.getItem('token');
+        if (token) {
+          try {
+            await this.$store.dispatch('validateWithToken');
+            // Redirect if token is valid
+            if (this.$store.getters.isLoggedIn) {
+              this.$router.push('/activities');
+            }
+          } catch (tokenErr) {
+            console.error('Token invalid:', tokenErr.message);
+          }
+        }
+      }
     },
   },
 };
