@@ -41,6 +41,7 @@ export default createStore({
             const data = await response.json();
             if (response.ok) {
                 commit('setUser', new UserAdapter(data.data));
+                document.cookie = `token=${data.data.token}; path=/;`;
                 return { success: true, message: data.message };
             } else {
                 return { success: false, message: data.message, errors: data.errors };
