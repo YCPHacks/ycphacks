@@ -10,11 +10,11 @@
             </ul>
           </div>
           
-          <div class="dropdown">
+          <div class="dropdown user-dropdown">
             <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
-            <ul class="dropdown-menu" v-if="menuDropdownVisible">
-              <li><router-link class="dropdown-menu nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
-              <li><router-link class="dropdown-menu nav-link" to="/logout" @click="menuDropdownVisible = false">Logout</router-link></li>
+            <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
+              <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
+              <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
             </ul>
           </div>
         </div>
@@ -23,8 +23,13 @@
 </template>
 
 <script>
+import store from "@/store/store.js";
+import {BDropdown} from "bootstrap-vue-3";
+import router from "@/router/index.js";
+
 export default {
   name: "NewNavBar",
+  components: {BDropdown},
   data() {
     return {
       menuDropdownVisible: false,
@@ -51,6 +56,10 @@ export default {
         // this.hardwareDropdownVisible = false;
         this.menuDropdownVisible = false;
       }
+    },
+    async handleLogout() {
+      await store.dispatch('logout');
+      this.$router.push("/login");
     }
   },
 };
@@ -143,13 +152,13 @@ export default {
   text-decoration: underline;
 }
 
-.hardware-dropdown .hardware-menu{
+.hardware-dropdown .hardware-menu, .user-dropdown .user-menu {
   display: none;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
 }
 
-.hardware-dropdown:hover .hardware-menu{
+.hardware-dropdown:hover .hardware-menu, .user-dropdown .user-menu {
   display: block;
   opacity: 1;
 }
