@@ -119,35 +119,40 @@ export default {
   methods: {
     async fetchHardware() {
       try {
-        const res = await hardwareService.getHardware();
-        let hardwareArray = [];
-
-        if (Array.isArray(res)) {
-          hardwareArray = res;
-        } else if (typeof res === "object" && res !== null) {
-          hardwareArray = Object.keys(res).map(title => ({
-            title,
-            products: res[title]
-          }));
-        } else {
-          console.warn("Unexpected backend response:", res);
-          return;
-        }
+        const groups = await hardwareService.getHardware();
         
-        let allRawItems = [];
-        hardwareArray.forEach(group => {
-            const rawItems = group.items.map(p => ({
-                // Standardize the item structure (must include availability status)
-                name: p.subtitle,
-                description: p.description || "No description available.",
-                image: p.imageUrl || null,
-                isUnavailable: p.isUnavailable // ASSUME the API provides this!
-            }));
-            allRawItems.push(...rawItems);
+        if (!Array.isArray(groups)) {
+            console.warn("Unexpected backend response, expected an array:", groups);
+            this.hardwareItems = [];
+            return;
+        }
+
+        const allRawItems = groups.flatMap(group => {
+            
+            // Assume items are nested in 'items' array, or the group itself is the item.
+            const itemsSource = Array.isArray(group.items) ? group.items : [group];
+            
+           return itemsSource.map(p => {
+                        
+              // FIX: Use the new 'fullName' field which must be added in the backend repo (HardwareRepo)
+              // This guarantees the unique, full name (e.g., "Raspberry Pi 4")
+              const fullName = p.fullName || p.name || group.title || "Unknown Hardware";
+
+              return {
+                  // This 'name' property is what getAvailabilityData uses for grouping
+                  name: fullName, 
+                  
+                  description: p.description || "No description available.",
+                  image: p.image || null,
+                  isUnavailable: p.isUnavailable // Availability status from the backend
+              };
+            });
         });
+        
         this.hardwareItems = this.getAvailabilityData(allRawItems);
+          
       } catch (err) {
-        console.error("Failed to fetch hardware:", err);
+          console.error("Failed to fetch hardware:", err); 
       }
     },
     getAvailabilityData(allProducts){
