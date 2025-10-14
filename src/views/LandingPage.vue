@@ -317,10 +317,11 @@
           :src="sponsor.logoUrl"
           :alt="`${sponsor.name} Logo`"
           class="sponsor-logo"
+          :style="getSponsorStyle(sponsor)"
         />
       </template>
       <template v-else>
-        <span class="sponsor-name">{{ sponsor.name }}</span>
+        <span class="sponsor-name" :style="getSponsorStyle(sponsor)">{{ sponsor.name }}</span>
       </template>
     </a>
     <p v-if="sponsors.length === 0" style="padding: 30px; font-size: 20px; color: #64965d;">
@@ -332,7 +333,7 @@
 
 <script>
 import { ref, onMounted } from "vue";
-import sponsorService from "@/services/sponsorService";
+import sponsorService from "../services/sponsorService";
 import { mapGetters } from "vuex";
 
 export default {
@@ -345,15 +346,62 @@ export default {
     const eventYear = ref(2024);
     const CURRENT_EVENT_ID = 1;
 
+    const sponsorSizes = {
+      'Platinum': { width: '200px', height: '200px', fontSize: '24px' },
+      'Gold': { width: '150px', height: '150px', fontSize: '20px' },
+      'Silver': { width: '100px', height: '100px', fontSize: '16px' },
+      'Bronze': { width: '50px', height: '50px', fontSize: '14px' },
+    }
+
+    const getSponsorStyle = (sponsor) => {
+      const tierName = sponsor.tier;
+      const style = sponsorSizes[tierName];
+
+      if(sponsor.logoUrl){
+        return {
+          width: style.width,
+          height: style.height,
+          objectFit: 'contain'
+        };
+      }else{
+        return {
+          width: style.width,
+          height: style.height,
+          fontSize: style.fontSize,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center'
+        };
+      }
+    };
+
     const fetchSponsors = async () => {
       try{
-        const rawData = await sponsorService.getSponsors(CURRENT_EVENT_ID);
+        const tierResponse = await sponsorService.getSponsorTiers();
+        console.log("Tier Data Received: ", tierResponse);
+        const tierMap = tierResponse.reduce((map, tier) => {
+          map[tier.id] = tier.tier;
+          return map;
+        }, {});
+        console.log("Final Tier Map for lookup: ", tierMap);
+
+        const rawSponsorResponse = await sponsorService.getSponsors(CURRENT_EVENT_ID);
+        const rawData = rawSponsorResponse;
+
+        console.log("Raw Sponsor Data: ", rawData);
         
         sponsors.value = rawData.map(s => {
+          const tierId = s.sponsorTierId;
+          const tierName = tierMap[tierId];
+
+          console.log(`Sponsor ID: ${s.name}, Tier ID: ${tierId}, Mapped Name: ${tierName}`);
+          
           return {
             name: s.name,
             website: s.website,
-            logoUrl: s.image || null
+            logoUrl: s.image || null,
+            tier: tierName
           };
         });
         // console.log("Sponsor data loaded:", sponsors.value); 
@@ -368,7 +416,8 @@ export default {
     });
     return {
       sponsors, 
-      eventYear
+      eventYear,
+      getSponsorStyle
     };
   }
 };
@@ -656,6 +705,10 @@ h1 {
 }
 .question{
   background-color: #ccffcc;
+  width: 100%;
+  max-width: 100%;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 .circle p {
     color:#64965d;
@@ -685,8 +738,8 @@ h1 {
   display: inline-block;
 }
 .sponsor-logo {
-  max-width: 150px;
-  max-height: 100px;
+  max-width: auto;
+  max-height: auto;
   object-fit: contain;
   margin-bottom: 0.5rem;
 }
