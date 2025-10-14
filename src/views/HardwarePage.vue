@@ -9,7 +9,7 @@
   </div>
   <div class="container-fluid">
     <div class="row align-items-start mt-5">
-      <main class="col-md-12">
+      <main class="col-md-12 col-lg-8 offset-lg-2">
         <div class="p-4 border rounded bg-white shadow-sm main-box">
           
           <div class="mb-4">
@@ -78,7 +78,7 @@
                   </div>
                 </div>
             </div>
-        </template>
+          </template>
           <div v-else class="text-center p-5 not-found-box">
             </div>
         </div>
@@ -133,18 +133,13 @@ export default {
             const itemsSource = Array.isArray(group.items) ? group.items : [group];
             
            return itemsSource.map(p => {
-                        
-              // FIX: Use the new 'fullName' field which must be added in the backend repo (HardwareRepo)
-              // This guarantees the unique, full name (e.g., "Raspberry Pi 4")
               const fullName = p.fullName || p.name || group.title || "Unknown Hardware";
 
               return {
-                  // This 'name' property is what getAvailabilityData uses for grouping
                   name: fullName, 
-                  
                   description: p.description || "No description available.",
                   image: p.image || null,
-                  isUnavailable: p.isUnavailable // Availability status from the backend
+                  isUnavailable: p.isUnavailable
               };
             });
         });
