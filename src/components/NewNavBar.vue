@@ -4,10 +4,10 @@
         <div class="nav-right" v-if="isLoggedIn">
           <a class="nav-link" href="/activities">Activities</a>
           <div class="dropdown hardware-dropdown">
-            <a class="dropdown-button nav-link" href="/hardware">Hardware ▾</a>
-            <ul class="dropdown-menu hardware-menu">
+            <a class="dropdown-button nav-link" href="/hardware">Hardware</a>
+            <!-- <ul class="dropdown-menu hardware-menu">   ▾
               <li><a class="nav-link" href="/hardware/availability">Availability</a></li>
-            </ul>
+            </ul> -->
           </div>
           
           <div class="dropdown">
