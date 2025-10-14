@@ -4,10 +4,7 @@
         <div class="nav-right" v-if="isLoggedIn">
           <router-link class="nav-link" to="/activities">Activities</router-link>
           <div class="dropdown hardware-dropdown">
-            <router-link class="dropdown-button nav-link" to="/hardware">Hardware ▾</router-link>
-            <ul class="dropdown-menu hardware-menu">
-              <li><router-link class="nav-link" to="/hardware/availability">Availability</router-link></li>
-            </ul>
+            <a class="dropdown-button nav-link" href="/hardware">Hardware</a>
           </div>
           
           <div class="dropdown user-dropdown">
