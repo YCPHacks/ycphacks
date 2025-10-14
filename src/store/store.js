@@ -19,6 +19,7 @@ export default createStore({
   },
   getters: {
     isLoggedIn: (state) => !!state.user,
+    getUser: (state) => state.user
   },
   mutations: {
     setUser(state, user) {
@@ -29,11 +30,31 @@ export default createStore({
     },
   },
   actions: {
+    async registerUser({ commit }, formData) {
+        try {
+            const response = await fetch('http://localhost:3000/user/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                commit('setUser', new UserAdapter(data.data));
+                return { success: true, message: data.message };
+            } else {
+                return { success: false, message: data.message, errors: data.errors };
+            }
+        } catch (error) {
+            console.error('Error during registration:', error);
+            return { success: false, message: 'An error occurred during registration. Please try again.' };
+        }
+    },
     async loginUser({ commit }, { email, password }) {
       try {
         const response = await axios.post('http://localhost:3000/user/login', { email, password });
         const data = response.data;
-        commit('setUser', data.data);
+        commit('setUser', new UserAdapter(data.data));
         localStorage.setItem('token', data.data.token);
       } catch (err) {
         throw new Error(err.response?.data?.message || 'Login failed');
@@ -55,9 +76,5 @@ export default createStore({
       commit('clearUser');
       localStorage.removeItem('token');
     },
-  },
-  getters: {
-    isLoggedIn: (state) => !!state.user,
-    getUser: (state) => state.user,
-  },
+  }
 });

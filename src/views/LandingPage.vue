@@ -1,12 +1,12 @@
 <template>
   <div class="landing-page">
     <!-- Background Video -->
-    <video autoplay loop muted id="bgvideo" preload="auto">
+    <video v-if="!isLoggedIn" autoplay loop muted id="bgvideo" preload="auto">
       <source src="/bg.mp4" type="video/mp4" />
     </video>
 
     <!-- Introduction Section -->
-    <div class="intro">
+    <div v-if="!isLoggedIn" class="intro">
       <div class="container">
         <div class="main-header">
           <!-- <img id="fountain" src="../assets/fountainWhite.png"/> -->
@@ -14,14 +14,14 @@
           <h2>November 1 - 3, 2024</h2>
           <h2>York College of Pennsylvania</h2>
           <div>
-            <a href="#" class="register-button">Create<br> Account</a>
+            <router-link class="register-button" to="/register">Create<br> Account</router-link>
           </div>
         </div>
       </div>
     </div>
 
     <!-- About Section -->
-    <div class="about" id="about" style="margin-top: 150px;">
+    <div v-if="!isLoggedIn" class="about" id="about" style="margin-top: 150px;">
       <div class="container">
         <div class="header">
           <div class="circle">
@@ -37,314 +37,317 @@
       </div>
     </div>
 
-<div class="attend" id="attend">
-  <div class="green-box">
-    <div class="container1" style="margin: auto; text-align: center;">
-      <div style="float: left; font-size: 75px; margin-right: 50px;">
-        <!-- <img id="fountain2" src="../assets/fountainWhite.png" style="width: 125px; height: 115px; margin-bottom: 0px;" /> -->
-        <br />2021<br /> Recap Video
-      </div>
-      <div style="float: right;">
-        <iframe width="500" height="380" src="https://www.youtube.com/embed/Ru9zvWGSH8U?autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <div v-if="!isLoggedIn" class="attend" id="attend">
+      <div class="green-box">
+        <div class="container1" style="margin: auto; text-align: center;">
+          <div style="float: left; font-size: 75px; margin-right: 50px;">
+            <!-- <img id="fountain2" src="../assets/fountainWhite.png" style="width: 125px; height: 115px; margin-bottom: 0px;" /> -->
+            <br />2021<br /> Recap Video
+          </div>
+          <div style="float: right;">
+            <iframe width="500" height="380" src="https://www.youtube.com/embed/Ru9zvWGSH8U?autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="container1" style="margin: auto; text-align: center;">
+          <div style="float: left; font-size: 75px; margin-right: 50px;">
+            <!-- <img id="fountain2" src="../assets/fountainWhite.png" style="width: 125px; height: 115px; margin-bottom: 0px;" /> -->
+            <br />2017<br /> Recap Video
+          </div>
+          <div style="float: right;">
+            <iframe width="500px" height="380px" src="https://www.youtube.com/embed/k5A2QTasITs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <!-- "Can't wait to apply?" heading placed below the videos -->
+        <h1 class="apply-now-heading">Can't wait to apply?</h1>
+       <p>Sign up <a href="http://146.190.66.30:4174/" style="color: white; font-size:22px;"> here</a> and we&#39;ll let you know when our application is open!</p>
       </div>
     </div>
-    <div class="container1" style="margin: auto; text-align: center;">
-      <div style="float: left; font-size: 75px; margin-right: 50px;">
-        <!-- <img id="fountain2" src="../assets/fountainWhite.png" style="width: 125px; height: 115px; margin-bottom: 0px;" /> -->
-        <br />2017<br /> Recap Video
-      </div>
-      <div style="float: right;">
-        <iframe width="500px" height="380px" src="https://www.youtube.com/embed/k5A2QTasITs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="schedule" id="schedule">
+      <div class="container">
+        <div class="header">
+          <div class="circle" style="font-size:27px; height:100px;">
+            <p>2024 Schedule</p>
+          </div>
+        </div>
+
+        <div class="schedule-content">
+          <div id="day-tag"><b>Friday</b> November 1st, 2024</div>
+
+          <table class="table table-bordered" style="margin-bottom:35px">
+            <tbody>
+              <tr>
+                <th scope="row">5 PM</th>
+                <th>Doors Open and Dinner</th>
+              </tr>
+              <tr>
+                <th scope="row">6:30 PM</th>
+                <th>Opening Ceremony</th>
+              </tr>
+              <tr>
+                <th colspan="2" scope="row" style="color:#000;background-color:#fff">7PM - HACKING BEGINS!</th>
+              </tr>
+              <tr>
+                <th scope="row">7:30 PM</th>
+                <th>Team and Idea Building</th>
+              </tr>
+              <tr>
+                <th scope="row">9:00 PM</th>
+                <th>Bryce Warner - 3D Printing</th>
+              </tr>
+              <tr>
+                <th scope="row">10:30 PM</th>
+                <th>Matrix Nerf Challenge</th>
+              </tr>
+              <tr>
+                <th scope="row">12 AM</th>
+                <th>Midnight Nerf War</th>
+              </tr>
+            </tbody>
+          </table>
+
+          <div id="day-tag"><b>Saturday</b> November 2nd, 2024</div>
+          <table class="table table-bordered" style="margin-bottom:35px">
+            <tbody>
+              <tr>
+                <th scope="row">2 AM</th>
+                <th>Trivia/Kahoots</th>
+              </tr>
+              <tr>
+                <th scope="row">8:30 AM</th>
+                <th>Breakfast</th>
+              </tr>
+              <tr>
+                <th scope="row">10 AM</th>
+                <th>Bee Central Workshop</th>
+              </tr>
+              <tr>
+                <th scope="row">12 PM</th>
+                <th>Lunch</th>
+              </tr>
+              <tr>
+                <th scope="row">1 PM</th>
+                <th>Dr. Hake - Workshop talk Coming Soon</th>
+              </tr>
+              <tr>
+                <th scope="row">2 PM</th>
+                <th>QUEST</th>
+              </tr>
+              <tr>
+                <th scope="row">3 PM</th>
+                <th>Dr. Babcock - Workshop talk Coming Soon</th>
+              </tr>
+              <tr>
+                <th scope="row">6:00 PM</th>
+                <th>Dinner</th>
+              </tr>
+              <tr>
+                <th scope="row">7:00 PM</th>
+                <th>Slideshow Karaoke</th>
+              </tr>
+              <tr>
+                <th scope="row">8:30 PM</th>
+                <th>Prof Zeller - Fire Spinning </th>
+              </tr>
+              <tr>
+                <th scope="row">10 PM</th>
+                <th>QUEST</th>
+              </tr>
+              <tr>
+                <th scope="row">12 AM</th>
+                <th>Midnight Whoopie Pies</th>
+              </tr>
+            </tbody>
+          </table>
+
+          <div id="day-tag"><b>Sunday</b> November 3rd, 2024</div>
+          <table class="table table-bordered" style="margin-bottom:35px">
+            <tbody>
+              <tr>
+                <th scope="row">1 AM</th>
+                <th>Daylight Savings Event</th>
+              </tr>
+              <tr>
+                <th scope="row">8:30 AM</th>
+                <th>Breakfast</th>
+              </tr>
+              <tr>
+                <th colspan="2" scope="row" style="color:#000;background-color:#fff">9 AM - HACKING ENDS!</th>
+              </tr>
+              <tr>
+                <th scope="row">10 AM</th>
+                <th>Presentations &amp; Judging</th>
+              </tr>
+              <tr>
+                <th scope="row">12 PM</th>
+                <th>Closing Ceremonies</th>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-bottom:35px">* Schedule is subject to change.</div>
+        </div>
       </div>
     </div>
 
-    <!-- "Can't wait to apply?" heading placed below the videos -->
-    <h1 class="apply-now-heading">Can't wait to apply?</h1>
-   <p>Sign up <a href="http://146.190.66.30:4174/" style="color: white; font-size:22px;"> here</a> and we&#39;ll let you know when our application is open!</p>
+    <div class="faq" id="faq">
+      <div class="container">
+        <div class="header">
+          <div class="circle">
+            <p>FAQ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="question">
+      <h3>What&#39;s a hackathon?</h3>
+
+      <p>A 36 hour event where you work together with a team to make something awesome. You don&#39;t need to know how to code or be a supreme hacker, just how to be creative! You can also get help from our mentors and speakers who will be attending.</p>
+
+      <h3>Can I come?</h3>
+
+      <p>We&#39;ll take any college student from anywhere on earth! We sadly cannot accept students under the age of 18. All students from outside of York College may be asked to attend online if Covid protocols change</p>
+
+      <h3>Where is this going to be?</h3>
+
+      <p>The Willman Business Center of <a href="https://goo.gl/maps/UzhJ14rStMz" target="_blank">York College!</a> There will be free parking <a href="https://goo.gl/maps/p1itMccEKvx" target="_blank">in the adjacent lot for the entire weekend.</a></p>
+
+      <h3>When will this be?</h3>
+
+      <p>November 1 - 3 2024</p>
+
+      <h3>Why?</h3>
+
+      <p>Learn new things, meet new people, and tons of free food and swag.</p>
+
+      <h3>Will you reimburse travel?</h3>
+
+      <p>If we get enough sponsors this season, we may offer it closer to the event date. At this time we cannot confirm it though. Apply and we&#39;ll email our applicants with more information as it becomes available.</p>
+
+      <h3>I don&#39;t have a team so....</h3>
+
+      <p>Well you&#39;re in luck! We have tons of team building activities if you don&#39;t have a team to come with you. You can also work alone if you&#39;d like.</p>
+
+      <h3>But I can&#39;t code!</h3>
+
+      <p>We&#39;ll have tons of great workshops and mentors to help you learn and build something amazing!</p>
+
+      <h3>How much does it cost?</h3>
+
+      <p>Nothing! Registration is free and food will be provided for you. And of course, swag is free too.</p>
+
+      <h3>Will there be hardware available?</h3>
+
+      <p>Yes! Hardware will be provided.</p>
+
+      <h3>What should I bring?</h3>
+
+      <p>ID, Clothing, sleeping bag, and any necessary tech (and chargers). And deodorant. Please.</p>
+
+      <h3>Do I keep my Intellectual Property?</h3>
+
+      <p>Yes! Participants retain 100% of the intellectual property that they create during the event.</p>
+
+      <h3>Are there any rules?</h3>
+
+      <p>You can find the MLH code of conduct <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" target="_blank">here</a>.</p>
+
+      <h3>You didn&#39;t answer my question!</h3>
+
+      <p>Send it to us at <a href="mailto:info@ycphacks.io">info@ycphacks.io!</a>.</p>
+    </div>
   </div>
-</div>
-<div class="schedule" id="schedule">
-  <div class="container">
-    <div class="header">
-      <div class="circle" style="font-size:27px; height:100px;">
-        <p>2024 Schedule</p>
-      </div>
-    </div>
 
-    <div class="schedule-content">
-      <div id="day-tag"><b>Friday</b> November 1st, 2024</div>
-
-      <table class="table table-bordered" style="margin-bottom:35px">
-        <tbody>
-          <tr>
-            <th scope="row">5 PM</th>
-            <th>Doors Open and Dinner</th>
-          </tr>
-          <tr>
-            <th scope="row">6:30 PM</th>
-            <th>Opening Ceremony</th>
-          </tr>
-          <tr>
-            <th colspan="2" scope="row" style="color:#000;background-color:#fff">7PM - HACKING BEGINS!</th>
-          </tr>
-          <tr>
-            <th scope="row">7:30 PM</th>
-            <th>Team and Idea Building</th>
-          </tr>
-          <tr>
-            <th scope="row">9:00 PM</th>
-            <th>Bryce Warner - 3D Printing</th>
-          </tr>
-          <tr>
-            <th scope="row">10:30 PM</th>
-            <th>Matrix Nerf Challenge</th>
-          </tr>
-          <tr>
-            <th scope="row">12 AM</th>
-            <th>Midnight Nerf War</th>
-          </tr>
-        </tbody>
-      </table>
-
-      <div id="day-tag"><b>Saturday</b> November 2nd, 2024</div>
-      <table class="table table-bordered" style="margin-bottom:35px">
-        <tbody>
-          <tr>
-            <th scope="row">2 AM</th>
-            <th>Trivia/Kahoots</th>
-          </tr>
-          <tr>
-            <th scope="row">8:30 AM</th>
-            <th>Breakfast</th>
-          </tr>
-          <tr>
-            <th scope="row">10 AM</th>
-            <th>Bee Central Workshop</th>
-          </tr>
-          <tr>
-            <th scope="row">12 PM</th>
-            <th>Lunch</th>
-          </tr>
-          <tr>
-            <th scope="row">1 PM</th>
-            <th>Dr. Hake - Workshop talk Coming Soon</th>
-          </tr>
-          <tr>
-            <th scope="row">2 PM</th>
-            <th>QUEST</th>
-          </tr>
-          <tr>
-            <th scope="row">3 PM</th>
-            <th>Dr. Babcock - Workshop talk Coming Soon</th>
-          </tr>
-          <tr>
-            <th scope="row">6:00 PM</th>
-            <th>Dinner</th>
-          </tr>
-          <tr>
-            <th scope="row">7:00 PM</th>
-            <th>Slideshow Karaoke</th>
-          </tr>
-          <tr>
-            <th scope="row">8:30 PM</th>
-            <th>Prof Zeller - Fire Spinning </th>
-          </tr>
-          <tr>
-            <th scope="row">10 PM</th>
-            <th>QUEST</th>
-          </tr>
-          <tr>
-            <th scope="row">12 AM</th>
-            <th>Midnight Whoopie Pies</th>
-          </tr>
-        </tbody>
-      </table>
-
-      <div id="day-tag"><b>Sunday</b> November 3rd, 2024</div>
-      <table class="table table-bordered" style="margin-bottom:35px">
-        <tbody>
-          <tr>
-            <th scope="row">1 AM</th>
-            <th>Daylight Savings Event</th>
-          </tr>
-          <tr>
-            <th scope="row">8:30 AM</th>
-            <th>Breakfast</th>
-          </tr>
-          <tr>
-            <th colspan="2" scope="row" style="color:#000;background-color:#fff">9 AM - HACKING ENDS!</th>
-          </tr>
-          <tr>
-            <th scope="row">10 AM</th>
-            <th>Presentations &amp; Judging</th>
-          </tr>
-          <tr>
-            <th scope="row">12 PM</th>
-            <th>Closing Ceremonies</th>
-          </tr>
-        </tbody>
-      </table>
-      <div style="margin-bottom:35px">* Schedule is subject to change.</div>
-    </div>
-  </div>
-</div>
-
-<div class="faq" id="faq">
-<div class="container">
-<div class="header">
-<div class="circle">
-<p>FAQ</p>
-</div>
-</div>
-</div>
-</div>
-
-<div class="question">
-<h3>What&#39;s a hackathon?</h3>
-
-<p>A 36 hour event where you work together with a team to make something awesome. You don&#39;t need to know how to code or be a supreme hacker, just how to be creative! You can also get help from our mentors and speakers who will be attending.</p>
-
-<h3>Can I come?</h3>
-
-<p>We&#39;ll take any college student from anywhere on earth! We sadly cannot accept students under the age of 18. All students from outside of York College may be asked to attend online if Covid protocols change</p>
-
-<h3>Where is this going to be?</h3>
-
-<p>The Willman Business Center of <a href="https://goo.gl/maps/UzhJ14rStMz" target="_blank">York College!</a> There will be free parking <a href="https://goo.gl/maps/p1itMccEKvx" target="_blank">in the adjacent lot for the entire weekend.</a></p>
-
-<h3>When will this be?</h3>
-
-<p>November 1 - 3 2024</p>
-
-<h3>Why?</h3>
-
-<p>Learn new things, meet new people, and tons of free food and swag.</p>
-
-<h3>Will you reimburse travel?</h3>
-
-<p>If we get enough sponsors this season, we may offer it closer to the event date. At this time we cannot confirm it though. Apply and we&#39;ll email our applicants with more information as it becomes available.</p>
-
-<h3>I don&#39;t have a team so....</h3>
-
-<p>Well you&#39;re in luck! We have tons of team building activities if you don&#39;t have a team to come with you. You can also work alone if you&#39;d like.</p>
-
-<h3>But I can&#39;t code!</h3>
-
-<p>We&#39;ll have tons of great workshops and mentors to help you learn and build something amazing!</p>
-
-<h3>How much does it cost?</h3>
-
-<p>Nothing! Registration is free and food will be provided for you. And of course, swag is free too.</p>
-
-<h3>Will there be hardware available?</h3>
-
-<p>Yes! Hardware will be provided.</p>
-
-<h3>What should I bring?</h3>
-
-<p>ID, Clothing, sleeping bag, and any necessary tech (and chargers). And deodorant. Please.</p>
-
-<h3>Do I keep my Intellectual Property?</h3>
-
-<p>Yes! Participants retain 100% of the intellectual property that they create during the event.</p>
-
-<h3>Are there any rules?</h3>
-
-<p>You can find the MLH code of conduct <a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" target="_blank">here</a>.</p>
-
-<h3>You didn&#39;t answer my question!</h3>
-
-<p>Send it to us at <a href="mailto:info@ycphacks.io">info@ycphacks.io!</a>.</p>
-</div>
-</div>
-
-<div class="prizes" id="prizes">
-<div class="container">
-<div class="header">
-<div class="circle" style="font-size:32px">
-<p>PRIZES</p>
-</div>
-</div>
-</div>
-</div>
-<div class="row">
-<div class="prize-titles" style="text-align:center;">
-<h3 style="font-size:30px">Quest 3</h3>
-<h3 style="font-size:30px">Smart TV</h3>
-<h3 style="font-size:30px">Quest 2</h3>
-<h3 style="font-size:30px">Nintendo Switch</h3>
-<h3 style="font-size:30px">Creality Ender 3D Printer</h3>
-<h3 style="font-size:30px">TECBOSS 3D Pen and filament</h3>
-<h3 style="font-size:30px">Beats Solo 3 Headphones</h3>
-<h3 style="font-size:30px">Amazon Echo</h3>
-<h3 style="font-size:30px">Apple Homepod Mini</h3>
-<h3 style="font-size:30px">Google Nest Speaker</h3>
-<h3 style="font-size:30px">Beats Pill</h3>
-<h3 style="font-size:30px">Gaming Keyboard and Mouse</h3>
-<h3 style="font-size:30px">Gaming Chair</h3>
-<h3 style="font-size:30px">Arduino Starter Kit</h3>
-<h3 style="font-size:30px">Google Swag!</h3>
-<h3 style="font-size:30px">$200+ in gift cards</h3>
-<h3 style="font-size:30px">$1000+ in cash prizes</h3>
-<h3 style="font-size:30px">Sponsored Hacks to Come!</h3>
-<h3 style="font-size:30px"> </h3>
-
-<div class="prize-inner">
-</div>
-</div>
-</div>
-<div class="sponsors" id="sponsors">
-  <div class="container">
-    <div class="main-sponsors">
+  <div class="prizes" id="prizes">
+    <div class="container">
       <div class="header">
-        <div class="circle" style="font-size:27px; width: 250px;">
-          <p>2024 Sponsors</p>
+        <div class="circle" style="font-size:32px">
+          <p>PRIZES</p>
         </div>
       </div>
     </div>
   </div>
-</div>
+  <div class="row">
+    <div class="prize-titles" style="text-align:center;">
+      <h3 style="font-size:30px">Quest 3</h3>
+      <h3 style="font-size:30px">Smart TV</h3>
+      <h3 style="font-size:30px">Quest 2</h3>
+      <h3 style="font-size:30px">Nintendo Switch</h3>
+      <h3 style="font-size:30px">Creality Ender 3D Printer</h3>
+      <h3 style="font-size:30px">TECBOSS 3D Pen and filament</h3>
+      <h3 style="font-size:30px">Beats Solo 3 Headphones</h3>
+      <h3 style="font-size:30px">Amazon Echo</h3>
+      <h3 style="font-size:30px">Apple Homepod Mini</h3>
+      <h3 style="font-size:30px">Google Nest Speaker</h3>
+      <h3 style="font-size:30px">Beats Pill</h3>
+      <h3 style="font-size:30px">Gaming Keyboard and Mouse</h3>
+      <h3 style="font-size:30px">Gaming Chair</h3>
+      <h3 style="font-size:30px">Arduino Starter Kit</h3>
+      <h3 style="font-size:30px">Google Swag!</h3>
+      <h3 style="font-size:30px">$200+ in gift cards</h3>
+      <h3 style="font-size:30px">$1000+ in cash prizes</h3>
+      <h3 style="font-size:30px">Sponsored Hacks to Come!</h3>
+      <h3 style="font-size:30px"> </h3>
 
-<div class="sponsor-images" style="background-color:white;">
-  <div v-for="sponsor in sponsors" :key="sponsor.id" class="sponsor-card">
-    <img
-      v-if="sponsor.sponsor_image_url"
-      :src="sponsor.sponsor_image_url"
-      :alt="sponsor.name"
-      class="sponsor-logo"
-    />
-    <p>{{ sponsor.name }} - {{ sponsor.tier }}</p>
+      <div class="prize-inner">
+      </div>
+    </div>
   </div>
-</div>
+  <div class="sponsors" id="sponsors">
+    <div class="container">
+      <div class="main-sponsors">
+        <div class="header">
+          <div class="circle" style="font-size:27px; width: 250px;">
+            <p>2024 Sponsors</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<!--
-<a href="https://mlh.io/seasons/2023/events" target="_blank"><img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\mlh-logo-color.svg" width="125" /></a>
+  <div class="sponsor-images" style="background-color:white;">
+    <div v-for="sponsor in sponsors" :key="sponsor.id" class="sponsor-card">
+      <img
+        v-if="sponsor.sponsor_image_url"
+        :src="sponsor.sponsor_image_url"
+        :alt="sponsor.name"
+        class="sponsor-logo"
+      />
+      <p>{{ sponsor.name }} - {{ sponsor.tier }}</p>
+    </div>
+  </div>
 
-<a href="https://www.ycp.edu/academics/graham-school-of-business/" target="_blank"> <img class="desaturate" src="" width="400" /> </a>
+  <!--
+  <a href="https://mlh.io/seasons/2023/events" target="_blank"><img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\mlh-logo-color.svg" width="125" /></a>
 
-<a href="https://www.dataforma.com/" target="_blank"> <img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\dataforma.png"/> </a>
+  <a href="https://www.ycp.edu/academics/graham-school-of-business/" target="_blank"> <img class="desaturate" src="" width="400" /> </a>
 
-<a href="https://www.jfti.com/" target="_blank"> <img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\jftaylor.png"/> </a>
+  <a href="https://www.dataforma.com/" target="_blank"> <img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\dataforma.png"/> </a>
 
-<a href="https://biznewspa.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\biznewspa-small-version.png"/> </a>
+  <a href="https://www.jfti.com/" target="_blank"> <img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\jftaylor.png"/> </a>
 
-<a href="https://www.johnsoncontrols.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\JohnsonControls.png"/> </a>
+  <a href="https://biznewspa.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\biznewspa-small-version.png"/> </a>
 
-<a href="https://mrgcorp.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\mrg-labs-logo.png"/> </a>
+  <a href="https://www.johnsoncontrols.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\JohnsonControls.png"/> </a>
 
-<a href="https://csdavidson.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\CSDavidson-Logo-Horizontal-Full-Color.png"/> </a>
+  <a href="https://mrgcorp.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\mrg-labs-logo.png"/> </a>
 
-<a href="http://hackp.ac/mlh-StandOutStickers-hackathons" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\stickers.png"/> </a>
- -->
+  <a href="https://csdavidson.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\CSDavidson-Logo-Horizontal-Full-Color.png"/> </a>
+
+  <a href="http://hackp.ac/mlh-StandOutStickers-hackathons" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\stickers.png"/> </a>
+   -->
 
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 import { getSponsors } from "@/services/sponsorService";
+import { mapGetters } from 'vuex';
 
 export default {
   name: "LandingPage",
+  computed: {
+    ...mapGetters(['isLoggedIn'])
+  }
 };
 
 const sponsors = ref([]);
