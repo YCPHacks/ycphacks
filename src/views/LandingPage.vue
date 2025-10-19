@@ -346,28 +346,48 @@ export default {
     const eventYear = ref(2024);
     const CURRENT_EVENT_ID = 1;
 
-    const sponsorSizes = {
-      'Platinum': { width: '200px', height: '200px', fontSize: '24px' },
-      'Gold': { width: '150px', height: '150px', fontSize: '20px' },
-      'Silver': { width: '100px', height: '100px', fontSize: '16px' },
-      'Bronze': { width: '50px', height: '50px', fontSize: '14px' },
-    }
+    // const sponsorSizes = {
+    //   'Platinum': { width: '200px', height: '200px', fontSize: '24px' },
+    //   'Gold': { width: '150px', height: '150px', fontSize: '20px' },
+    //   'Silver': { width: '100px', height: '100px', fontSize: '16px' },
+    //   'Bronze': { width: '50px', height: '50px', fontSize: '14px' },
+    // }
+
+    // Remove the sponsorSizes object entirely, or keep it for fallback if needed.
 
     const getSponsorStyle = (sponsor) => {
-      const tierName = sponsor.tier;
-      const style = sponsorSizes[tierName];
+      const rawWidth = sponsor.imageWidth || 50;
+      const rawHeight = sponsor.imageHeight || 50;
 
+      const width = `${rawWidth}px`;
+      const height = `${rawHeight}px`;
+      
+      const baseSize = rawWidth; 
+    
+      let fontSize;
+      
+      if (baseSize < 75) {
+          // If the size is small (e.g., Bronze at 50px)
+          fontSize = '12px';
+      } else if (baseSize < 125) {
+          // If the size is medium (e.g., Silver at 100px)
+          fontSize = '16px'; 
+      } else {
+          // If the size is large (e.g., Gold/Platinum at 150px+)
+          fontSize = '20px';
+      }
+      
       if(sponsor.logoUrl){
         return {
-          width: style.width,
-          height: style.height,
+          width: width,
+          height: height,
           objectFit: 'contain'
         };
       }else{
         return {
-          width: style.width,
-          height: style.height,
-          fontSize: style.fontSize,
+          width: width,
+          height: height,
+          fontSize: fontSize,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -379,29 +399,41 @@ export default {
     const fetchSponsors = async () => {
       try{
         const tierResponse = await sponsorService.getSponsorTiers();
-        console.log("Tier Data Received: ", tierResponse);
+        // console.log("Tier Data Received: ", tierResponse);
         const tierMap = tierResponse.reduce((map, tier) => {
-          map[tier.id] = tier.tier;
+          map[tier.id] = {
+            tierName: tier.tier,
+            width: tier.width,
+            height: tier.height,
+          }
           return map;
         }, {});
-        console.log("Final Tier Map for lookup: ", tierMap);
+        // console.log("Final Tier Map for lookup: ", tierMap);
 
         const rawSponsorResponse = await sponsorService.getSponsors(CURRENT_EVENT_ID);
         const rawData = rawSponsorResponse;
 
-        console.log("Raw Sponsor Data: ", rawData);
+        // console.log("Raw Sponsor Data: ", rawData);
         
         sponsors.value = rawData.map(s => {
           const tierId = s.sponsorTierId;
-          const tierName = tierMap[tierId];
+          const tierInfo = tierMap[tierId]; // Renamed to tierInfo as it holds multiple values
 
-          console.log(`Sponsor ID: ${s.name}, Tier ID: ${tierId}, Mapped Name: ${tierName}`);
+          // Use optional chaining or a simple check for safety
+          const tierName = tierInfo ? tierInfo.tierName : 'Unknown';
+          const tierWidth = tierInfo ? tierInfo.width : null;
+          const tierHeight = tierInfo ? tierInfo.height : null;
+
+          // console.log(`Sponsor Name: ${s.name}, Tier ID: ${tierId}, Mapped Name: ${tierName}`);
           
           return {
             name: s.name,
             website: s.website,
             logoUrl: s.image || null,
-            tier: tierName
+            tier: tierName, // Attach the full tier name
+            // ⭐ 2. Attach the width and height to the sponsor object ⭐
+            imageWidth: tierWidth,
+            imageHeight: tierHeight,
           };
         });
         // console.log("Sponsor data loaded:", sponsors.value); 
