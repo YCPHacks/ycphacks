@@ -9,6 +9,23 @@
             <p>Hack Categories</p>
         </div>
 
+
+        <!-- Spacer to push dropdown lower -->
+        <div style="height: 60px;"></div>
+
+        <!-- Centered dropdown -->
+        <div class="dropdown-row">
+          <div class="event-dropdown">
+            <label for="event-select">Select Event:</label>
+            <select id="event-select" v-model="selectedEventId" @change="fetchCategories">
+              <option v-for="event in events" :key="event.id" :value="event.id">
+                {{ event.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+
         <!-- Categories list -->
         <ul class="categories-list">
           <li v-for="(category, index) in categories" :key="index" class="category">
@@ -37,6 +54,15 @@
 
           </li> 
         </ul> <!-- end categories list -->
+
+        <!-- No events or categories message -->
+        <div v-if="!events.length" class="no-events-message">
+          No events found.
+        </div>
+        <div v-if="!categories.length && selectedEventId" class="no-categories-message">
+          No categories found for this event.
+        </div>
+
         
       </div>
     </div>
@@ -45,30 +71,76 @@
 </template> 
 <!-- end Template -->
 
-<!-- Script -->
+
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      categories: [
-        { name: "Category 1", description: "Description for Category 1", prizes: ["1st", "2nd", "3rd"], open: false },
-        { name: "Category 2", description: "Description for Category 2", prizes: ["1st", "2nd", "3rd"], open: false },
-        { name: "Category 3", description: "Description for Category 3", prizes: ["1st", "2nd", "3rd"], open: false }
-      ]
+      categories: [],
+      events: [],
+      selectedEventId: null
     };
   },
+  created() {
+    axios.get('http://localhost:3000/event/all')
+      .then(response => {
+        this.events = response.data.events
+          ? response.data.events.map(event => ({ ...event }))
+          : [];
+        if (this.events.length > 0) {
+          this.selectedEventId = this.events[0].id;
+          this.fetchCategories();
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching events:', error);
+      });
+  },
   methods: {
+    fetchCategories() {
+      if (!this.selectedEventId) return;
+      axios.get(`http://localhost:3000/event/${this.selectedEventId}/categories`)
+        .then(response => {
+          this.categories = response.data.categories
+            ? response.data.categories.map(category => ({ ...category, open: false }))
+            : [];
+        })
+        .catch(error => {
+          console.error('Error fetching categories:', error);
+        });
+    },
     toggle(index) {
       this.categories[index].open = !this.categories[index].open;
     }
   }
 };
 </script>
-<!-- end Script -->
+
+
+
 
 
 <!-- Styling  -->
 <style scoped>
+
+.dropdown-row {
+  display: flex;
+  justify-content: right;
+  margin-bottom: 30px;
+}
+
+.event-dropdown {
+  display: flex;
+  align-items: right;
+  gap: 8px;
+  margin: 0;
+}
+.header {
+  position: relative;
+}
+
 
 .header{
   font-size: 36px;
@@ -134,6 +206,14 @@ export default {
   margin-left: 20px;
   list-style-type: circle;
   font-size: 18px;
+}
+
+.no-events-message,
+.no-categories-message {
+  color: #444;
+  font-size: 20px;
+  margin: 30px 0;
+  font-style: italic;
 }
 </style>
 <!-- end Styling  -->
