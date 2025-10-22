@@ -376,18 +376,21 @@ export default {
           // If the size is large (e.g., Gold/Platinum at 150px+)
           fontSize = '20px';
       }
+
+      let style = {
+        width: width,
+        height: height,
+        fontSize: fontSize,
+      };
       
       if(sponsor.logoUrl){
         return {
-          width: width,
-          height: height,
+          ...style,
           objectFit: 'contain'
         };
       }else{
         return {
-          width: width,
-          height: height,
-          fontSize: fontSize,
+          ...style,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -770,8 +773,8 @@ h1 {
   display: inline-block;
 }
 .sponsor-logo {
-  max-width: auto;
-  max-height: auto;
+  width: auto;
+  height: auto;
   object-fit: contain;
   margin-bottom: 0.5rem;
 }
@@ -825,16 +828,7 @@ h1 {
   transition: transform 0.2s;
 }
 
-.sponsor-logo {
-  max-width: 200px;
-  max-height: 80px;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-}
-
 .sponsor-name{
-  font-size: 24px;
   font-weight: 700;
   color: #333;
   padding: 10px;
