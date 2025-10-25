@@ -63,19 +63,23 @@
        <p>Sign up <a href="http://146.190.66.30:4174/" style="color: white; font-size:22px;"> here</a> and we&#39;ll let you know when our application is open!</p>
       </div>
     </div>
-    <div class="schedule" id="schedule">
-      <div class="container">
-        <div class="header">
-          <div class="circle" style="font-size:27px; height:100px;">
-            <p>2024 Schedule</p>
+
+    <Activity />
+
+    <div class="landing-page">
+      <div class="schedule" id="schedule">
+        <div class="container">
+          <div class="header">
+            <div class="circle" style="font-size:27px; height:100px;">
+              <p>2024 Schedule</p>
+            </div>
           </div>
-        </div>
 
-        <div class="schedule-content">
-          <div id="day-tag"><b>Friday</b> November 1st, 2024</div>
+          <div class="schedule-content">
+            <div id="day-tag"><b>Friday</b> November 1st, 2024</div>
 
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
+            <table class="table table-bordered" style="margin-bottom:35px">
+              <tbody>
               <tr>
                 <th scope="row">5 PM</th>
                 <th>Doors Open and Dinner</th>
@@ -103,12 +107,12 @@
                 <th scope="row">12 AM</th>
                 <th>Midnight Nerf War</th>
               </tr>
-            </tbody>
-          </table>
+              </tbody>
+            </table>
 
-          <div id="day-tag"><b>Saturday</b> November 2nd, 2024</div>
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
+            <div id="day-tag"><b>Saturday</b> November 2nd, 2024</div>
+            <table class="table table-bordered" style="margin-bottom:35px">
+              <tbody>
               <tr>
                 <th scope="row">2 AM</th>
                 <th>Trivia/Kahoots</th>
@@ -157,12 +161,12 @@
                 <th scope="row">12 AM</th>
                 <th>Midnight Whoopie Pies</th>
               </tr>
-            </tbody>
-          </table>
+              </tbody>
+            </table>
 
-          <div id="day-tag"><b>Sunday</b> November 3rd, 2024</div>
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
+            <div id="day-tag"><b>Sunday</b> November 3rd, 2024</div>
+            <table class="table table-bordered" style="margin-bottom:35px">
+              <tbody>
               <tr>
                 <th scope="row">1 AM</th>
                 <th>Daylight Savings Event</th>
@@ -182,9 +186,10 @@
                 <th scope="row">12 PM</th>
                 <th>Closing Ceremonies</th>
               </tr>
-            </tbody>
-          </table>
-          <div style="margin-bottom:35px">* Schedule is subject to change.</div>
+              </tbody>
+            </table>
+            <div style="margin-bottom:35px">* Schedule is subject to change.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -334,9 +339,13 @@
 import { ref, onMounted } from "vue";
 import sponsorService from "@/services/sponsorService";
 import { mapGetters } from "vuex";
+import Activity from "@/views/ActivitiesPage.vue"
 
 export default {
   name: "LandingPage",
+  components: {
+    Activity
+  },
   computed: {
     ...mapGetters(['isLoggedIn'])
   },
