@@ -3,7 +3,7 @@
     <div v-if="event && Object.keys(event).length > 0" class="container" style="color: #ffffff">
       <div class="header">
         <div class="circle" style="font-size:27px; height:100px;">
-          <p>{{ event.startDate.getFullYear() }} Schedule</p>
+          <p>{{ event.startDate.getFullYear() || '' }} Schedule</p>
         </div>
       </div>
 
