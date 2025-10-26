@@ -1,43 +1,87 @@
 <template>
-  <div class="landing-page">
-    <div v-if="event && Object.keys(event).length > 0" class="schedule" id="schedule">
-      <div class="container">
-        <div class="header">
-          <div class="circle" style="font-size:27px; height:100px;">
-            <p>{{ event.startDate.getFullYear() }} Schedule</p>
-          </div>
+  <div v-if="!isLoading" class="schedule" id="schedule">
+    <div v-if="event && Object.keys(event).length > 0" class="container" style="color: #ffffff">
+      <div class="header">
+        <div class="circle" style="font-size:27px; height:100px;">
+          <p>{{ event.startDate.getFullYear() }} Schedule</p>
         </div>
+      </div>
 
-        <div class="schedule-content">
-          <div v-for="(activities, date) in groupedActivities" :key="date">
-            <span id="day-tag">
-              <b>{{ new Date(date).toLocaleDateString("en-US", { weekday: "long" }) }}</b>
-              {{ new Date(date).toLocaleDateString("en-US", { month: "long" }) }}
-              {{ getOrdinalDay(date) }},
-              {{ new Date(date).getFullYear() }}
-            </span>
-            <table class="table table-bordered" style="margin-bottom:35px">
-              <tbody>
-                <tr v-for="activity in activities" :key="activity.id">
+      <div class="schedule-content">
+        <div v-for="(activities, date) in groupedActivities" :key="date">
+          <span id="day-tag">
+            <b>{{ new Date(date).toLocaleDateString("en-US", { weekday: "long" }) }}</b>
+            {{ new Date(date).toLocaleDateString("en-US", { month: "long" }) }}
+            {{ getOrdinalDay(date) }},
+            {{ new Date(date).getFullYear() }}
+          </span>
+          <table class="table table-bordered" style="margin-bottom:35px">
+            <tbody>
+              <template v-for="activity in activities" :key="activity.id">
+                <!-- Main row -->
+                <tr
+                    @click="toggleRow(activity.id)"
+                    @mouseenter="hoveredRow = activity.id"
+                    @mouseleave="hoveredRow = null"
+                    :class="{
+                      'important-row': isImportantActivity(activity.activityName),
+                      'activity-row-group': isLoggedIn,
+                      'hovered-row': hoveredRow === activity.id
+                    }"
+                >
                   <th scope="row">
                     {{ new Date(activity.activityDate).toLocaleTimeString("en-US", {
-                      timeZone: "America/New_York",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true
-                    }) }}
+                    timeZone: "America/New_York",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true
+                  }) }}
                   </th>
                   <th>{{ activity.activityName }}</th>
                 </tr>
-              </tbody>
-            </table>
-          </div>
-          <div style="margin-bottom:35px">* Schedule is subject to change.</div>
+
+                <!-- Description row -->
+                <tr
+                    v-if="isLoggedIn"
+                    @mouseenter="hoveredRow = activity.id"
+                    @mouseleave="hoveredRow = null"
+                    :class="{
+                      'important-row': isImportantActivity(activity.activityName),
+                      'hovered-row': hoveredRow === activity.id
+                    }"
+                >
+                  <td colspan="2" class="p-0">
+                    <b-collapse :visible="expandedRows.includes(activity.id)">
+                      <b-card body-class="p-3 mt-2" class="activity-description">
+                        {{ activity.activityDescription }}
+                      </b-card>
+                    </b-collapse>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
         </div>
+        <div style="padding-bottom:15px">* Schedule is subject to change.</div>
       </div>
     </div>
-    <div v-else>
-      <div style="margin-bottom:35px">Schedule is not being displayed at this time. Please check back later!</div>
+    <div v-else class="no-event-container">
+      <div class="no-event-content">
+        <div class="header" style="padding-bottom: 20px;">
+          <div class="circle" style="font-size:27px; height:75px;">
+            <p>Schedule</p>
+          </div>
+        </div>
+        <p class="no-event-message">
+          The schedule is not being displayed at this time.<br />
+          Please check back later!
+        </p>
+      </div>
+    </div>
+  </div>
+  <div v-else class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
   </div>
 </template>
@@ -52,7 +96,6 @@ export default {
   computed: {
     ...mapGetters(['isLoggedIn']),
     groupedActivities() {
-      console.log(this.groupActivitiesByDay(store.state.activities));
       return this.groupActivitiesByDay(store.state.activities);
     }
   },
@@ -65,7 +108,9 @@ export default {
         startDate: new Date('2025-11-07T22:00:00.000Z'),
         endDate: new Date('2025-11-09T21:00:00.000Z'),
         canChange: true
-      }
+      },
+      hoveredRow: 0,
+      expandedRows: []
     }
   },
   methods: {
@@ -126,6 +171,25 @@ export default {
                       ? "rd"
                       : "th";
       return `${d}${suffix}`;
+    },
+    isImportantActivity(activityName) {
+      const normalized = activityName.toLowerCase();
+      const importantKeywords = [
+        "hacking start",
+        "hacking begin",
+        "hacking end",
+        "hacking stop"
+      ];
+
+      // match any keyword appearing in the string
+      return importantKeywords.some(keyword => normalized.includes(keyword));
+    },
+    toggleRow(id) {
+      if (this.expandedRows.includes(id)) {
+        this.expandedRows.splice(this.expandedRows.indexOf(this.expandedRows.id), 1);
+      } else {
+        this.expandedRows.push(id)
+      }
     }
   },
   mounted() {
@@ -222,11 +286,9 @@ a {
   border: 6px solid #fff;
   text-align: center;
   color: white;
-  line-height: 100px;
   font-size: 20px;
   transition: all 0.3s ease;
   padding-bottom: 10%;
-
 }
 
 .header .circle {
@@ -342,8 +404,9 @@ h1 {
     margin: 0.67em 0;
 }
 .schedule {
-    margin-top: 50px;
-    background-color:#93dda3;
+    padding-top: 60px;
+    background-color: #a0dda3;
+    min-height: 100vh;
 }
 .schedule .header .circle {
     font-size: 40px;
@@ -359,6 +422,92 @@ h1 {
 }
 #day-tag {
     font-size: 50px;
+}
+
+.table {
+  table-layout: fixed;
+}
+
+/* Default (i.e., non-important) rows */
+.table th,
+.table td {
+  background-color: #a0dda3; /* dark background */
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.table tr:hover th,
+.table tr:hover td {
+  background-color: #6c965d;
+}
+
+/* Important rows (both main and description) */
+.table .important-row th,
+.table .important-row td {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+/* Make card match the row color */
+.table .important-row .activity-description {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: none;
+}
+
+/* When hovered (both rows share same activity id) */
+.table .hovered-row th,
+.table .hovered-row td {
+  background-color: #6c965d !important; /* your hover color */
+  color: #fff !important;
+  transition: background-color 0.25s ease;
+}
+
+/* Important-row hover (white version) */
+.table .important-row.hovered-row th,
+.table .important-row.hovered-row td {
+  background-color: #e6e6e6 !important;
+  color: #000 !important;
+}
+
+/* When hovered, make the card transparent so the hover color shows through */
+.table .hovered-row .activity-description {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+/* Non-important dropdown card */
+.activity-description {
+  background-color: #a0dda3 !important;
+  color: #fff !important;
+  border: none;
+}
+
+.activity-row-group:hover {
+  cursor: pointer;
+}
+
+.no-event-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh; /* centers vertically */
+  text-align: center;
+  color: #ffffff;
+}
+
+.no-event-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no-event-message {
+  font-size: 1.1rem;
+  color: #fff;
+  max-width: 400px;
+  line-height: 1.5;
 }
 
 </style>

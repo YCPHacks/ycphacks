@@ -95,6 +95,7 @@ export default createStore({
 
     async getAllActivities({ commit }, eventId) {
         try{
+            if (!eventId) return;
             const response = await axios.get(`http://localhost:3000/event/activity/${eventId}`);
 
             // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format

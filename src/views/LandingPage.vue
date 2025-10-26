@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <Activity />
+    <Activities />
 
     <div class="faq" id="faq">
       <div class="container">
@@ -211,12 +211,12 @@
 import { ref, onMounted } from "vue";
 import sponsorService from "@/services/sponsorService";
 import { mapGetters } from "vuex";
-import Activity from "@/views/ActivitiesPage.vue"
+import Activities from "@/views/ActivitiesPage.vue"
 
 export default {
   name: "LandingPage",
   components: {
-    Activity
+    Activities
   },
   computed: {
     ...mapGetters(['isLoggedIn'])
