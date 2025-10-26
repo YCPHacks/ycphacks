@@ -16,10 +16,12 @@ class UserAdapter {
 export default createStore({
   state: {
     user: null,
+    activities: []
   },
   getters: {
     isLoggedIn: (state) => !!state.user,
-    getUser: (state) => state.user
+    getUser: (state) => state.user,
+    getActivities: (state) => state.activities
   },
   mutations: {
     setUser(state, user) {
@@ -28,6 +30,12 @@ export default createStore({
     clearUser(state) {
       state.user = null;
     },
+    setActivities(state, activities) {
+        state.activities = activities;
+    },
+    clearActivities(state) {
+        state.activities = [];
+    }
   },
   actions: {
     async registerUser({ commit }, formData) {
@@ -82,6 +90,34 @@ export default createStore({
             return { success: true, message: data.message };
         } catch (error) {
             return { success: false, message: error.response?.data?.message || "Authentication failed" };
+        }
+    },
+
+    async getAllActivities({ commit }, eventId) {
+        try{
+            if (!eventId) return;
+            const response = await axios.get(`http://localhost:3000/event/activity/${eventId}`);
+
+            // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format
+            const activities = response.data.activities.map(activity => {
+                activity.activityDate = (new Date(activity.activityDate)).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true,
+                    timeZone: "America/New_York"
+                });
+
+                return activity;
+            });
+
+            commit("setActivities", activities);
+            return { success: true, message: response.data.message };
+        } catch (error) {
+            return { success: false, message: error.response?.data?.message || "Error fetching activity" };
         }
     },
 

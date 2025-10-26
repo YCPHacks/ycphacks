@@ -63,131 +63,8 @@
        <p>Sign up <a href="http://146.190.66.30:4174/" style="color: white; font-size:22px;"> here</a> and we&#39;ll let you know when our application is open!</p>
       </div>
     </div>
-    <div class="schedule" id="schedule">
-      <div class="container">
-        <div class="header">
-          <div class="circle" style="font-size:27px; height:100px;">
-            <p>2024 Schedule</p>
-          </div>
-        </div>
 
-        <div class="schedule-content">
-          <div id="day-tag"><b>Friday</b> November 1st, 2024</div>
-
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
-              <tr>
-                <th scope="row">5 PM</th>
-                <th>Doors Open and Dinner</th>
-              </tr>
-              <tr>
-                <th scope="row">6:30 PM</th>
-                <th>Opening Ceremony</th>
-              </tr>
-              <tr>
-                <th colspan="2" scope="row" style="color:#000;background-color:#fff">7PM - HACKING BEGINS!</th>
-              </tr>
-              <tr>
-                <th scope="row">7:30 PM</th>
-                <th>Team and Idea Building</th>
-              </tr>
-              <tr>
-                <th scope="row">9:00 PM</th>
-                <th>Bryce Warner - 3D Printing</th>
-              </tr>
-              <tr>
-                <th scope="row">10:30 PM</th>
-                <th>Matrix Nerf Challenge</th>
-              </tr>
-              <tr>
-                <th scope="row">12 AM</th>
-                <th>Midnight Nerf War</th>
-              </tr>
-            </tbody>
-          </table>
-
-          <div id="day-tag"><b>Saturday</b> November 2nd, 2024</div>
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
-              <tr>
-                <th scope="row">2 AM</th>
-                <th>Trivia/Kahoots</th>
-              </tr>
-              <tr>
-                <th scope="row">8:30 AM</th>
-                <th>Breakfast</th>
-              </tr>
-              <tr>
-                <th scope="row">10 AM</th>
-                <th>Bee Central Workshop</th>
-              </tr>
-              <tr>
-                <th scope="row">12 PM</th>
-                <th>Lunch</th>
-              </tr>
-              <tr>
-                <th scope="row">1 PM</th>
-                <th>Dr. Hake - Workshop talk Coming Soon</th>
-              </tr>
-              <tr>
-                <th scope="row">2 PM</th>
-                <th>QUEST</th>
-              </tr>
-              <tr>
-                <th scope="row">3 PM</th>
-                <th>Dr. Babcock - Workshop talk Coming Soon</th>
-              </tr>
-              <tr>
-                <th scope="row">6:00 PM</th>
-                <th>Dinner</th>
-              </tr>
-              <tr>
-                <th scope="row">7:00 PM</th>
-                <th>Slideshow Karaoke</th>
-              </tr>
-              <tr>
-                <th scope="row">8:30 PM</th>
-                <th>Prof Zeller - Fire Spinning </th>
-              </tr>
-              <tr>
-                <th scope="row">10 PM</th>
-                <th>QUEST</th>
-              </tr>
-              <tr>
-                <th scope="row">12 AM</th>
-                <th>Midnight Whoopie Pies</th>
-              </tr>
-            </tbody>
-          </table>
-
-          <div id="day-tag"><b>Sunday</b> November 3rd, 2024</div>
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
-              <tr>
-                <th scope="row">1 AM</th>
-                <th>Daylight Savings Event</th>
-              </tr>
-              <tr>
-                <th scope="row">8:30 AM</th>
-                <th>Breakfast</th>
-              </tr>
-              <tr>
-                <th colspan="2" scope="row" style="color:#000;background-color:#fff">9 AM - HACKING ENDS!</th>
-              </tr>
-              <tr>
-                <th scope="row">10 AM</th>
-                <th>Presentations &amp; Judging</th>
-              </tr>
-              <tr>
-                <th scope="row">12 PM</th>
-                <th>Closing Ceremonies</th>
-              </tr>
-            </tbody>
-          </table>
-          <div style="margin-bottom:35px">* Schedule is subject to change.</div>
-        </div>
-      </div>
-    </div>
+    <Activities />
 
     <div class="faq" id="faq">
       <div class="container">
@@ -334,9 +211,13 @@
 import { ref, onMounted } from "vue";
 import sponsorService from "@/services/sponsorService";
 import { mapGetters } from "vuex";
+import Activities from "@/views/ActivitiesPage.vue"
 
 export default {
   name: "LandingPage",
+  components: {
+    Activities
+  },
   computed: {
     ...mapGetters(['isLoggedIn'])
   },

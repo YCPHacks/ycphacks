@@ -1,132 +1,202 @@
 <template>
-  <div class="landing-page">
-    <div class="schedule" id="schedule">
-      <div class="container">
-        <div class="header">
-          <div class="circle" style="font-size:27px; height:100px;">
-            <p>2024 Schedule</p>
+  <div v-if="!isLoading" class="schedule" id="schedule">
+    <div v-if="event && Object.keys(event).length > 0" class="container" style="color: #ffffff">
+      <div class="header">
+        <div class="circle" style="font-size:27px; height:100px;">
+          <p>{{ event.startDate.getFullYear() || '' }} Schedule</p>
+        </div>
+      </div>
+
+      <div class="schedule-content">
+        <div v-for="(activities, date) in groupedActivities" :key="date">
+          <span id="day-tag">
+            <b>{{ new Date(date).toLocaleDateString("en-US", { weekday: "long" }) }}</b>
+            {{ new Date(date).toLocaleDateString("en-US", { month: "long" }) }}
+            {{ getOrdinalDay(date) }},
+            {{ new Date(date).getFullYear() }}
+          </span>
+          <table class="table table-bordered" style="margin-bottom:35px">
+            <tbody>
+              <template v-for="activity in activities" :key="activity.id">
+                <!-- Main row -->
+                <tr
+                    @click="toggleRow(activity.id)"
+                    @mouseenter="hoveredRow = activity.id"
+                    @mouseleave="hoveredRow = null"
+                    :class="{
+                      'important-row': isImportantActivity(activity.activityName),
+                      'activity-row-group': isLoggedIn,
+                      'hovered-row': hoveredRow === activity.id
+                    }"
+                >
+                  <th scope="row">
+                    {{ new Date(activity.activityDate).toLocaleTimeString("en-US", {
+                    timeZone: "America/New_York",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true
+                  }) }}
+                  </th>
+                  <th>{{ activity.activityName }}</th>
+                </tr>
+
+                <!-- Description row -->
+                <tr
+                    v-if="isLoggedIn"
+                    @mouseenter="hoveredRow = activity.id"
+                    @mouseleave="hoveredRow = null"
+                    :class="{
+                      'important-row': isImportantActivity(activity.activityName),
+                      'hovered-row': hoveredRow === activity.id
+                    }"
+                >
+                  <td colspan="2" class="p-0">
+                    <b-collapse :visible="expandedRows.includes(activity.id)">
+                      <b-card body-class="p-3 mt-2" class="activity-description">
+                        {{ activity.activityDescription }}
+                      </b-card>
+                    </b-collapse>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding-bottom:15px">* Schedule is subject to change.</div>
+      </div>
+    </div>
+    <div v-else class="no-event-container">
+      <div class="no-event-content">
+        <div class="header" style="padding-bottom: 20px;">
+          <div class="circle" style="font-size:27px; height:75px;">
+            <p>Schedule</p>
           </div>
         </div>
-
-        <div class="schedule-content">
-          <div id="day-tag"><b>Friday</b> November 1st, 2024</div>
-
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
-              <tr>
-                <th scope="row">5 PM</th>
-                <th>Doors Open and Dinner</th>
-              </tr>
-              <tr>
-                <th scope="row">6:30 PM</th>
-                <th>Opening Ceremony</th>
-              </tr>
-              <tr>
-                <th colspan="2" scope="row" style="color:#000;background-color:#fff">7PM - HACKING BEGINS!</th>
-              </tr>
-              <tr>
-                <th scope="row">7:30 PM</th>
-                <th>Team and Idea Building</th>
-              </tr>
-              <tr>
-                <th scope="row">9:00 PM</th>
-                <th>Bryce Warner - 3D Printing</th>
-              </tr>
-              <tr>
-                <th scope="row">10:30 PM</th>
-                <th>Matrix Nerf Challenge</th>
-              </tr>
-              <tr>
-                <th scope="row">12 AM</th>
-                <th>Midnight Nerf War</th>
-              </tr>
-            </tbody>
-          </table>
-
-          <div id="day-tag"><b>Saturday</b> November 2nd, 2024</div>
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
-              <tr>
-                <th scope="row">2 AM</th>
-                <th>Trivia/Kahoots</th>
-              </tr>
-              <tr>
-                <th scope="row">8:30 AM</th>
-                <th>Breakfast</th>
-              </tr>
-              <tr>
-                <th scope="row">10 AM</th>
-                <th>Bee Central Workshop</th>
-              </tr>
-              <tr>
-                <th scope="row">12 PM</th>
-                <th>Lunch</th>
-              </tr>
-              <tr>
-                <th scope="row">1 PM</th>
-                <th>Dr. Hake - Workshop talk Coming Soon</th>
-              </tr>
-              <tr>
-                <th scope="row">2 PM</th>
-                <th>QUEST</th>
-              </tr>
-              <tr>
-                <th scope="row">3 PM</th>
-                <th>Dr. Babcock - Workshop talk Coming Soon</th>
-              </tr>
-              <tr>
-                <th scope="row">6:00 PM</th>
-                <th>Dinner</th>
-              </tr>
-              <tr>
-                <th scope="row">7:00 PM</th>
-                <th>Slideshow Karaoke</th>
-              </tr>
-              <tr>
-                <th scope="row">8:30 PM</th>
-                <th>Prof Zeller - Fire Spinning </th>
-              </tr>
-              <tr>
-                <th scope="row">10 PM</th>
-                <th>QUEST</th>
-              </tr>
-              <tr>
-                <th scope="row">12 AM</th>
-                <th>Midnight Whoopie Pies</th>
-              </tr>
-            </tbody>
-          </table>
-
-          <div id="day-tag"><b>Sunday</b> November 3rd, 2024</div>
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
-              <tr>
-                <th scope="row">1 AM</th>
-                <th>Daylight Savings Event</th>
-              </tr>
-              <tr>
-                <th scope="row">8:30 AM</th>
-                <th>Breakfast</th>
-              </tr>
-              <tr>
-                <th colspan="2" scope="row" style="color:#000;background-color:#fff">9 AM - HACKING ENDS!</th>
-              </tr>
-              <tr>
-                <th scope="row">10 AM</th>
-                <th>Presentations &amp; Judging</th>
-              </tr>
-              <tr>
-                <th scope="row">12 PM</th>
-                <th>Closing Ceremonies</th>
-              </tr>
-            </tbody>
-          </table>
-          <div style="margin-bottom:35px">* Schedule is subject to change.</div>
-        </div>
+        <p class="no-event-message">
+          The schedule is not being displayed at this time.<br />
+          Please check back later!
+        </p>
       </div>
     </div>
   </div>
+  <div v-else class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
 </template>
+
+<script>
+import { mapGetters } from "vuex";
+import store from "@/store/store.js";
+
+export default {
+  name: "ActivityPage",
+  components: {},
+  computed: {
+    ...mapGetters(['isLoggedIn']),
+    groupedActivities() {
+      return this.groupActivitiesByDay(store.state.activities);
+    }
+  },
+  data() {
+    return {
+      isLoading: false,
+      event: { // NOTE THIS IS TEMPORARY AND SHOULD BE REPLACED WITH A CALL TO THE BACKEND TO GET THE CORRECT EVENT
+        id: 1,
+        eventName: 'YCP Hacks 2025',
+        startDate: new Date('2025-11-07T22:00:00.000Z'),
+        endDate: new Date('2025-11-09T21:00:00.000Z'),
+        canChange: true
+      },
+      hoveredRow: 0,
+      expandedRows: []
+    }
+  },
+  methods: {
+    async fetchActivities() {
+      this.isLoading = true
+
+      await store.dispatch('getAllActivities', this.event.id);
+
+      this.isLoading = false;
+    },
+    // Takes in an array of activities and separates them out into an object, where each entry is a date which points
+    // to a list of all the activities happening on that date
+    groupActivitiesByDay(activities) {
+      const dateRange = this.getDateRangeOfEvent();
+
+      for (const activity of activities) {
+        const dateKey = new Date(activity.activityDate);
+        // Need to match the same string form you’ll use in `dateRange`
+        const key = dateKey.toLocaleDateString("en-US", { timeZone: "America/New_York" });
+        if (dateRange[key]) dateRange[key].push(activity);
+      }
+
+      // Sort each day by time (i.e., earliest to latest)
+      for (const key in dateRange) {
+        dateRange[key].sort((a, b) => {
+          const timeA = new Date(a.activityDate).getTime();
+          const timeB = new Date(b.activityDate).getTime();
+          return timeA - timeB;
+        });
+      }
+
+      return dateRange
+    },
+    // Returns a list of all dates between the event start and end dates, inclusive
+    getDateRangeOfEvent() {
+      const start = this.event.startDate;
+      const end = this.event.endDate;
+      const dateRange = {};
+      const current = new Date(start);
+
+      while (current.getDate() <= end.getDate()) {
+        const key = current.toLocaleDateString("en-US", { timeZone: "America/New_York" });
+        dateRange[key] = [];
+        current.setDate(current.getDate() + 1);
+      }
+
+      return dateRange;
+    },
+    // Takes in a date and returns the day with its ordinal suffix (like “st”, “nd”, “rd”, “th”)
+    getOrdinalDay(date) {
+      const d = new Date(date).getDate();
+      const suffix =
+          d % 10 === 1 && d !== 11
+              ? "st"
+              : d % 10 === 2 && d !== 12
+                  ? "nd"
+                  : d % 10 === 3 && d !== 13
+                      ? "rd"
+                      : "th";
+      return `${d}${suffix}`;
+    },
+    isImportantActivity(activityName) {
+      const normalized = activityName.toLowerCase();
+      const importantKeywords = [
+        "hacking start",
+        "hacking begin",
+        "hacking end",
+        "hacking stop"
+      ];
+
+      // match any keyword appearing in the string
+      return importantKeywords.some(keyword => normalized.includes(keyword));
+    },
+    toggleRow(id) {
+      if (this.expandedRows.includes(id)) {
+        this.expandedRows.splice(this.expandedRows.indexOf(this.expandedRows.id), 1);
+      } else {
+        this.expandedRows.push(id)
+      }
+    }
+  },
+  mounted() {
+    this.fetchActivities();
+  }
+};
+</script>
 
 <style scoped>
 body {
@@ -216,11 +286,9 @@ a {
   border: 6px solid #fff;
   text-align: center;
   color: white;
-  line-height: 100px;
   font-size: 20px;
   transition: all 0.3s ease;
   padding-bottom: 10%;
-
 }
 
 .header .circle {
@@ -336,8 +404,9 @@ h1 {
     margin: 0.67em 0;
 }
 .schedule {
-    margin-top: 50px;
-    background-color:#93dda3;
+    padding-top: 60px;
+    background-color: #a0dda3;
+    min-height: 100vh;
 }
 .schedule .header .circle {
     font-size: 40px;
@@ -353,6 +422,92 @@ h1 {
 }
 #day-tag {
     font-size: 50px;
+}
+
+.table {
+  table-layout: fixed;
+}
+
+/* Default (i.e., non-important) rows */
+.table th,
+.table td {
+  background-color: #a0dda3; /* dark background */
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.table tr:hover th,
+.table tr:hover td {
+  background-color: #6c965d;
+}
+
+/* Important rows (both main and description) */
+.table .important-row th,
+.table .important-row td {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+/* Make card match the row color */
+.table .important-row .activity-description {
+  background-color: #fff !important;
+  color: #000 !important;
+  border: none;
+}
+
+/* When hovered (both rows share same activity id) */
+.table .hovered-row th,
+.table .hovered-row td {
+  background-color: #6c965d !important; /* your hover color */
+  color: #fff !important;
+  transition: background-color 0.25s ease;
+}
+
+/* Important-row hover (white version) */
+.table .important-row.hovered-row th,
+.table .important-row.hovered-row td {
+  background-color: #e6e6e6 !important;
+  color: #000 !important;
+}
+
+/* When hovered, make the card transparent so the hover color shows through */
+.table .hovered-row .activity-description {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+/* Non-important dropdown card */
+.activity-description {
+  background-color: #a0dda3 !important;
+  color: #fff !important;
+  border: none;
+}
+
+.activity-row-group:hover {
+  cursor: pointer;
+}
+
+.no-event-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh; /* centers vertically */
+  text-align: center;
+  color: #ffffff;
+}
+
+.no-event-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no-event-message {
+  font-size: 1.1rem;
+  color: #fff;
+  max-width: 400px;
+  line-height: 1.5;
 }
 
 </style>
