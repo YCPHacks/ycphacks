@@ -18,8 +18,10 @@
           <div class="event-dropdown">
             <label for="event-select">Select Event:</label>
             <select id="event-select" v-model="selectedEventId" @change="fetchCategories">
+              <option :value="null" disabled>Select an event</option>
+              <option :value="null">     </option>
               <option v-for="event in events" :key="event.id" :value="event.id">
-                {{ event.name }}
+                {{ event.eventName }}
               </option>
             </select>
           </div>
@@ -33,23 +35,22 @@
                 class="category-header" 
                 @click="toggle(index)"
               >
-                {{ category.name }}
+                {{ category.categoryName }}
                 <span>{{ category.open ? "▲" : "▼" }}</span>
               </div>
 
 
-              <!-- if open show description and list of prizes -->
+              <!-- if open show list of prizes -->
               <div v-show="category.open">
-                <div class="category-description">
-                  {{ category.description }}
-                </div>
-
-                <ul class="prize-list">
-                  <li v-for="(prize, i) in category.prizes" :key="i">
-                    {{ prize }}
+                <ul class="prize-list" v-if="category.prizes && category.prizes.length">
+                  <li v-for="(prize, pIndex) in category.prizes" :key="pIndex">
+                    {{ formatPlacement(prize.placement) }}: {{ prize.prizeName }}
                   </li>
                 </ul>
-              </div><!-- end if open -->
+                <div v-else>
+                  No prizes found for this category.
+                </div>
+              </div>
 
 
           </li> 
@@ -100,8 +101,11 @@ export default {
   },
   methods: {
     fetchCategories() {
-      if (!this.selectedEventId) return;
-      axios.get(`http://localhost:3000/event/${this.selectedEventId}/categories`)
+      if (!this.selectedEventId) {
+        this.categories = []; // clear categories if no event is selected
+        return;
+      }
+        axios.get(`http://localhost:3000/event/category/${this.selectedEventId}`)
         .then(response => {
           this.categories = response.data.categories
             ? response.data.categories.map(category => ({ ...category, open: false }))
@@ -111,10 +115,37 @@ export default {
           console.error('Error fetching categories:', error);
         });
     },
-    toggle(index) {
-      this.categories[index].open = !this.categories[index].open;
+    async toggle(index) {
+      const category = this.categories[index];
+      category.open = !category.open;
+
+      if (category.open) {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/event/category/${category.id}/prizes`
+          );
+          // Sort prizes by placement
+          category.prizes = (response.data.prizes || []).sort(
+            (a, b) => a.placement - b.placement
+          );
+        } catch (error) {
+          console.error('Error fetching prizes:', error);
+          category.prizes = [];
+        }
+      }
+    },
+    formatPlacement(num) {
+      if (!num) return '';
+      const j = num % 10,
+            k = num % 100;
+      if (j === 1 && k !== 11) return num + "st";
+      if (j === 2 && k !== 12) return num + "nd";
+      if (j === 3 && k !== 13) return num + "rd";
+      return num + "th";
     }
-  }
+
+
+  }//end methods
 };
 </script>
 
