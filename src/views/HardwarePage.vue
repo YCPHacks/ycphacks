@@ -180,7 +180,7 @@ export default {
             availabilityText = "Unavailable";
             isUnavailable = true;
         } else {
-            availabilityText = `${item.unavailableCount} / ${item.totalCount}`;
+            availabilityText = `${availableCount} / ${item.totalCount}`;
         }
 
         return {
