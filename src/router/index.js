@@ -1,5 +1,6 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
+import store from '../store/store.js';
 import LandingPage from '../views/LandingPage.vue';
 import Registration from '../views/Registration.vue';
 import LoginPage from '../views/LoginPage.vue';
@@ -31,12 +32,41 @@ const routes = [
         path: '/hardware',
         name: 'Hardware',
         component: HardwarePage,
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: LandingPage // Should be replaced with the profile component once it is implemented
     }
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
+});
+
+router.beforeEach(async (to, from, next) => {
+    let isAuthenticated = !!store.state.user;
+    if (!isAuthenticated) {
+        const result = await store.dispatch('validateWithToken');
+        isAuthenticated = result.success;
+    }
+
+    // Allow routing to login if NOT authenticated
+    if (to.path === '/login' || to.path === '/register') {
+        if (isAuthenticated) {
+            return next('/'); // already logged in, redirect away
+        } else {
+            return next(); // allow login/register page
+        }
+    }
+
+    // For all other routes that require auth
+    if (to.path !== '/' && !isAuthenticated) {
+        return next('/'); // redirect to landing page
+    }
+
+    next(); // allow route
 });
 
 export default router;

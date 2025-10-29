@@ -62,7 +62,6 @@
                         <div class="flex-grow-1">
                             
                             <div class="text-end small fw-semibold mb-2">
-                                Availability: 
                                 <span :class="{'text-danger': item.isUnavailable, 'text-success': !item.isUnavailable}">
                                     {{ item.availabilityText }}
                                 </span>
