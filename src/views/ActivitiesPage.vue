@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isLoading" class="schedule" id="schedule">
     <div v-if="event && Object.keys(event).length > 0" class="container" style="color: #ffffff">
-      <div class="header">
+      <div class="header" style="margin-bottom: 10px;">
         <div class="circle" style="font-size:27px; height:100px;">
           <p>{{ event.startDate.getFullYear() || '' }} Schedule</p>
         </div>
@@ -9,13 +9,13 @@
 
       <div class="schedule-content">
         <div v-for="(activities, date) in groupedActivities" :key="date">
-          <span id="day-tag">
-            <b>{{ new Date(date).toLocaleDateString("en-US", { weekday: "long" }) }}</b>
+          <span id="day-tag" style="color: #5f8653">
+            <b>{{ new Date(date).toLocaleDateString("en-US", { weekday: "long" }) }}
             {{ new Date(date).toLocaleDateString("en-US", { month: "long" }) }}
             {{ getOrdinalDay(date) }},
-            {{ new Date(date).getFullYear() }}
+            {{ new Date(date).getFullYear() }}</b>
           </span>
-          <table class="table table-bordered" style="margin-bottom:35px">
+          <table v-if="activities.length > 0" class="table table-bordered" style="margin-bottom:35px">
             <tbody>
               <template v-for="activity in activities" :key="activity.id">
                 <!-- Main row -->
@@ -61,8 +61,9 @@
               </template>
             </tbody>
           </table>
+          <div v-else style="padding:15px 0; color: #5f8653">There are no activities currently set for this date. Please check back later!</div>
         </div>
-        <div style="padding-bottom:15px">* Schedule is subject to change.</div>
+        <div style="padding:15px 0; color:#5f8653;">* Schedule is subject to change.</div>
       </div>
     </div>
     <div v-else class="no-event-container">
@@ -185,8 +186,9 @@ export default {
       return importantKeywords.some(keyword => normalized.includes(keyword));
     },
     toggleRow(id) {
+      console.log(id , this.expandedRows);
       if (this.expandedRows.includes(id)) {
-        this.expandedRows.splice(this.expandedRows.indexOf(this.expandedRows.id), 1);
+        this.expandedRows.splice(this.expandedRows.indexOf(id), 1);
       } else {
         this.expandedRows.push(id)
       }
@@ -421,7 +423,7 @@ h1 {
     transform: skew(20deg);
 }
 #day-tag {
-    font-size: 50px;
+    font-size: 40px;
 }
 
 .table {
@@ -432,7 +434,7 @@ h1 {
 .table th,
 .table td {
   background-color: #a0dda3; /* dark background */
-  color: #fff;
+  color: #5f8653;
   border: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
@@ -480,7 +482,7 @@ h1 {
 /* Non-important dropdown card */
 .activity-description {
   background-color: #a0dda3 !important;
-  color: #fff !important;
+  color: #5f8653 !important;
   border: none;
 }
 
