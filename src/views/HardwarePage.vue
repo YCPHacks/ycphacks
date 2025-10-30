@@ -29,7 +29,6 @@
                   class="accordion-item mb-3"
                 >
                     
-<<<<<<< HEAD
                   <h2 :id="'heading-' + getSafeId(item.name)" class="accordion-header">
                     <button
                       class="accordion-button collapsed hardware-item-header"
@@ -53,19 +52,6 @@
 
                       <div class="fw-bold">{{ item.name }}</div>
                     </button>
-=======
-                    <h2 :id="'heading-' + getSafeId(item.name)" class="accordion-header">
-                      <button
-                          class="accordion-button collapsed hardware-item-header"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          :data-bs-target="'#collapse-' + getSafeId(item.name)"
-                          aria-expanded="false"
-                          :aria-controls="'collapse-' + getSafeId(item.name)"
-                      >
-                          <div class="fw-bold">{{ item.name }}</div>
-                          </button>
->>>>>>> parent of 6b1dcfe... #5: Added color/symbols to hardware tabs for dropdowns
                   </h2>
 
                   <div
@@ -216,36 +202,6 @@ export default {
         };
       });
     },
-<<<<<<< HEAD
-    getAvailabilityIconClass(status){
-      switch (status) {
-        case 'none':
-          // Red circle background, black 'X'
-          return { 
-            outerIcon: 'fa-circle', // Colored background
-            innerIcon: 'fa-times',  // Black icon
-            outerColor: 'text-danger' 
-          };
-        case 'some':
-          // Yellow circle background, black '-'
-          return { 
-            outerIcon: 'fa-circle', 
-            innerIcon: 'fa-minus', 
-            outerColor: 'text-warning' 
-          };
-        case 'all':
-          // Green circle background, black checkmark
-          return { 
-            outerIcon: 'fa-circle', 
-            innerIcon: 'fa-check', 
-            outerColor: 'text-success' 
-          };
-        default:
-          return { outerIcon: '', innerIcon: '', outerColor: '' };
-      }
-    },
-=======
->>>>>>> parent of 6b1dcfe... #5: Added color/symbols to hardware tabs for dropdowns
     getSafeId(name) {
         return name ? name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '';
     }
