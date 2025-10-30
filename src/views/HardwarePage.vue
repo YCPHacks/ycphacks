@@ -29,6 +29,7 @@
                   class="accordion-item mb-3"
                 >
                     
+<<<<<<< HEAD
                   <h2 :id="'heading-' + getSafeId(item.name)" class="accordion-header">
                     <button
                       class="accordion-button collapsed hardware-item-header"
@@ -52,6 +53,19 @@
 
                       <div class="fw-bold">{{ item.name }}</div>
                     </button>
+=======
+                    <h2 :id="'heading-' + getSafeId(item.name)" class="accordion-header">
+                      <button
+                          class="accordion-button collapsed hardware-item-header"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          :data-bs-target="'#collapse-' + getSafeId(item.name)"
+                          aria-expanded="false"
+                          :aria-controls="'collapse-' + getSafeId(item.name)"
+                      >
+                          <div class="fw-bold">{{ item.name }}</div>
+                          </button>
+>>>>>>> parent of 6b1dcfe... #5: Added color/symbols to hardware tabs for dropdowns
                   </h2>
 
                   <div
@@ -186,29 +200,23 @@ export default {
         const availableCount = item.totalCount - item.unavailableCount;
         let availabilityText;
         let isUnavailable = false;
-        let availabilityStatus;
 
         if (availableCount === 0) {
-          availabilityText = "Unavailable";
-          isUnavailable = true;
-          availabilityStatus = 'none';
-        } else if (availableCount === item.totalCount){
-          availabilityText = `${availableCount} / ${item.totalCount}`;
-          availabilityStatus = 'all';
-        }else{
-          availabilityText = `${availableCount} / ${item.totalCount}`;
-          availabilityStatus = 'some';
+            availabilityText = "Unavailable";
+            isUnavailable = true;
+        } else {
+            availabilityText = `${availableCount} / ${item.totalCount}`;
         }
 
         return {
-          ...item,
-          availableCount,
-          availabilityText,
-          isUnavailable,
-          availabilityStatus
+            ...item,
+            availableCount,
+            availabilityText,
+            isUnavailable
         };
       });
     },
+<<<<<<< HEAD
     getAvailabilityIconClass(status){
       switch (status) {
         case 'none':
@@ -236,6 +244,8 @@ export default {
           return { outerIcon: '', innerIcon: '', outerColor: '' };
       }
     },
+=======
+>>>>>>> parent of 6b1dcfe... #5: Added color/symbols to hardware tabs for dropdowns
     getSafeId(name) {
         return name ? name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '';
     }
