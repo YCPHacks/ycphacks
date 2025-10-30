@@ -38,9 +38,16 @@
                           aria-expanded="false"
                           :aria-controls="'collapse-' + getSafeId(item.name)"
                       >
-                          <div class="fw-bold">{{ item.name }}</div>
-                          </button>
-                  </h2>
+                      <span class="me-3">
+                        <i
+                          :class="['bi', getAvailabilityIconClass(item.availabilityStatus).icon, getAvailabilityIconClass(item.availabilityStatus).color]"
+                          style="font-size: 1.1rem;"
+                        ></i>
+                      </span>
+                      <div class="fw-bold">{{ item.name }}</div>
+                          
+                      </button>
+                    </h2>
 
                   <div
                     :id="'collapse-' + getSafeId(item.name)"
@@ -174,21 +181,43 @@ export default {
         const availableCount = item.totalCount - item.unavailableCount;
         let availabilityText;
         let isUnavailable = false;
+        let availabilityStatus;
 
         if (availableCount === 0) {
-            availabilityText = "Unavailable";
-            isUnavailable = true;
-        } else {
-            availabilityText = `${availableCount} / ${item.totalCount}`;
+          availabilityText = "Unavailable";
+          isUnavailable = true;
+          availabilityStatus = 'none';
+        } else if (availableCount === item.totalCount){
+          availabilityText = `${availableCount} / ${item.totalCount}`;
+          availabilityStatus = 'all';
+        }else{
+          availabilityText = `${availableCount} / ${item.totalCount}`;
+          availabilityStatus = 'some';
         }
 
         return {
-            ...item,
-            availableCount,
-            availabilityText,
-            isUnavailable
+          ...item,
+          availableCount,
+          availabilityText,
+          isUnavailable,
+          availabilityStatus
         };
       });
+    },
+    getAvailabilityIconClass(status){
+      switch (status) {
+        case 'none':
+          // Red X mark: bi-x-circle-fill
+          return { icon: 'bi-x-circle-fill', color: 'text-danger' };
+        case 'some':
+          // Yellow circle/dot: bi-dash-circle-fill (or bi-dot, bi-circle-fill)
+          return { icon: 'bi-dash-circle-fill', color: 'text-warning' };
+        case 'all':
+          // Green checkmark: bi-check-circle-fill
+          return { icon: 'bi-check-circle-fill', color: 'text-success' };
+        default:
+          return { icon: '', color: '' };
+      }
     },
     getSafeId(name) {
         return name ? name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '';

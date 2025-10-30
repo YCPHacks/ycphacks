@@ -7,9 +7,4 @@ export default {
         const res = await axios.get(`${API_URL}/`);
         return res.data;
     },
-
-    async getHardwareAvailability(){
-        const res = await axios.get(`${API_URL}/availability/`);
-        return res.data;
-    }
 }
