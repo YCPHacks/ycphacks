@@ -24,30 +24,35 @@
           <template v-if="filteredItems.length > 0">
             <div id="hardwareAccordion" class="accordion">
                 <div 
-                    v-for="(item, index) in filteredItems" 
-                    :key="item.name" 
-                    class="accordion-item mb-3"
+                  v-for="(item, index) in filteredItems" 
+                  :key="item.name" 
+                  class="accordion-item mb-3"
                 >
                     
-                    <h2 :id="'heading-' + getSafeId(item.name)" class="accordion-header">
-                      <button
-                          class="accordion-button collapsed hardware-item-header"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          :data-bs-target="'#collapse-' + getSafeId(item.name)"
-                          aria-expanded="false"
-                          :aria-controls="'collapse-' + getSafeId(item.name)"
-                      >
-                      <span class="me-3">
-                        <i
-                          :class="['bi', getAvailabilityIconClass(item.availabilityStatus).icon, getAvailabilityIconClass(item.availabilityStatus).color]"
-                          style="font-size: 1.1rem;"
-                        ></i>
+                  <h2 :id="'heading-' + getSafeId(item.name)" class="accordion-header">
+                    <button
+                      class="accordion-button collapsed hardware-item-header"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      :data-bs-target="'#collapse-' + getSafeId(item.name)"
+                      aria-expanded="false"
+                      :aria-controls="'collapse-' + getSafeId(item.name)"
+                    >
+                      <span class="fa-stack fa-2x me-3" style="font-size: 0.8em;"> 
+                        <font-awesome-icon 
+                          :icon="['fas', getAvailabilityIconClass(item.availabilityStatus).outerIcon]" 
+                          class="fa-stack-2x" 
+                          :class="getAvailabilityIconClass(item.availabilityStatus).outerColor"
+                        />
+                        <font-awesome-icon 
+                          :icon="['fas', getAvailabilityIconClass(item.availabilityStatus).innerIcon]" 
+                          class="fa-stack-1x text-black" 
+                        />
                       </span>
+
                       <div class="fw-bold">{{ item.name }}</div>
-                          
-                      </button>
-                    </h2>
+                    </button>
+                  </h2>
 
                   <div
                     :id="'collapse-' + getSafeId(item.name)"
@@ -59,24 +64,24 @@
                       <div class="d-flex align-items-start">
                         <div class="flex-shrink-0 me-4">
                             <img
-                                :src="item.image"
-                                :alt="item.name"
-                                class="img-thumbnail"
-                                style="width: 150px; height: 150px; object-fit: contain;"
+                              :src="item.image"
+                              :alt="item.name"
+                              class="img-thumbnail"
+                              style="width: 150px; height: 150px; object-fit: contain;"
                             />
                         </div>
 
                         <div class="flex-grow-1">
                             
-                            <div class="text-end small fw-semibold mb-2">
-                                <span :class="{'text-danger': item.isUnavailable, 'text-success': !item.isUnavailable}">
-                                    {{ item.availabilityText }}
-                                </span>
-                            </div>
-                            
-                            <p class="mb-3">
-                                {{ item.description }}
-                            </p>
+                          <div class="text-end small fw-semibold mb-2">
+                            <span :class="{'text-danger': item.isUnavailable, 'text-success': !item.isUnavailable}">
+                              {{ item.availabilityText }}
+                            </span>
+                          </div>
+                          
+                          <p class="mb-3">
+                            {{ item.description }}
+                          </p>
                             
                         </div>
                       </div>
@@ -207,16 +212,28 @@ export default {
     getAvailabilityIconClass(status){
       switch (status) {
         case 'none':
-          // Red X mark: bi-x-circle-fill
-          return { icon: 'bi-x-circle-fill', color: 'text-danger' };
+          // Red circle background, black 'X'
+          return { 
+            outerIcon: 'fa-circle', // Colored background
+            innerIcon: 'fa-times',  // Black icon
+            outerColor: 'text-danger' 
+          };
         case 'some':
-          // Yellow circle/dot: bi-dash-circle-fill (or bi-dot, bi-circle-fill)
-          return { icon: 'bi-dash-circle-fill', color: 'text-warning' };
+          // Yellow circle background, black '-'
+          return { 
+            outerIcon: 'fa-circle', 
+            innerIcon: 'fa-minus', 
+            outerColor: 'text-warning' 
+          };
         case 'all':
-          // Green checkmark: bi-check-circle-fill
-          return { icon: 'bi-check-circle-fill', color: 'text-success' };
+          // Green circle background, black checkmark
+          return { 
+            outerIcon: 'fa-circle', 
+            innerIcon: 'fa-check', 
+            outerColor: 'text-success' 
+          };
         default:
-          return { icon: '', color: '' };
+          return { outerIcon: '', innerIcon: '', outerColor: '' };
       }
     },
     getSafeId(name) {
