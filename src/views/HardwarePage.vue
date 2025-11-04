@@ -1,34 +1,17 @@
 <template>
-    <div class="container-top">
-       <header class="main-header">
-           <div class="text-center py-4">
-             <h1 class="mb-2">Hardware</h1>
-             <hr class="header-line" />
-           </div>
-       </header>
-    </div>
+  <div class="container-top">
+    <header class="main-header">
+      <div class="text-center py-4">
+        <h1 class="mb-2">Hardware</h1>
+        <hr class="header-line" />
+      </div>
+    </header>
+  </div>
   <div class="container-fluid">
     <div class="row align-items-start mt-5">
-      <!-- TOC Sidebar -->
-      <aside class="col-md-3">
-        <div class="p-3 border rounded bg-light toc-box">
-            <h2 class="fs-5 fw-bold mb-3">Hardware Contents</h2>
-            <ul class="list-unstyled">
-              <li v-for="section in hardwareSections" :key="section.id" class="mb-2">
-                <a
-                  :href="'#' + section.id"
-                  class="text-primary text-decoration-none"
-                >
-                  {{ section.title }}
-                </a>
-              </li>
-            </ul>
-        </div>
-       </aside>
-
-      <!-- Main Content -->
-      <main class="col-md-9">
+      <main class="col-md-12 col-lg-8 offset-lg-2">
         <div class="p-4 border rounded bg-white shadow-sm main-box">
+          
           <div class="mb-4">
             <input
               v-model="searchQuery"
@@ -38,46 +21,65 @@
             />
           </div>
 
-          <template v-if="filteredSections.length > 0">
-            <section
-              v-for="section in filteredSections"
-              :key="section.id"
-              :id="section.id"
-              class="mb-5"
-            >
-              <h2 class="fs-3 fw-bold mb-4">{{ section.title }}</h2>
-
-              <div class="row g-4">
-                <div
-                  v-for="item in section.items"
-                  :key="item.name"
-                  class="col-md-6 col-lg-4"
+          <template v-if="filteredItems.length > 0">
+            <div id="hardwareAccordion" class="accordion">
+                <div 
+                    v-for="(item, index) in filteredItems" 
+                    :key="item.name" 
+                    class="accordion-item mb-3"
                 >
-                  <div class="card h-100 shadow-sm hardware-card">
-                    <img
-                      :src="item.image"
-                      :alt="item.name"
-                      class="card-img-top p-3"
-                      style="height: 200px; object-fit: contain;"
-                    />
-                    <div class="card-body">
-                      <h3 class="card-title fs-5 fw-semibold">{{ item.name }}</h3>
-                      <p class="card-text text-muted">{{ item.description }}</p>
+                    
+                    <h2 :id="'heading-' + getSafeId(item.name)" class="accordion-header">
+                      <button
+                          class="accordion-button collapsed hardware-item-header"
+                          type="button"
+                          data-bs-toggle="collapse"
+                          :data-bs-target="'#collapse-' + getSafeId(item.name)"
+                          aria-expanded="false"
+                          :aria-controls="'collapse-' + getSafeId(item.name)"
+                      >
+                          <div class="fw-bold">{{ item.name }}</div>
+                          </button>
+                  </h2>
+
+                  <div
+                    :id="'collapse-' + getSafeId(item.name)"
+                    class="accordion-collapse collapse"
+                    :aria-labelledby="'heading-' + getSafeId(item.name)"
+                    data-bs-parent="#hardwareAccordion"
+                  >
+                    <div class="accordion-body">
+                      <div class="d-flex align-items-start">
+                        <div class="flex-shrink-0 me-4">
+                            <img
+                                :src="item.image"
+                                :alt="item.name"
+                                class="img-thumbnail"
+                                style="width: 150px; height: 150px; object-fit: contain;"
+                            />
+                        </div>
+
+                        <div class="flex-grow-1">
+                            
+                            <div class="text-end small fw-semibold mb-2">
+                                <span :class="{'text-danger': item.isUnavailable, 'text-success': !item.isUnavailable}">
+                                    {{ item.availabilityText }}
+                                </span>
+                            </div>
+                            
+                            <p class="mb-3">
+                                {{ item.description }}
+                            </p>
+                            
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </section>
+            </div>
           </template>
           <div v-else class="text-center p-5 not-found-box">
-            <h2 class="fs-3 text-secondary mb-3">No Hardware Found</h2>
-            <p v-if="searchQuery" class="lead text-muted">
-              Could not find hardware matching **"{{ searchQuery }}"**.
-            </p>
-            <p v-else class="lead text-muted">
-              No hardware data is currently available.
-            </p>
-          </div>
+            </div>
         </div>
       </main>
     </div>
@@ -92,108 +94,106 @@ export default {
   data() {
     return {
       searchQuery: "",
-      rawHardwareSections: [],
-      hardwareSections: []
+      hardwareItems: []
     };
   },
   computed: {
-    filteredSections() {
+    filteredItems() {
       // If there is no search query, return the original, full list of hardware sections.
       if (!this.searchQuery) {
-          return this.groupRawData(this.rawHardwareSections);
+          return this.hardwareItems;
       }
 
       const query = this.searchQuery.toLowerCase();
       
-      // 1. Map over the original sections
-      return this.hardwareSections
-          .map(section => ({
-              ...section, // Keep the existing section properties (id, title)
-              
-              // 2. Filter the items within the current section
-              items: section.items.filter(item => 
-                  // Check if the search query is in the item name or description
-                  item.name.toLowerCase().includes(query) ||
-                  item.description.toLowerCase().includes(query)
-              )
-          }))
-          // 3. Filter out any sections that are now empty (have no matching items)
-          .filter(section => section.items.length > 0);
+      return this.hardwareItems.filter(item => 
+        item.name.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query)
+      );
     }
   },
   mounted() {
     this.fetchHardware();
   },
   methods: {
-    groupItemsByName(items){
+    async fetchHardware() {
+      try {
+        const groups = await hardwareService.getHardware();
+        
+        if (!Array.isArray(groups)) {
+            console.warn("Unexpected backend response, expected an array:", groups);
+            this.hardwareItems = [];
+            return;
+        }
+
+        const allRawItems = groups.flatMap(group => {
+            
+            // Assume items are nested in 'items' array, or the group itself is the item.
+            const itemsSource = Array.isArray(group.items) ? group.items : [group];
+            
+           return itemsSource.map(p => {
+              const fullName = p.fullName || p.name || group.title || "Unknown Hardware";
+
+              return {
+                  name: fullName, 
+                  description: p.description || "No description available.",
+                  image: p.image || null,
+                  isUnavailable: p.isUnavailable
+              };
+            });
+        });
+        
+        this.hardwareItems = this.getAvailabilityData(allRawItems);
+          
+      } catch (err) {
+          console.error("Failed to fetch hardware:", err); 
+      }
+    },
+    getAvailabilityData(allProducts){
       const grouped = {};
-      items.forEach(item => {
-        const name = item.name;
+
+      allProducts.forEach(p => {
+        const name = p.name;
 
         if(!grouped[name]){
           grouped[name] = {
             name: name,
-            description: item.description,
-            image: item.image,
+            description: p.description,
+            image: p.image,
+            totalCount: 0,
+            unavailableCount: 0,
           };
         }
+        grouped[name].totalCount += 1;
+        if(p.isUnavailable){
+          grouped[name].unavailableCount += 1;
+        }
       });
-      return Object.values(grouped);
-    },
-    groupRawData(sections){
-      return sections.map(section => {
-        const groupedItems = this.groupItemsByName(section.items);
-        return {
-          ...section,
-          items: groupedItems
-        };
-      }).filter(section => section.items.length > 0); //
-    },
-    async fetchHardware() {
-      try {
-        const res = await hardwareService.getHardware();
-        // console.log("Raw backend data:", res);
 
-        let hardwareArray = [];
+      return Object.values(grouped).map(item => {
+        const availableCount = item.totalCount - item.unavailableCount;
+        let availabilityText;
+        let isUnavailable = false;
 
-        if (Array.isArray(res)) {
-          hardwareArray = res;
-        } else if (typeof res === "object" && res !== null) {
-          hardwareArray = Object.keys(res).map(title => ({
-            title,
-            products: res[title]
-          }));
+        if (availableCount === 0) {
+            availabilityText = "Unavailable";
+            isUnavailable = true;
         } else {
-          console.warn("Unexpected backend response:", res);
-          return;
+            availabilityText = `${item.unavailableCount} / ${item.totalCount}`;
         }
 
-        let standardizedSections = hardwareArray.map(group => {
-            
-            // 1. Standardize the item structure from the raw API response
-            const rawItems = group.items.map(p => ({
-                name: p.subtitle,             // The name to group by
-                description: p.description || "No description available.",
-                image: p.imageUrl || null,
-            }));
-
-            // 2. Group the standardized items by name (deduplicate)
-            const groupedItems = this.groupItemsByName(rawItems);
-
-            // 3. Return the final section object
-            return {
-                id: group.title.toLowerCase().replace(/\s+/g, "-"),
-                title: group.title,
-                items: groupedItems
-            };
-        });
-        this.rawHardwareSections = standardizedSections;
-        this.hardwareSections = this.groupRawData(this.rawHardwareSections);
-      } catch (err) {
-        console.error("Failed to fetch hardware:", err);
-      }
+        return {
+            ...item,
+            availableCount,
+            availabilityText,
+            isUnavailable
+        };
+      });
+    },
+    getSafeId(name) {
+        return name ? name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '';
     }
-  }
+  },
 };
 </script>
 

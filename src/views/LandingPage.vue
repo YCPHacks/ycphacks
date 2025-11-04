@@ -63,131 +63,8 @@
        <p>Sign up <a href="http://146.190.66.30:4174/" style="color: white; font-size:22px;"> here</a> and we&#39;ll let you know when our application is open!</p>
       </div>
     </div>
-    <div class="schedule" id="schedule">
-      <div class="container">
-        <div class="header">
-          <div class="circle" style="font-size:27px; height:100px;">
-            <p>2024 Schedule</p>
-          </div>
-        </div>
 
-        <div class="schedule-content">
-          <div id="day-tag"><b>Friday</b> November 1st, 2024</div>
-
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
-              <tr>
-                <th scope="row">5 PM</th>
-                <th>Doors Open and Dinner</th>
-              </tr>
-              <tr>
-                <th scope="row">6:30 PM</th>
-                <th>Opening Ceremony</th>
-              </tr>
-              <tr>
-                <th colspan="2" scope="row" style="color:#000;background-color:#fff">7PM - HACKING BEGINS!</th>
-              </tr>
-              <tr>
-                <th scope="row">7:30 PM</th>
-                <th>Team and Idea Building</th>
-              </tr>
-              <tr>
-                <th scope="row">9:00 PM</th>
-                <th>Bryce Warner - 3D Printing</th>
-              </tr>
-              <tr>
-                <th scope="row">10:30 PM</th>
-                <th>Matrix Nerf Challenge</th>
-              </tr>
-              <tr>
-                <th scope="row">12 AM</th>
-                <th>Midnight Nerf War</th>
-              </tr>
-            </tbody>
-          </table>
-
-          <div id="day-tag"><b>Saturday</b> November 2nd, 2024</div>
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
-              <tr>
-                <th scope="row">2 AM</th>
-                <th>Trivia/Kahoots</th>
-              </tr>
-              <tr>
-                <th scope="row">8:30 AM</th>
-                <th>Breakfast</th>
-              </tr>
-              <tr>
-                <th scope="row">10 AM</th>
-                <th>Bee Central Workshop</th>
-              </tr>
-              <tr>
-                <th scope="row">12 PM</th>
-                <th>Lunch</th>
-              </tr>
-              <tr>
-                <th scope="row">1 PM</th>
-                <th>Dr. Hake - Workshop talk Coming Soon</th>
-              </tr>
-              <tr>
-                <th scope="row">2 PM</th>
-                <th>QUEST</th>
-              </tr>
-              <tr>
-                <th scope="row">3 PM</th>
-                <th>Dr. Babcock - Workshop talk Coming Soon</th>
-              </tr>
-              <tr>
-                <th scope="row">6:00 PM</th>
-                <th>Dinner</th>
-              </tr>
-              <tr>
-                <th scope="row">7:00 PM</th>
-                <th>Slideshow Karaoke</th>
-              </tr>
-              <tr>
-                <th scope="row">8:30 PM</th>
-                <th>Prof Zeller - Fire Spinning </th>
-              </tr>
-              <tr>
-                <th scope="row">10 PM</th>
-                <th>QUEST</th>
-              </tr>
-              <tr>
-                <th scope="row">12 AM</th>
-                <th>Midnight Whoopie Pies</th>
-              </tr>
-            </tbody>
-          </table>
-
-          <div id="day-tag"><b>Sunday</b> November 3rd, 2024</div>
-          <table class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
-              <tr>
-                <th scope="row">1 AM</th>
-                <th>Daylight Savings Event</th>
-              </tr>
-              <tr>
-                <th scope="row">8:30 AM</th>
-                <th>Breakfast</th>
-              </tr>
-              <tr>
-                <th colspan="2" scope="row" style="color:#000;background-color:#fff">9 AM - HACKING ENDS!</th>
-              </tr>
-              <tr>
-                <th scope="row">10 AM</th>
-                <th>Presentations &amp; Judging</th>
-              </tr>
-              <tr>
-                <th scope="row">12 PM</th>
-                <th>Closing Ceremonies</th>
-              </tr>
-            </tbody>
-          </table>
-          <div style="margin-bottom:35px">* Schedule is subject to change.</div>
-        </div>
-      </div>
-    </div>
+    <Activities />
 
     <div class="faq" id="faq">
       <div class="container">
@@ -296,7 +173,7 @@
     <div class="container">
       <div class="main-sponsors">
         <div class="header">
-          <div class="circle" style="font-size:27px; width: 250px;">
+          <div class="circle">
             <p>2024 Sponsors</p>
           </div>
         </div>
@@ -305,61 +182,161 @@
   </div>
 
   <div class="sponsor-images" style="background-color:white;">
-    <div v-for="sponsor in sponsors" :key="sponsor.id" class="sponsor-card">
-      <img
-        v-if="sponsor.sponsor_image_url"
-        :src="sponsor.sponsor_image_url"
-        :alt="sponsor.name"
-        class="sponsor-logo"
-      />
-      <p>{{ sponsor.name }} - {{ sponsor.tier }}</p>
-    </div>
+    <a
+      v-for="sponsor in sponsors"
+      :key="sponsor.name"
+      :href="sponsor.website"
+      target="_blank"
+      class="sponsor-link"
+    >
+      <template v-if="sponsor.logoUrl">
+        <img
+          :src="sponsor.logoUrl"
+          :alt="`${sponsor.name} Logo`"
+          class="sponsor-logo"
+          :style="getSponsorStyle(sponsor)"
+        />
+      </template>
+      <template v-else>
+        <span class="sponsor-name" :style="getSponsorStyle(sponsor)">{{ sponsor.name }}</span>
+      </template>
+    </a>
+    <p v-if="sponsors.length === 0" style="padding: 30px; font-size: 20px; color: #64965d;">
+      Be the first! Contact us to become a sponsor.
+    </p>
   </div>
-
-  <!--
-  <a href="https://mlh.io/seasons/2023/events" target="_blank"><img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\mlh-logo-color.svg" width="125" /></a>
-
-  <a href="https://www.ycp.edu/academics/graham-school-of-business/" target="_blank"> <img class="desaturate" src="" width="400" /> </a>
-
-  <a href="https://www.dataforma.com/" target="_blank"> <img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\dataforma.png"/> </a>
-
-  <a href="https://www.jfti.com/" target="_blank"> <img class="desaturate" src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\jftaylor.png"/> </a>
-
-  <a href="https://biznewspa.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\biznewspa-small-version.png"/> </a>
-
-  <a href="https://www.johnsoncontrols.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\JohnsonControls.png"/> </a>
-
-  <a href="https://mrgcorp.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\mrg-labs-logo.png"/> </a>
-
-  <a href="https://csdavidson.com/" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\CSDavidson-Logo-Horizontal-Full-Color.png"/> </a>
-
-  <a href="http://hackp.ac/mlh-StandOutStickers-hackathons" target="_blank"> <img src="C:\Users\riann\umbrella\ycphacks\media\YCP Hacks_files\stickers.png"/> </a>
-   -->
 
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
-import { getSponsors } from "@/services/sponsorService";
-import { mapGetters } from 'vuex';
+import sponsorService from "../services/sponsorService";
+import { mapGetters } from "vuex";
+import Activities from "@/views/ActivitiesPage.vue"
 
 export default {
   name: "LandingPage",
+  components: {
+    Activities
+  },
   computed: {
     ...mapGetters(['isLoggedIn'])
+  },
+  setup(){
+    const sponsors = ref([]);
+    const eventYear = ref(2024);
+    const CURRENT_EVENT_ID = 1;
+
+    // const sponsorSizes = {
+    //   'Platinum': { width: '200px', height: '200px', fontSize: '24px' },
+    //   'Gold': { width: '150px', height: '150px', fontSize: '20px' },
+    //   'Silver': { width: '100px', height: '100px', fontSize: '16px' },
+    //   'Bronze': { width: '50px', height: '50px', fontSize: '14px' },
+    // }
+
+    // Remove the sponsorSizes object entirely, or keep it for fallback if needed.
+
+    const getSponsorStyle = (sponsor) => {
+      const rawWidth = sponsor.imageWidth || 50;
+      const rawHeight = sponsor.imageHeight || 50;
+
+      const width = `${rawWidth}px`;
+      const height = `${rawHeight}px`;
+      
+      const baseSize = rawWidth; 
+    
+      let fontSize;
+      
+      if (baseSize < 75) {
+          // If the size is small (e.g., Bronze at 50px)
+          fontSize = '12px';
+      } else if (baseSize < 125) {
+          // If the size is medium (e.g., Silver at 100px)
+          fontSize = '16px'; 
+      } else {
+          // If the size is large (e.g., Gold/Platinum at 150px+)
+          fontSize = '20px';
+      }
+
+      let style = {
+        width: width,
+        height: height,
+        fontSize: fontSize,
+      };
+      
+      if(sponsor.logoUrl){
+        return {
+          ...style,
+          objectFit: 'contain'
+        };
+      }else{
+        return {
+          ...style,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center'
+        };
+      }
+    };
+
+    const fetchSponsors = async () => {
+      try{
+        const tierResponse = await sponsorService.getSponsorTiers();
+        // console.log("Tier Data Received: ", tierResponse);
+        const tierMap = tierResponse.reduce((map, tier) => {
+          map[tier.id] = {
+            tierName: tier.tier,
+            width: tier.width,
+            height: tier.height,
+          }
+          return map;
+        }, {});
+        // console.log("Final Tier Map for lookup: ", tierMap);
+
+        const rawSponsorResponse = await sponsorService.getSponsors(CURRENT_EVENT_ID);
+        const rawData = rawSponsorResponse;
+
+        // console.log("Raw Sponsor Data: ", rawData);
+        
+        sponsors.value = rawData.map(s => {
+          const tierId = s.sponsorTierId;
+          const tierInfo = tierMap[tierId]; // Renamed to tierInfo as it holds multiple values
+
+          // Use optional chaining or a simple check for safety
+          const tierName = tierInfo ? tierInfo.tierName : 'Unknown';
+          const tierWidth = tierInfo ? tierInfo.width : null;
+          const tierHeight = tierInfo ? tierInfo.height : null;
+
+          // console.log(`Sponsor Name: ${s.name}, Tier ID: ${tierId}, Mapped Name: ${tierName}`);
+          
+          return {
+            name: s.name,
+            website: s.website,
+            logoUrl: s.image || null,
+            tier: tierName, // Attach the full tier name
+            // ⭐ 2. Attach the width and height to the sponsor object ⭐
+            imageWidth: tierWidth,
+            imageHeight: tierHeight,
+          };
+        });
+        // console.log("Sponsor data loaded:", sponsors.value); 
+      }catch(err){
+        console.error("Failed to fetch sponsors: ", err);
+        sponsors.value = [];
+      }
+    };
+
+    onMounted(()=> {
+      fetchSponsors();
+    });
+    return {
+      sponsors, 
+      eventYear,
+      getSponsorStyle
+    };
   }
 };
-
-const sponsors = ref([]);
-
-onMounted(async () => {
-  try {
-    const res = await getSponsors();
-    sponsors.value = res.data
-  } catch (err) {
-    console.error("Error fetching sponsors:", err);
-  }
-});
 </script>
 
 <style scoped>
@@ -456,8 +433,8 @@ a {
 
 .circle {
   display: inline-block;
-  width: 200px;
-  height: 100px;
+  width: 300px;
+  height: 120px;
   margin-top: 10px;
   margin-left: 20px;
   margin-right: 20px;
@@ -465,18 +442,16 @@ a {
   border: 6px solid #fff;
   text-align: center;
   color: white;
-  line-height: 100px;
+  line-height: 120px;
   font-size: 20px;
   transition: all 0.3s ease;
-  padding-bottom: 10%;
-
 }
 
 .about {
     position: relative;
     top: -650px;
     margin-bottom: -550px;
-    text-align: justify;
+    text-align: center;
     font-size: 18px;
     display: flex;
     align-items: center;
@@ -529,7 +504,9 @@ a {
     }
 }
 .header {
-    text-align: center;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
 }
 .circle p {
     font-size: 32px;
@@ -622,24 +599,32 @@ h1 {
 .schedule {
     margin-top: 50px;
     background-color:#93dda3;
+    text-align: center;
 }
 .schedule .header .circle {
     font-size: 40px;
 }
 .faq{
   background-color: #ccffcc;
+  text-align: center;
 }
 .prizes{
   background-color: #ccffcc;
+  text-align: center;
 }
 .prize-titles{
   background-color:#ccffcc;
 }
 .sponsors{
   background-color:#ccffcc;
+  text-align: center;
 }
 .question{
   background-color: #ccffcc;
+  width: 100%;
+  max-width: 100%;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 .circle p {
     color:#64965d;
@@ -648,6 +633,7 @@ h1 {
     -moz-transform: skew(20deg);
     -o-transform: skew(20deg);
     transform: skew(20deg);
+    white-space: nowrap;
 }
 #day-tag {
     font-size: 50px;
@@ -668,8 +654,8 @@ h1 {
   display: inline-block;
 }
 .sponsor-logo {
-  max-width: 150px;
-  max-height: 100px;
+  width: auto;
+  height: auto;
   object-fit: contain;
   margin-bottom: 0.5rem;
 }
@@ -703,5 +689,30 @@ h1 {
   transform: scale(0.95); /* Slightly pressed-in effect */
 }
 
+.sponsor-images{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  min-height: 200px;
+}
+
+.sponsor-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 20px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  transition: transform 0.2s;
+}
+
+.sponsor-name{
+  font-weight: 700;
+  color: #333;
+  padding: 10px;
+}
 
 </style>

@@ -2,11 +2,14 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000";
 
-export const getSponsors = () => axios.get(API_URL);
+export default{
+    async getSponsors(eventId){
+        const res = await axios.get(`${API_URL}/api/eventsponsors/by-event/${eventId}`);
+        return res.data;
+    },
 
-export const addSponsor = (sponsor) => axios.post(API_URL, sponsor);
-
-export const updateSponsor = (id, sponsor) =>
-  axios.put(`${API_URL}/${id}`, sponsor);
-
-export const deleteSponsor = (id) => axios.delete(`${API_URL}/${id}`);
+    async getSponsorTiers(){
+      const res = await axios.get(`${API_URL}/api/eventsponsors/tiers`);
+      return res.data;
+    }
+}
