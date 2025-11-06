@@ -16,12 +16,14 @@ class UserAdapter {
 export default createStore({
   state: {
     user: null,
-    activities: []
+    activities: [],
+    event: {}
   },
   getters: {
     isLoggedIn: (state) => !!state.user,
     getUser: (state) => state.user,
-    getActivities: (state) => state.activities
+    getActivities: (state) => state.activities,
+    getEvent: (state) => state.event
   },
   mutations: {
     setUser(state, user) {
@@ -35,6 +37,12 @@ export default createStore({
     },
     clearActivities(state) {
         state.activities = [];
+    },
+    setEvent(state, event) {
+        state.events = event;
+    },
+    clearEvent(state) {
+        state.event = null;
     }
   },
   actions: {
@@ -121,6 +129,21 @@ export default createStore({
         }
     },
 
+      async getActiveEvent({ commit }) {
+          try {
+              const response = await axios.get(`http://localhost:3000/event/active`);
+
+              // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format
+              const event = response.data
+              event.startDate = formatDateToEST(event.startDate);
+              event.endDate = formatDateToEST(event.endDate);
+
+              commit("setEvent", event);
+              return {success: true, message: response.data.message};
+          } catch (error) {
+              return {success: false, message: error.response?.data?.message || "Error fetching active event"};
+          }
+      },
     logout({ commit }) {
         commit("clearUser");
         document.cookie = `token=; path=/;`;
