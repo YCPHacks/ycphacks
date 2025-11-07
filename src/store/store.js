@@ -17,7 +17,8 @@ export default createStore({
   state: {
     user: null,
     activities: [],
-    event: {}
+    event: {},
+    apiBaseUrl: import.meta.env.VITE_API_BASE_URL
   },
   getters: {
     isLoggedIn: (state) => !!state.user,
@@ -43,12 +44,12 @@ export default createStore({
     },
     clearEvent(state) {
         state.event = null;
-    }
+    },
   },
   actions: {
-    async registerUser({ commit }, formData) {
+    async registerUser({ commit, state }, formData) {
         try {
-            const response = await fetch('http://localhost:3000/user/register', {
+            const response = await fetch(`${state.apiBaseUrl}/user/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -67,9 +68,9 @@ export default createStore({
             return { success: false, message: 'An error occurred during registration. Please try again.' };
         }
     },
-    async loginUser({ commit }, { email, password }) {
+    async loginUser({ commit,state }, { email, password }) {
       try {
-        const response = await axios.post('http://localhost:3000/user/login', { email, password });
+        const response = await axios.post(`${state.apiBaseUrl}/user/register/user/login`, { email, password });
         const data = response.data;
         commit('setUser', new UserAdapter(data.data));
         document.cookie = `token=${data.data.token}; path=/;`;
@@ -77,7 +78,7 @@ export default createStore({
         throw new Error(err.response?.data?.message || 'Login failed');
       }
     },
-    async validateWithToken({ commit }) {
+    async validateWithToken({ commit, state }) {
         try {
             const token = {
                 token: document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1]
@@ -85,7 +86,7 @@ export default createStore({
 
             if (!token) return { success: false, message: "No token found"};
 
-            const response = await axios.post("http://localhost:3000/user/auth", {token}, {
+            const response = await axios.post(`${state.apiBaseUrl}/user/register/user/auth`, {token}, {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -101,10 +102,10 @@ export default createStore({
         }
     },
 
-    async getAllActivities({ commit }, eventId) {
+    async getAllActivities({ commit,state }, eventId) {
         try{
             if (!eventId) return;
-            const response = await axios.get(`http://localhost:3000/event/activity/${eventId}`);
+            const response = await axios.get(`${state.apiBaseUrl}/user/register/event/activity/${eventId}`);
 
             // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format
             const activities = response.data.activities.map(activity => {
@@ -129,9 +130,9 @@ export default createStore({
         }
     },
 
-      async getActiveEvent({ commit }) {
+      async getActiveEvent({ commit, state }) {
           try {
-              const response = await axios.get(`http://localhost:3000/event/active`);
+              const response = await axios.get(`${state.apiBaseUrl}/user/register/event/active`);
 
               // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format
               const event = response.data
