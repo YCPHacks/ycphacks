@@ -6,6 +6,7 @@ import Registration from '../views/Registration.vue';
 import LoginPage from '../views/LoginPage.vue';
 import ActivitiesPage from '../views/ActivitiesPage.vue';
 import HardwarePage from '../views/HardwarePage.vue';
+import CategoriesPage from '../views/CategoriesPage.vue';
 
 const routes = [
     {
@@ -32,6 +33,11 @@ const routes = [
         path: '/hardware',
         name: 'Hardware',
         component: HardwarePage,
+    },
+    {
+        path: '/categories',
+        name: 'Categories',
+        component: CategoriesPage,
     },
     {
         path: '/profile',
