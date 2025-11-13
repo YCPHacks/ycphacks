@@ -70,7 +70,7 @@ export default createStore({
     },
     async loginUser({ commit,state }, { email, password }) {
       try {
-        const response = await axios.post(`${state.apiBaseUrl}/user/register/user/login`, { email, password });
+        const response = await axios.post(`${state.apiBaseUrl}/user/login`, { email, password });
         const data = response.data;
         commit('setUser', new UserAdapter(data.data));
         document.cookie = `token=${data.data.token}; path=/;`;
