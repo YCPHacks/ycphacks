@@ -86,7 +86,7 @@ export default createStore({
 
             if (!token) return { success: false, message: "No token found"};
 
-            const response = await axios.post(`${state.apiBaseUrl}/user/register/user/auth`, {token}, {
+            const response = await axios.post(`${state.apiBaseUrl}/user/auth`, {token}, {
                 headers: {
                     "Content-Type": "application/json",
                 },

@@ -77,6 +77,7 @@
 import axios from 'axios';
 
 export default {
+  name: 'CategoriesPage',
   data() {
     return {
       categories: [],
