@@ -6,6 +6,7 @@ import Registration from '../views/Registration.vue';
 import LoginPage from '../views/LoginPage.vue';
 import ActivitiesPage from '../views/ActivitiesPage.vue';
 import HardwarePage from '../views/HardwarePage.vue';
+import TeamsPage from '@/views/TeamsPage.vue';
 
 const routes = [
     {
@@ -32,6 +33,14 @@ const routes = [
         path: '/hardware',
         name: 'Hardware',
         component: HardwarePage,
+    },
+    {
+        path: '/teams',
+        name: 'Team',
+        component: TeamsPage,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/profile',
