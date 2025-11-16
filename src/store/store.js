@@ -95,15 +95,13 @@ export default createStore({
           
           const tokenString = tokenCookie.split('=')[1]; // ✅ This is the raw string now.
 
-          // 3. Check if the string is empty/malformed.
-          if (!tokenString) return { success: false, message: "No token string found" };
-          
-          // 4. Send the token string directly in the request body object.
-          const response = await axios.post(`${state.apiBaseUrl}/user/auth`, { token: tokenString }, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+            if (!token) return { success: false, message: "No token found"};
+
+            const response = await axios.post(`${state.apiBaseUrl}/user/register/user/auth`, {token}, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
             const data = await response.data;
             const user = new UserAdapter(data.data);
