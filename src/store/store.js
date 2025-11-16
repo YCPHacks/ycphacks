@@ -21,7 +21,9 @@ export default createStore({
   getters: {
     isLoggedIn: (state) => !!state.user,
     getUser: (state) => state.user,
-    getActivities: (state) => state.activities
+    getActivities: (state) => state.activities,
+    getEvent: (state) => state.event,
+    getUserTeamId: (state) => state.userTeamId
   },
   mutations: {
     setUser(state, user) {
@@ -29,12 +31,22 @@ export default createStore({
     },
     clearUser(state) {
       state.user = null;
+      state.userTeamId = null;
     },
     setActivities(state, activities) {
         state.activities = activities;
     },
     clearActivities(state) {
         state.activities = [];
+    },
+    setEvent(state, event) {
+        state.event = event;
+    },
+    clearEvent(state) {
+        state.event = null;
+    },
+    setUserTeamId(state, teamId){
+      state.userTeamId = teamId;
     }
   },
   actions: {
@@ -59,33 +71,44 @@ export default createStore({
             return { success: false, message: 'An error occurred during registration. Please try again.' };
         }
     },
-    async loginUser({ commit }, { email, password }) {
+    async loginUser({ commit, state, dispatch }, { email, password }) {
       try {
         const response = await axios.post('http://localhost:3000/user/login', { email, password });
         const data = response.data;
         commit('setUser', new UserAdapter(data.data));
         document.cookie = `token=${data.data.token}; path=/;`;
+
+        // await dispatch('getActiveEvent');
+        await dispatch('fetchUserTeamStatus');
       } catch (err) {
         throw new Error(err.response?.data?.message || 'Login failed');
       }
     },
-    async validateWithToken({ commit }) {
+    async validateWithToken({ commit, state, dispatch }) {
         try {
-            const token = {
-                token: document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1]
-            }
+          const tokenCookie = document.cookie.split('; ').find(row => row.startsWith('token='));
+        
+          // 2. Check for the cookie row first.
+          if (!tokenCookie) return { success: false, message: "No token found" };
+          
+          const tokenString = tokenCookie.split('=')[1]; // ✅ This is the raw string now.
 
-            if (!token) return { success: false, message: "No token found"};
-
-            const response = await axios.post("http://localhost:3000/user/auth", {token}, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+          // 3. Check if the string is empty/malformed.
+          if (!tokenString) return { success: false, message: "No token string found" };
+          
+          // 4. Send the token string directly in the request body object.
+          const response = await axios.post(`${state.apiBaseUrl}/user/auth`, { token: tokenString }, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
 
             const data = await response.data;
             const user = new UserAdapter(data.data);
             commit("setUser", user);
+
+            // await dispatch('getActiveEvent');
+            await dispatch('fetchUserTeamStatus');
 
             return { success: true, message: data.message };
         } catch (error) {
@@ -119,6 +142,47 @@ export default createStore({
         } catch (error) {
             return { success: false, message: error.response?.data?.message || "Error fetching activity" };
         }
+    },
+
+      async getActiveEvent({ commit, state }) {
+          try {
+              const response = await axios.get(`${state.apiBaseUrl}/user/register/event/active`);
+
+              // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format
+              const event = response.data
+              event.startDate = formatDateToEST(event.startDate);
+              event.endDate = formatDateToEST(event.endDate);
+
+              commit("setEvent", event);
+              return {success: true, message: response.data.message};
+          } catch (error) {
+              return {success: false, message: error.response?.data?.message || "Error fetching active event"};
+          }
+      },
+
+    async fetchUserTeamStatus({ commit, state, getters }){
+      if(!getters.isLoggedIn || !getters.getUser){
+        commit('setUserTeamId', null);
+        return;
+      }
+
+      const userId = getters.getUser.id;
+      const eventId = 1;  //getters.getEvent.id ||
+
+      try{
+        const response = await axios.get(`${state.apiBaseUrl}/teams/${userId}/team`, {
+          params: { eventId }
+        });
+
+        const teamId = response.data.teamId || null;
+
+        commit('setUserTeamId', teamId);
+        return { success: true }
+      }catch(err){
+        console.error("Error fetching user team status: ", err);
+        commit('setUserTeamId', null)
+        return { success: false, message: "Failed to fetch team status" };
+      }
     },
 
     logout({ commit }) {
