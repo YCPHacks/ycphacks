@@ -59,20 +59,6 @@ export default {
         this.$router.push('/activities');
       } catch (err) {
         console.warn('Login failed:', err.message);
-
-        // Optional: check if there’s a token and validate it
-        const token = localStorage.getItem('token');
-        if (token) {
-          try {
-            await this.$store.dispatch('validateWithToken');
-            // Redirect if token is valid
-            if (this.$store.getters.isLoggedIn) {
-              this.$router.push('/activities');
-            }
-          } catch (tokenErr) {
-            console.error('Token invalid:', tokenErr.message);
-          }
-        }
       }
     },
   },
