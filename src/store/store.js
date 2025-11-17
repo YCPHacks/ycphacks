@@ -16,7 +16,9 @@ class UserAdapter {
 export default createStore({
   state: {
     user: null,
-    activities: []
+    activities: [],
+    event: {},
+    apiBaseUrl: import.meta.env.VITE_API_BASE_URL
   },
   getters: {
     isLoggedIn: (state) => !!state.user,
@@ -50,9 +52,9 @@ export default createStore({
     }
   },
   actions: {
-    async registerUser({ commit }, formData) {
+    async registerUser({ commit, state }, formData) {
         try {
-            const response = await fetch('http://localhost:3000/user/register', {
+            const response = await fetch(`${state.apiBaseUrl}/user/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -73,7 +75,7 @@ export default createStore({
     },
     async loginUser({ commit, state, dispatch }, { email, password }) {
       try {
-        const response = await axios.post('http://localhost:3000/user/login', { email, password });
+        const response = await axios.post(`${state.apiBaseUrl}/user/login`, { email, password });
         const data = response.data;
         commit('setUser', new UserAdapter(data.data));
         document.cookie = `token=${data.data.token}; path=/;`;
@@ -116,10 +118,10 @@ export default createStore({
         }
     },
 
-    async getAllActivities({ commit }, eventId) {
+    async getAllActivities({ commit,state }, eventId) {
         try{
             if (!eventId) return;
-            const response = await axios.get(`http://localhost:3000/event/activity/${eventId}`);
+            const response = await axios.get(`${state.apiBaseUrl}/user/register/event/activity/${eventId}`);
 
             // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format
             const activities = response.data.activities.map(activity => {
