@@ -9,6 +9,10 @@
           <div class="dropdown hardware-dropdown">
             <a class="dropdown-button nav-link" href="/hardware">Hardware</a>
           </div>
+
+          <div class="dropdown hardware-dropdown">
+            <a class="dropdown-button nav-link" href="/categories">Hack Categories</a>
+          </div>
           
           <div class="dropdown user-dropdown">
             <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
