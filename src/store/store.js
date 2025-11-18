@@ -94,15 +94,17 @@ export default createStore({
           // 2. Check for the cookie row first.
           if (!tokenCookie) return { success: false, message: "No token found" };
           
-          const tokenString = tokenCookie.split('=')[1]; // ✅ This is the raw string now.
+          const tokenString = tokenCookie.split('=')[1]; 
 
-            if (!token) return { success: false, message: "No token found"};
-
-            const response = await axios.post(`${state.apiBaseUrl}/user/register/user/auth`, {token}, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+          // 3. Check if the string is empty/malformed.
+          if (!tokenString) return { success: false, message: "No token string found" };
+          
+          // 4. Send the token string directly in the request body object.
+          const response = await axios.post(`http://localhost:3000/user/auth`, { token: tokenString }, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
 
             const data = await response.data;
             const user = new UserAdapter(data.data);
@@ -147,7 +149,7 @@ export default createStore({
 
       async getActiveEvent({ commit, state }) {
           try {
-              const response = await axios.get(`${state.apiBaseUrl}/event/active`);
+              const response = await axios.get(`http://localhost:3000/user/register/event/active`);
 
               // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format
               const event = response.data.event
@@ -171,7 +173,7 @@ export default createStore({
       const eventId = 1;  //getters.getEvent.id ||
 
       try{
-        const response = await axios.get(`${state.apiBaseUrl}/teams/${userId}/team`, {
+        const response = await axios.get(`http://localhost:3000/teams/${userId}/team`, {
           params: { eventId }
         });
 
