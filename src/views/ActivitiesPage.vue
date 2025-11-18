@@ -3,7 +3,7 @@
     <div v-if="event && Object.keys(event).length > 0" class="container" style="color: #ffffff">
       <div class="header" style="margin-bottom: 10px;">
         <div class="circle" style="font-size:27px; height:100px;">
-          <p>{{ event.startDate.getFullYear() || '' }} Schedule</p>
+          <p>{{ new Date(event.startDate).getFullYear() || '' }} Schedule</p>
         </div>
       </div>
 
@@ -95,7 +95,10 @@ export default {
   name: "ActivityPage",
   components: {},
   computed: {
-    ...mapGetters(['isLoggedIn']),
+    ...mapGetters(['isLoggedIn', 'getEvent']),
+    event() {
+      return this.getEvent;
+    },
     groupedActivities() {
       return this.groupActivitiesByDay(store.state.activities);
     }
@@ -103,13 +106,6 @@ export default {
   data() {
     return {
       isLoading: false,
-      event: { // NOTE THIS IS TEMPORARY AND SHOULD BE REPLACED WITH A CALL TO THE BACKEND TO GET THE CORRECT EVENT
-        id: 1,
-        eventName: 'YCP Hacks 2025',
-        startDate: new Date('2025-11-07T22:00:00.000Z'),
-        endDate: new Date('2025-11-09T21:00:00.000Z'),
-        canChange: true
-      },
       hoveredRow: 0,
       expandedRows: []
     }
@@ -118,6 +114,7 @@ export default {
     async fetchActivities() {
       this.isLoading = true
 
+      await store.dispatch('getActiveEvent');
       await store.dispatch('getAllActivities', this.event.id);
 
       this.isLoading = false;

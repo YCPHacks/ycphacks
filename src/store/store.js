@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
+import { formatDateToEST } from "@/utils/formatDate.js";
 
 // Optional: a small adapter for user objects
 class UserAdapter {
@@ -121,7 +122,7 @@ export default createStore({
     async getAllActivities({ commit,state }, eventId) {
         try{
             if (!eventId) return;
-            const response = await axios.get(`${state.apiBaseUrl}/user/register/event/activity/${eventId}`);
+            const response = await axios.get(`${state.apiBaseUrl}/event/activity/${eventId}`);
 
             // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format
             const activities = response.data.activities.map(activity => {
@@ -151,9 +152,9 @@ export default createStore({
               const response = await axios.get(`http://localhost:3000/user/register/event/active`);
 
               // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format
-              const event = response.data
-              event.startDate = formatDateToEST(event.startDate);
-              event.endDate = formatDateToEST(event.endDate);
+              const event = response.data.event
+              event.startDate = new Date(formatDateToEST(event.startDate));
+              event.endDate = new Date (formatDateToEST(event.endDate));
 
               commit("setEvent", event);
               return {success: true, message: response.data.message};
