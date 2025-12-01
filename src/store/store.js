@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
+import { formatDateToEST } from "@/utils/formatDate.js";
 
 // Optional: a small adapter for user objects
 class UserAdapter {
@@ -16,10 +17,16 @@ class UserAdapter {
 export default createStore({
   state: {
     user: null,
+    activities: [],
+    event: {},
+    apiBaseUrl: import.meta.env.VITE_API_BASE_URL
   },
   getters: {
     isLoggedIn: (state) => !!state.user,
-    getUser: (state) => state.user
+    getUser: (state) => state.user,
+    getActivities: (state) => state.activities,
+    getEvent: (state) => state.event,
+    getUserTeamId: (state) => state.userTeamId
   },
   mutations: {
     setUser(state, user) {
@@ -27,7 +34,23 @@ export default createStore({
     },
     clearUser(state) {
       state.user = null;
+      state.userTeamId = null;
     },
+    setActivities(state, activities) {
+        state.activities = activities;
+    },
+    clearActivities(state) {
+        state.activities = [];
+    },
+    setEvent(state, event) {
+        state.event = event;
+    },
+    clearEvent(state) {
+        state.event = null;
+    },
+    setUserTeamId(state, teamId){
+      state.userTeamId = teamId;
+    }
   },
   actions: {
     async registerUser({ commit, state, dispatch }, formData) {
@@ -76,31 +99,42 @@ export default createStore({
     },
     async loginUser({ commit, state, dispatch }, { email, password }) {
       try {
-        const response = await axios.post('http://localhost:3000/user/login', { email, password });
+        const response = await axios.post(`${state.apiBaseUrl}/user/login`, { email, password });
         const data = response.data;
         commit('setUser', new UserAdapter(data.data));
         document.cookie = `token=${data.data.token}; path=/;`;
+
+        // await dispatch('getActiveEvent');
+        await dispatch('fetchUserTeamStatus');
       } catch (err) {
         throw new Error(err.response?.data?.message || 'Login failed');
       }
     },
-    async validateWithToken({ commit }) {
+    async validateWithToken({ commit, state, dispatch }) {
         try {
-            const token = {
-                token: document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1]
-            }
+          const tokenCookie = document.cookie.split('; ').find(row => row.startsWith('token='));
+        
+          // 2. Check for the cookie row first.
+          if (!tokenCookie) return { success: false, message: "No token found" };
+          
+          const tokenString = tokenCookie.split('=')[1]; 
 
-            if (!token) return { success: false, message: "No token found"};
-
-            const response = await axios.post("http://localhost:3000/user/auth", {token}, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
+          // 3. Check if the string is empty/malformed.
+          if (!tokenString) return { success: false, message: "No token string found" };
+          
+          // 4. Send the token string directly in the request body object.
+          const response = await axios.post(`http://localhost:3000/user/auth`, { token: tokenString }, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
 
             const data = await response.data;
             const user = new UserAdapter(data.data);
             commit("setUser", user);
+
+            // await dispatch('getActiveEvent');
+            await dispatch('fetchUserTeamStatus');
 
             return { success: true, message: data.message };
         } catch (error) {

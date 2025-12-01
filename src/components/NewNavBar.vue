@@ -2,9 +2,16 @@
   <nav class="navbar">
     <div class="nav">
         <div class="nav-right" v-if="isLoggedIn">
+          <div class="nav-right" v-if="isInTeam">
+            <router-link class="nav-link" to="/teams">Team Information</router-link>
+          </div>
           <router-link class="nav-link" to="/activities">Activities</router-link>
           <div class="dropdown hardware-dropdown">
             <a class="dropdown-button nav-link" href="/hardware">Hardware</a>
+          </div>
+
+          <div class="dropdown hardware-dropdown">
+            <a class="dropdown-button nav-link" href="/categories">Hack Categories</a>
           </div>
           
           <div class="dropdown user-dropdown">
@@ -23,6 +30,7 @@
 import store from "@/store/store.js";
 import {BDropdown} from "bootstrap-vue-3";
 import router from "@/router/index.js";
+import { mapGetters } from "vuex";
 
 export default {
   name: "NewNavBar",
@@ -30,12 +38,21 @@ export default {
   data() {
     return {
       menuDropdownVisible: false,
-      isLoggedIn: true,
+      // isLoggedIn: true,
     };
   },
-  mounted(){
-    document.addEventListener('click', this.closeMenusOutside);
+  computed: {
+    ...mapGetters(['isLoggedIn']),
+    isInTeam(){
+      return !!this.$store.getters.getUserTeamId;
+    }
   },
+  // mounted(){
+  //   if(store.getters.isLoggedIn){
+  //     store.dispatch('fetchUserTeamStatus');
+  //   }
+  //   document.addEventListener('click', this.closeMenusOutside);
+  // },
   beforeUnmount(){
     document.removeEventListener('click', this.closeMenusOutside);
   },

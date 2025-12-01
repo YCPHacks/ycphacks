@@ -23,59 +23,65 @@
 
           <template v-if="filteredItems.length > 0">
             <div id="hardwareAccordion" class="accordion">
-                <div 
-                    v-for="(item, index) in filteredItems" 
-                    :key="item.name" 
-                    class="accordion-item mb-3"
-                >
-                    
-                    <h2 :id="'heading-' + getSafeId(item.name)" class="accordion-header">
-                      <button
-                          class="accordion-button collapsed hardware-item-header"
-                          type="button"
-                          data-bs-toggle="collapse"
-                          :data-bs-target="'#collapse-' + getSafeId(item.name)"
-                          aria-expanded="false"
-                          :aria-controls="'collapse-' + getSafeId(item.name)"
-                      >
-                          <div class="fw-bold">{{ item.name }}</div>
-                          </button>
-                  </h2>
-
-                  <div
-                    :id="'collapse-' + getSafeId(item.name)"
-                    class="accordion-collapse collapse"
-                    :aria-labelledby="'heading-' + getSafeId(item.name)"
-                    data-bs-parent="#hardwareAccordion"
+              <div 
+                v-for="(item, index) in filteredItems" 
+                :key="item.name" 
+                class="accordion-item mb-3"
+              >
+                  
+                <h2 :id="'heading-' + getSafeId(item.name)" class="accordion-header">
+                  <button
+                    class="accordion-button collapsed hardware-item-header"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    :data-bs-target="'#collapse-' + getSafeId(item.name)"
+                    aria-expanded="false"
+                    :aria-controls="'collapse-' + getSafeId(item.name)"
                   >
-                    <div class="accordion-body">
-                      <div class="d-flex align-items-start">
-                        <div class="flex-shrink-0 me-4">
-                            <img
-                                :src="item.image"
-                                :alt="item.name"
-                                class="img-thumbnail"
-                                style="width: 150px; height: 150px; object-fit: contain;"
-                            />
-                        </div>
+                    <span class="me-3">
+                      <i
+                        :class="['bi', getAvailabilityIconClass(item.availabilityStatus).icon, getAvailabilityIconClass(item.availabilityStatus).color]"
+                        style="font-size: 1.1rem;"
+                      ></i>
+                    </span>
+                    <div class="fw-bold">{{ item.name }}</div>
+                  </button>
+                </h2>
 
-                        <div class="flex-grow-1">
-                            
-                            <div class="text-end small fw-semibold mb-2">
-                                <span :class="{'text-danger': item.isUnavailable, 'text-success': !item.isUnavailable}">
-                                    {{ item.availabilityText }}
-                                </span>
-                            </div>
-                            
-                            <p class="mb-3">
-                                {{ item.description }}
-                            </p>
-                            
+                <div
+                  :id="'collapse-' + getSafeId(item.name)"
+                  class="accordion-collapse collapse"
+                  :aria-labelledby="'heading-' + getSafeId(item.name)"
+                  data-bs-parent="#hardwareAccordion"
+                >
+                  <div class="accordion-body">
+                    <div class="d-flex align-items-start">
+                      <div class="flex-shrink-0 me-4">
+                          <img
+                            :src="item.image"
+                            :alt="item.name"
+                            class="img-thumbnail"
+                            style="width: 150px; height: 150px; object-fit: contain;"
+                          />
+                      </div>
+
+                      <div class="flex-grow-1">
+                          
+                        <div class="text-end small fw-semibold mb-2">
+                          <span :class="{'text-danger': item.isUnavailable, 'text-success': !item.isUnavailable}">
+                            {{ item.availabilityText }}
+                          </span>
                         </div>
+                        
+                        <p class="mb-3">
+                          {{ item.description }}
+                        </p>
+                          
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
             </div>
           </template>
           <div v-else class="text-center p-5 not-found-box">
@@ -174,21 +180,43 @@ export default {
         const availableCount = item.totalCount - item.unavailableCount;
         let availabilityText;
         let isUnavailable = false;
+        let availabilityStatus;
 
         if (availableCount === 0) {
-            availabilityText = "Unavailable";
-            isUnavailable = true;
-        } else {
-            availabilityText = `${item.unavailableCount} / ${item.totalCount}`;
+          availabilityText = "Unavailable";
+          isUnavailable = true;
+          availabilityStatus = 'none';
+        } else if (availableCount === item.totalCount){
+          availabilityText = `${availableCount} / ${item.totalCount}`;
+          availabilityStatus = 'all';
+        }else{
+          availabilityText = `${availableCount} / ${item.totalCount}`;
+          availabilityStatus = 'some';
         }
 
         return {
-            ...item,
-            availableCount,
-            availabilityText,
-            isUnavailable
+          ...item,
+          availableCount,
+          availabilityText,
+          isUnavailable,
+          availabilityStatus
         };
       });
+    },
+    getAvailabilityIconClass(status){
+      switch (status) {
+        case 'none':
+          // Red X mark: bi-x-circle-fill
+          return { icon: 'bi-x-circle-fill', color: 'text-danger' };
+        case 'some':
+          // Yellow circle/dot: bi-dash-circle-fill (or bi-dot, bi-circle-fill)
+          return { icon: 'bi-dash-circle-fill', color: 'text-warning' };
+        case 'all':
+          // Green checkmark: bi-check-circle-fill
+          return { icon: 'bi-check-circle-fill', color: 'text-success' };
+        default:
+          return { icon: '', color: '' };
+      }
     },
     getSafeId(name) {
         return name ? name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '';
