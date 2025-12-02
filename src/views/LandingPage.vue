@@ -189,9 +189,9 @@
       target="_blank"
       class="sponsor-link"
     >
-      <template v-if="sponsor.logoUrl">
+      <template v-if="sponsor.imageUrl">
         <img
-          :src="sponsor.logoUrl"
+          :src="sponsor.imageUrl"
           :alt="`${sponsor.name} Logo`"
           class="sponsor-logo"
           :style="getSponsorStyle(sponsor)"
@@ -312,10 +312,10 @@ export default {
           
           return {
             name: s.name,
-            website: s.website,
+            website: revertUrlFromServer(s.website),
             logoUrl: s.image || null,
             tier: tierName, // Attach the full tier name
-            // ⭐ 2. Attach the width and height to the sponsor object ⭐
+            imageUrl: s.imageUrl,
             imageWidth: tierWidth,
             imageHeight: tierHeight,
           };
@@ -325,6 +325,19 @@ export default {
         console.error("Failed to fetch sponsors: ", err);
         sponsors.value = [];
       }
+    };
+
+    const revertUrlFromServer = (url) => {
+      if (!url) return "";
+      let original = url.trim();
+
+      original = original.replace(/DOTC/g, ':');
+      original = original.replace(/DOTS/g, '/');
+      original = original.replace(/DOTQ/g, '?');
+      original = original.replace(/DOTE/g, '=');
+      original = original.replace(/DOTA/g, '&');
+
+      return original;
     };
 
     onMounted(()=> {
