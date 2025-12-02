@@ -53,12 +53,21 @@ export default createStore({
     }
   },
   actions: {
-    async registerUser({ commit, state }, formData) {
+    async registerUser({ commit, state, dispatch }, formData) {
+        const eventResult = await dispatch('getActiveEvent');
+
+        const eventId = eventResult.event?.id;
+
+        if(!eventId){
+          console.error("Critical: Could not determine active event ID for registration.");
+          return { success: false, message: 'Registration failed: No active event found.' };
+        }
         try {
+          const finalFormData = { ...formData, eventId: eventId };
             const response = await fetch(`${state.apiBaseUrl}/user/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(finalFormData)
             });
 
             const data = await response.json();
@@ -73,6 +82,20 @@ export default createStore({
             console.error('Error during registration:', error);
             return { success: false, message: 'An error occurred during registration. Please try again.' };
         }
+    },
+    async createParticipantEntry({ state }, { userId, eventId }) {
+      // This assumes you have a new backend endpoint: POST /participant/create
+      const response = await fetch(`${state.apiBaseUrl}/participant/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, eventId })
+      });
+      
+      // Handle response and errors here (e.g., logging)
+      if (!response.ok) {
+        console.error("Failed to create EventParticipant entry.");
+      }
+      return response.ok;
     },
     async loginUser({ commit, state, dispatch }, { email, password }) {
       try {
@@ -156,7 +179,7 @@ export default createStore({
               event.endDate = new Date (formatDateToEST(event.endDate));
 
               commit("setEvent", event);
-              return {success: true, message: response.data.message};
+              return {success: true, message: response.data.message, event: event};
           } catch (error) {
               return {success: false, message: error.response?.data?.message || "Error fetching active event"};
           }
@@ -191,5 +214,25 @@ export default createStore({
         commit("clearUser");
         document.cookie = `token=; path=/;`;
     },
+
+    async fetchEventStaff({ state }, eventId) {
+      if (!eventId) {
+          console.error("Cannot fetch staff: Missing event ID.");
+          return [];
+      }
+      
+      // Use the base URL and append the specific route: /user/event/:eventId/staff
+      const url = `${state.apiBaseUrl}/user/event/${eventId}/staff`;
+
+      try {
+          const response = await axios.get(url);
+          // The staff list is the direct response data (array of staff objects)
+          return response.data; 
+      } catch (error) {
+          console.error('Error fetching event staff:', error.response?.data?.message || error.message);
+          // Return an empty array on failure
+          return []; 
+      }
+    }
   }
 });
