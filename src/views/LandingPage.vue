@@ -90,7 +90,7 @@
       <h3>2024 Sponsors</h3>
       <div class="sponsor-images">
         <a v-for="sponsor in sponsors" :key="sponsor.name" :href="sponsor.website" target="_blank" class="sponsor-link">
-          <img v-if="sponsor.logoUrl" :src="sponsor.logoUrl" :alt="`${sponsor.name} Logo`" :style="getSponsorStyle(sponsor)" />
+          <img v-if="sponsor.imageUrl" :src="sponsor.imageUrl" :alt="`${sponsor.name} Logo`" :style="getSponsorStyle(sponsor)" />
           <span v-else class="sponsor-name" :style="getSponsorStyle(sponsor)">{{ sponsor.name }}</span>
         </a>
         <p v-if="sponsors.length === 0">Be the first! Contact us to become a sponsor.</p>
@@ -162,10 +162,12 @@ export default {
         }, {});
         sponsors.value = rawSponsorResponse.map((s) => {
           const tierInfo = tierMap[s.sponsorTierId] || {};
+          console.log(s.imageUrl, s.name);
           return {
             name: s.name,
-            website: s.website,
+            website: revertUrlFromServer(s.website),
             logoUrl: s.image || null, tier: tierInfo.tierName || "Unknown",
+            imageUrl: s.imageUrl || "",
             imageWidth: tierInfo.width || 50, imageHeight: tierInfo.height || 50 };
         });
       } catch {
@@ -189,10 +191,6 @@ export default {
     onMounted(()=> {
       fetchSponsors();
     });
-    return {
-      sponsors, 
-      eventYear,
-      getSponsorStyle
     const fetchStaff = async () => {
       try {
         const fetchedData = await store.dispatch("fetchEventStaff", CURRENT_EVENT_ID);
