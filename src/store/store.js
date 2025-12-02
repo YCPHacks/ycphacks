@@ -215,5 +215,25 @@ export default createStore({
         commit("clearUser");
         document.cookie = `token=; path=/;`;
     },
+
+    async fetchEventStaff({ state }, eventId) {
+      if (!eventId) {
+          console.error("Cannot fetch staff: Missing event ID.");
+          return [];
+      }
+      
+      // Use the base URL and append the specific route: /user/event/:eventId/staff
+      const url = `${state.apiBaseUrl}/user/event/${eventId}/staff`;
+
+      try {
+          const response = await axios.get(url);
+          // The staff list is the direct response data (array of staff objects)
+          return response.data; 
+      } catch (error) {
+          console.error('Error fetching event staff:', error.response?.data?.message || error.message);
+          // Return an empty array on failure
+          return []; 
+      }
+    }
   }
 });

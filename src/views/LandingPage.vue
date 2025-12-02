@@ -206,12 +206,37 @@
     </p>
   </div>
 
+  <div class="staff-team" id="staff-team">
+    <div class="container">
+      <div class="main-staff">
+        <div class="header">
+            <div class="diagonal-shape">
+              <h2 style="margin: 0;">Meet the Staff Team</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="staff-names">
+      <div v-if="staff.length > 0" class="staff-grid">
+        <div v-for="member in staff" :key="member.id" class="staff-member">
+          <strong class="staff-name">
+            {{ member.firstName }} {{ member.lastName }}
+          </strong>
+        </div>
+      </div>
+      <p v-else style="padding: 30px; font-size: 20px; color: #64965d; text-align: center;">
+        Staff list coming soon!
+      </p>
+    </div>
+  </div>
+
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 import sponsorService from "../services/sponsorService";
-import { mapGetters } from "vuex";
+import { mapGetters, useStore } from "vuex";
 import Activities from "@/views/ActivitiesPage.vue"
 
 export default {
@@ -223,9 +248,11 @@ export default {
     ...mapGetters(['isLoggedIn'])
   },
   setup(){
+    const store = useStore();
     const sponsors = ref([]);
     const eventYear = ref(2024);
     const CURRENT_EVENT_ID = 1;
+    const staff = ref([]);
 
     // const sponsorSizes = {
     //   'Platinum': { width: '200px', height: '200px', fontSize: '24px' },
@@ -327,11 +354,20 @@ export default {
       }
     };
 
+    const fetchStaff = async () => {
+      const fetchedData = await store.dispatch('fetchEventStaff', CURRENT_EVENT_ID);
+      
+      // Defensive check: ensure staff.value is always an array
+      staff.value = Array.isArray(fetchedData) ? fetchedData : [];
+    };
+
     onMounted(()=> {
       fetchSponsors();
+      fetchStaff();
     });
     return {
       sponsors, 
+      staff,
       eventYear,
       getSponsorStyle
     };
@@ -715,4 +751,71 @@ h1 {
   padding: 10px;
 }
 
+.staff-names {
+    /* Use the same light background color as the '2024 Sponsors' section's background area */
+    background-color: #f0fff0; /* A very pale green, similar to the sponsor area */
+    padding: 5px 0 20px 0;
+}
+/* Assuming these styles exist for the header container */
+.sponsors .header,
+.staff-team .header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px; /* Space below the header shape */
+}
+
+/* This targets the diagonal shape seen in the 2024 Sponsors image */
+.diagonal-shape {
+    /* Style to create the parallelogram/trapezoid shape */
+    background-color: #e6ffe6; /* Light green background to match the image */
+    padding: 10px 40px;
+    transform: skewX(-20deg); /* Skew to create the diagonal edges */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional subtle shadow */
+    text-align: center;
+}
+
+.diagonal-shape h2 {
+    /* Un-skew the text so it reads horizontally */
+    transform: skewX(20deg);
+    color: #64965d; /* Dark green text color */
+    font-size: 28px;
+    font-weight: 300;
+}
+
+/* Style for the Staff Grid */
+.staff-grid {
+    display: grid;
+    /* Default to 2 columns on small screens, adjust padding */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    justify-items: center; /* Center items within their grid cell */
+    gap: 10px; /* Smaller gap between names */
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.staff-member {
+    /* Remove default light-gray background */
+    background-color: transparent !important; 
+    
+    /* Give it a slight border or subtle background if needed, but keeping it simple: */
+    /* background-color: white; */ 
+    /* border: 1px solid #e6ffe6; */
+    border-radius: 5px;
+    padding: 5px 10px; /* Make the boxes smaller */
+    box-shadow: none !important; /* Remove any default box shadow for a cleaner look */
+    
+    /* Ensure the text color matches the dark green theme color */
+    color: #3e6d3d; 
+    font-weight: 700;
+}
+
+.staff-name {
+    /* To match the dark green text tone */
+    color: #3e6d3d !important; 
+    font-size: 24px;
+    font-family: 'Courier New', monospace; /* Keep the clean, retro font style */
+    white-space: nowrap;
+}
 </style>
