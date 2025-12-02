@@ -1,26 +1,24 @@
 <template>
   <div class="landing-page">
-    <!-- Background Video -->
     <video v-if="!isLoggedIn" autoplay loop muted id="bgvideo" preload="auto">
       <source src="/bg.mp4" type="video/mp4" />
     </video>
-
-    <!-- Introduction Section -->
     <div v-if="!isLoggedIn" class="intro">
       <div class="container">
         <div class="main-header">
-          <!-- <img id="fountain" src="../assets/fountainWhite.png"/> -->
-          <h1>YCP Hacks</h1>
-          <h2>November 1 - 3, 2024</h2>
-          <h2>York College of Pennsylvania</h2>
-          <div>
-            <router-link class="register-button" to="/register">Create<br> Account</router-link>
+          <h1>{{ activeEvent?.eventName }}</h1>
+          <div v-if="activeEvent">
+            <p class="event-date">
+              {{ formatDate(activeEvent.startDate) }} – {{ formatDate(activeEvent.endDate) }}
+            </p>
+            <h2>York College of Pennsylvania</h2>
+            <div>
+              <router-link class="register-button" to="/register">Create<br> Account</router-link>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- About Section -->
     <div v-if="!isLoggedIn" class="about" id="about" style="margin-top: 150px;">
       <div class="container">
         <div class="header">
@@ -41,7 +39,6 @@
       <div class="green-box">
         <div class="container1" style="margin: auto; text-align: center;">
           <div style="float: left; font-size: 75px; margin-right: 50px;">
-            <!-- <img id="fountain2" src="../assets/fountainWhite.png" style="width: 125px; height: 115px; margin-bottom: 0px;" /> -->
             <br />2021<br /> Recap Video
           </div>
           <div style="float: right;">
@@ -50,7 +47,6 @@
         </div>
         <div class="container1" style="margin: auto; text-align: center;">
           <div style="float: left; font-size: 75px; margin-right: 50px;">
-            <!-- <img id="fountain2" src="../assets/fountainWhite.png" style="width: 125px; height: 115px; margin-bottom: 0px;" /> -->
             <br />2017<br /> Recap Video
           </div>
           <div style="float: right;">
@@ -58,9 +54,8 @@
           </div>
         </div>
 
-        <!-- "Can't wait to apply?" heading placed below the videos -->
         <h1 class="apply-now-heading">Can't wait to apply?</h1>
-       <p>Sign up <a href="http://146.190.66.30:4174/" style="color: white; font-size:22px;"> here</a> and we&#39;ll let you know when our application is open!</p>
+        <p>Sign up <a href="http://146.190.66.30:4174/" style="color: white; font-size:22px;"> here</a> and we&#39;ll let you know when our application is open!</p>
       </div>
     </div>
 
@@ -183,18 +178,18 @@
 
   <div class="sponsor-images" style="background-color:white;">
     <a
-      v-for="sponsor in sponsors"
-      :key="sponsor.name"
-      :href="sponsor.website"
-      target="_blank"
-      class="sponsor-link"
+        v-for="sponsor in sponsors"
+        :key="sponsor.name"
+        :href="sponsor.website"
+        target="_blank"
+        class="sponsor-link"
     >
       <template v-if="sponsor.logoUrl">
         <img
-          :src="sponsor.logoUrl"
-          :alt="`${sponsor.name} Logo`"
-          class="sponsor-logo"
-          :style="getSponsorStyle(sponsor)"
+            :src="sponsor.logoUrl"
+            :alt="`${sponsor.name} Logo`"
+            class="sponsor-logo"
+            :style="getSponsorStyle(sponsor)"
         />
       </template>
       <template v-else>
@@ -209,182 +204,157 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
+import { useStore } from "vuex";
+import Activities from "@/views/ActivitiesPage.vue";
 import sponsorService from "../services/sponsorService";
-import { mapGetters } from "vuex";
-import Activities from "@/views/ActivitiesPage.vue"
+// mapGetters is not strictly necessary in the composition API setup() function
+// import { mapGetters } from "vuex";
 
 export default {
   name: "LandingPage",
   components: {
-    Activities
+    Activities,
   },
-  computed: {
-    ...mapGetters(['isLoggedIn'])
-  },
-  setup(){
+
+  setup() {
+    const store = useStore();
+
+    // Load events on page load
+    store.dispatch("getActiveEvent");
+
+    const activeEvent = computed(() => {
+      const event = store.getters.getEvent;
+      return (event && Object.keys(event).length > 0) ? event : null;
+    });
+
+    // Sponsors list
     const sponsors = ref([]);
-    const eventYear = ref(2024);
-    const CURRENT_EVENT_ID = 1;
 
-    // const sponsorSizes = {
-    //   'Platinum': { width: '200px', height: '200px', fontSize: '24px' },
-    //   'Gold': { width: '150px', height: '150px', fontSize: '20px' },
-    //   'Silver': { width: '100px', height: '100px', fontSize: '16px' },
-    //   'Bronze': { width: '50px', height: '50px', fontSize: '14px' },
-    // }
-
-    // Remove the sponsorSizes object entirely, or keep it for fallback if needed.
-
-    const getSponsorStyle = (sponsor) => {
-      const rawWidth = sponsor.imageWidth || 50;
-      const rawHeight = sponsor.imageHeight || 50;
-
-      const width = `${rawWidth}px`;
-      const height = `${rawHeight}px`;
-      
-      const baseSize = rawWidth; 
-    
-      let fontSize;
-      
-      if (baseSize < 75) {
-          // If the size is small (e.g., Bronze at 50px)
-          fontSize = '12px';
-      } else if (baseSize < 125) {
-          // If the size is medium (e.g., Silver at 100px)
-          fontSize = '16px'; 
-      } else {
-          // If the size is large (e.g., Gold/Platinum at 150px+)
-          fontSize = '20px';
-      }
-
-      let style = {
-        width: width,
-        height: height,
-        fontSize: fontSize,
-      };
-      
-      if(sponsor.logoUrl){
-        return {
-          ...style,
-          objectFit: 'contain'
-        };
-      }else{
-        return {
-          ...style,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          textAlign: 'center'
-        };
-      }
+    // Format date for display
+    const formatDate = (date) => {
+      if (!date) return "";
+      return new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
     };
 
-    const fetchSponsors = async () => {
-      try{
+    // Style sponsor image or text
+    const getSponsorStyle = (sponsor) => {
+      return {
+        width: sponsor.imageWidth + "px",
+        height: sponsor.imageHeight + "px",
+        objectFit: "contain",
+      };
+    };
+
+    // Fetch sponsors for the active event
+    const fetchSponsors = async (eventId) => {
+      try {
         const tierResponse = await sponsorService.getSponsorTiers();
-        // console.log("Tier Data Received: ", tierResponse);
+        const rawSponsorResponse = await sponsorService.getSponsors(eventId);
+
         const tierMap = tierResponse.reduce((map, tier) => {
           map[tier.id] = {
             tierName: tier.tier,
             width: tier.width,
             height: tier.height,
-          }
+          };
           return map;
         }, {});
-        // console.log("Final Tier Map for lookup: ", tierMap);
 
-        const rawSponsorResponse = await sponsorService.getSponsors(CURRENT_EVENT_ID);
-        const rawData = rawSponsorResponse;
+        sponsors.value = rawSponsorResponse.map(s => {
+          const tierInfo = tierMap[s.sponsorTierId] || {};
 
-        // console.log("Raw Sponsor Data: ", rawData);
-        
-        sponsors.value = rawData.map(s => {
-          const tierId = s.sponsorTierId;
-          const tierInfo = tierMap[tierId]; // Renamed to tierInfo as it holds multiple values
-
-          // Use optional chaining or a simple check for safety
-          const tierName = tierInfo ? tierInfo.tierName : 'Unknown';
-          const tierWidth = tierInfo ? tierInfo.width : null;
-          const tierHeight = tierInfo ? tierInfo.height : null;
-
-          // console.log(`Sponsor Name: ${s.name}, Tier ID: ${tierId}, Mapped Name: ${tierName}`);
-          
           return {
             name: s.name,
             website: s.website,
             logoUrl: s.image || null,
-            tier: tierName, // Attach the full tier name
-            // ⭐ 2. Attach the width and height to the sponsor object ⭐
-            imageWidth: tierWidth,
-            imageHeight: tierHeight,
+            tier: tierInfo.tierName || "Unknown",
+            imageWidth: tierInfo.width || 50,
+            imageHeight: tierInfo.height || 50,
           };
         });
-        // console.log("Sponsor data loaded:", sponsors.value); 
-      }catch(err){
-        console.error("Failed to fetch sponsors: ", err);
+      } catch (err) {
+        console.error("Sponsor fetch failed:", err);
         sponsors.value = [];
       }
     };
 
-    onMounted(()=> {
-      fetchSponsors();
+    // Reload sponsors when the active event changes
+    watch(activeEvent, (newEvent) => {
+      if (newEvent) {
+        fetchSponsors(newEvent.id);
+      }
     });
+
+    // First load: Fetch sponsors if an active event is already available
+    onMounted(() => {
+      if (activeEvent.value) {
+        fetchSponsors(activeEvent.value.id);
+      }
+    });
+
     return {
-      sponsors, 
-      eventYear,
-      getSponsorStyle
+      sponsors,
+      activeEvent,
+      formatDate,
+      getSponsorStyle,
     };
-  }
+  },
 };
 </script>
 
 <style scoped>
+/* ... Your original styles ... */
 body {
-    font-family: Lato, sans-serif;
-    color: #fff;
-    font-weight: 300;
-    font-size: 18px;
-    overflow-y: scroll;
-    overflow-x: hidden;
+  font-family: Lato, sans-serif;
+  color: #fff;
+  font-weight: 300;
+  font-size: 18px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .na
 .intro .main-header {
-    text-align: center;
-    display: block;
-    position: relative;
-    z-index: 100;
+  text-align: center;
+  margin-top: 50px;
+  display: block;
+  position: relative;
+  z-index: 100;
 }
 .intro .circle {
-    display: inline-block;
-    width: 200px;
-    height: 100px;
-    margin-top: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
-    border-radius: 10%;
-    border: 6px solid #fff;
-    text-align: center;
-    color: white;
-    line-height: 100px;
-    font-size: 20px;
-    transition: all .3s ease;
+  display: inline-block;
+  width: 200px;
+  height: 100px;
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 10%;
+  border: 6px solid #fff;
+  text-align: center;
+  color: white;
+  line-height: 100px;
+  font-size: 20px;
+  transition: all .3s ease;
 }
 .bounce {
-    -webkit-animation-name: bounce;
-    animation-name: bounce;
-    -webkit-transform-origin: center bottom;
-    -ms-transform-origin: center bottom;
-    transform-origin: center bottom;
+  -webkit-animation-name: bounce;
+  animation-name: bounce;
+  -webkit-transform-origin: center bottom;
+  -ms-transform-origin: center bottom;
+  transform-origin: center bottom;
 }
 .animated {
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
 a {
-    background-color: transparent;
+  background-color: transparent;
 }
 .landing-page {
   text-align: center;
@@ -411,15 +381,15 @@ a {
 .intro {
   position: relative;
   z-index: 1;
-  color:white;
+  color: white;
   background-color: rgba(0, 0, 0, 0.01);
-  /* margin-top: 10px; */
-  padding:20px;
+  margin-top: -1000px;
+  padding:550px;
   bottom: 850px;
   display: block;
   align-items: center;
   justify-content: center;
-  text-align: center; /* Center content */
+  text-align: center;
 }
 
 .intro h1 {
@@ -448,19 +418,19 @@ a {
 }
 
 .about {
-    position: relative;
-    top: -650px;
-    margin-bottom: -550px;
-    text-align: center;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: black;
-    background-color:#ccffcc;
+  position: relative;
+  top: -650px;
+  margin-bottom: -550px;
+  text-align: center;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  background-color:#ccffcc;
 }
 .about .row {
-    text-align: center;
+  text-align: center;
 }
 .about .text {
   margin-top: 10px;
@@ -472,75 +442,75 @@ a {
 }
 
 .about .header .circle {
-    font-size: 50px;
-    color: #93dda3;
+  font-size: 50px;
+  color: #93dda3;
 }
 .header .circle {
-    background: #fff;
-    position: relative;
-    -webkit-transform: skew(-20deg);
-    -moz-transform: skew(-20deg);
-    -o-transform: skew(-20deg);
-    transform: skew(-20deg);
+  background: #fff;
+  position: relative;
+  -webkit-transform: skew(-20deg);
+  -moz-transform: skew(-20deg);
+  -o-transform: skew(-20deg);
+  transform: skew(-20deg);
 }
 .container {
-    position: relative;
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 38px 20px;
-    box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 38px 20px;
+  box-sizing: border-box;
 }
 
 @media (min-width: 550px) {
-    .container {
-        width: 80%;
-    }
+  .container {
+    width: 80%;
+  }
 }
 @media (min-width: 400px) {
-    .container {
-        width: 85%;
-        padding: 0;
-    }
+  .container {
+    width: 85%;
+    padding: 0;
+  }
 }
 .header {
-    display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
 }
 .circle p {
-    font-size: 32px;
-    -webkit-transform: skew(20deg);
-    -moz-transform: skew(20deg);
-    -o-transform: skew(20deg);
-    transform: skew(20deg);
+  font-size: 32px;
+  -webkit-transform: skew(20deg);
+  -moz-transform: skew(20deg);
+  -o-transform: skew(20deg);
+  transform: skew(20deg);
 }
 pre, blockquote, dl, figure, table, p, ul, ol, form {
-    margin-bottom: 2.5rem;
+  margin-bottom: 2.5rem;
 }
 .intro #fountain {
-    display: block;
-    position: relative;
-    margin: auto;
-    max-height: 100px;
-    margin-bottom: -100px;
+  display: block;
+  position: relative;
+  margin: auto;
+  max-height: 100px;
+  margin-bottom: -100px;
 }
 img{
   border:0;
 }
 .intro h1 {
-    padding-top: 100px;
-   font-family: 'Headliner', sans-serif;
-    font-size: 60px;
+  padding-top: 100px;
+  font-family: 'Headliner', sans-serif;
+  font-size: 60px;
 }
 .circle p {
-    font-size: 32px;
-    -webkit-transform: skew(20deg);
-    -moz-transform: skew(20deg);
-    -o-transform: skew(20deg);
-    transform: skew(20deg);
+  font-size: 32px;
+  -webkit-transform: skew(20deg);
+  -moz-transform: skew(20deg);
+  -o-transform: skew(20deg);
+  transform: skew(20deg);
 }
- .attend {
+.attend {
   position: relative;
   text-align: center;
   padding-bottom: 100px;
@@ -561,11 +531,11 @@ img{
   align-items: center;
   margin-bottom: 50px; /* Add margin between the videos */
   position: relative;
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 38px 20px;
-    box-sizing: border-box;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 38px 20px;
+  box-sizing: border-box;
 }
 
 #fountain2 {
@@ -581,13 +551,13 @@ h1{
   letter-spacing:-.1rem;
 }
 h1, h2, h3, h4, h5, h6 {
-    margin-top: 0;
-    margin-bottom: 2rem;
-    font-weight: 300;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  font-weight: 600;
 }
 h1 {
-    font-size: 2em;
-    margin: 0.67em 0;
+  font-size: 2em;
+  margin: 0.67em 0;
 }
 .apply-now-heading {
   font-size: 5.0rem;
@@ -597,12 +567,12 @@ h1 {
   color: white; /* You can change this to match the design */
 }
 .schedule {
-    margin-top: 50px;
-    background-color:#93dda3;
-    text-align: center;
+  margin-top: 50px;
+  background-color:#93dda3;
+  text-align: center;
 }
 .schedule .header .circle {
-    font-size: 40px;
+  font-size: 40px;
 }
 .faq{
   background-color: #ccffcc;
@@ -627,26 +597,26 @@ h1 {
   padding-right: 25px;
 }
 .circle p {
-    color:#64965d;
-    font-size: 32px;
-    -webkit-transform: skew(20deg);
-    -moz-transform: skew(20deg);
-    -o-transform: skew(20deg);
-    transform: skew(20deg);
-    white-space: nowrap;
+  color:#64965d;
+  font-size: 32px;
+  -webkit-transform: skew(20deg);
+  -moz-transform: skew(20deg);
+  -o-transform: skew(20deg);
+  transform: skew(20deg);
+  white-space: nowrap;
 }
 #day-tag {
-    font-size: 50px;
+  font-size: 50px;
 }
 .sponsors .sponsor-images {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 .sponsors .sponsor-images img {
-    max-width: 200px;
-    padding: 20px;
+  max-width: 200px;
+  padding: 20px;
 }
 .sponsor-card {
   text-align: center;
@@ -660,12 +630,12 @@ h1 {
   margin-bottom: 0.5rem;
 }
 .container {
-    position: relative;
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 38px 20px;
-    box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 38px 20px;
+  box-sizing: border-box;
 }
 .register-button {
   display: inline-block;
@@ -713,6 +683,12 @@ h1 {
   font-weight: 700;
   color: #333;
   padding: 10px;
+}
+
+.event-date {
+  font-size: 36px;
+  font-weight: 600;
+  margin: 20px 0;
 }
 
 </style>

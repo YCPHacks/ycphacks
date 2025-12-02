@@ -149,8 +149,7 @@ export default createStore({
 
       async getActiveEvent({ commit, state }) {
           try {
-              const response = await axios.get(`http://localhost:3000/event/active`);
-
+              const response = await axios.get(`${state.apiBaseUrl}/event/active`);
               // Convert dates from UTC to local time (i.e., EST) and to a user-friendly format
               const event = response.data.event
               event.startDate = new Date(formatDateToEST(event.startDate));
