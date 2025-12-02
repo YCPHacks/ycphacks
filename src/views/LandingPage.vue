@@ -173,6 +173,26 @@ export default {
       }
     };
 
+    const revertUrlFromServer = (url) => {
+      if (!url) return "";
+      let original = url.trim();
+
+      original = original.replace(/DOTC/g, ':');
+      original = original.replace(/DOTS/g, '/');
+      original = original.replace(/DOTQ/g, '?');
+      original = original.replace(/DOTE/g, '=');
+      original = original.replace(/DOTA/g, '&');
+
+      return original;
+    };
+
+    onMounted(()=> {
+      fetchSponsors();
+    });
+    return {
+      sponsors, 
+      eventYear,
+      getSponsorStyle
     const fetchStaff = async () => {
       try {
         const fetchedData = await store.dispatch("fetchEventStaff", CURRENT_EVENT_ID);
