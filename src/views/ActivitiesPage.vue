@@ -12,15 +12,15 @@
 
 
       <div class="schedule-content">
-        <div v-for="(activities, date) in groupedActivities" :key="date">
-          <span id="day-tag" style="color: #5f8653">
+        <div v-for="(activities, date) in groupedActivities" :key="date" style="margin-bottom: 50px;">
+          <span id="day-tag" style="color: #008350; margin-left: 75px;">
             <b>{{ new Date(date).toLocaleDateString("en-US", { weekday: "long" }) }}
             {{ new Date(date).toLocaleDateString("en-US", { month: "long" }) }}
             {{ getOrdinalDay(date) }},
             {{ new Date(date).getFullYear() }}</b>
           </span>
-          <table v-if="activities.length > 0" class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
+          <table v-if="activities.length > 0" class="table table-bordered" style="margin-bottom:35px; background: #231F20">
+            <tbody style="background: #231F20; width: 50%; ">
               <template v-for="activity in activities" :key="activity.id">
                 <!-- Main row -->
                 <tr
@@ -33,7 +33,7 @@
                       'hovered-row': hoveredRow === activity.id
                     }"
                 >
-                  <th scope="row">
+                  <th scope="row" style="color: #008350; font-weight: bold; font-size: 35px;">
                     {{ new Date(activity.activityDate).toLocaleTimeString("en-US", {
                     timeZone: "America/New_York",
                     hour: "numeric",
@@ -41,7 +41,7 @@
                     hour12: true
                   }) }}
                   </th>
-                  <th>{{ activity.activityName }}</th>
+                  <th style="color: #008350; font-weight: bold; font-size: 35px;">{{ activity.activityName }}</th>
                 </tr>
 
                 <!-- Description row -->
@@ -65,7 +65,7 @@
               </template>
             </tbody>
           </table>
-          <div v-else style="padding:15px 0; color: #5f8653">There are no activities currently set for this date. Please check back later!</div>
+          <div v-else style="padding:15px 0; color: #008350; margin-left: 100px; font-size: 25px; font-weight:bold;">There are no activities currently set for this date. Please check back later!</div>
         </div>
         <div class ="text-center py-4" style="padding:15px 0; color:#008350; font-size: 30px">* Schedule is subject to change.</div>
       </div>
@@ -148,13 +148,16 @@ export default {
     },
     // Returns a list of all dates between the event start and end dates, inclusive
     getDateRangeOfEvent() {
-      const start = this.event.startDate;
-      const end = this.event.endDate;
+      const start = new Date(this.event.startDate);
+      const end = new Date(this.event.endDate);
       const dateRange = {};
       const current = new Date(start);
 
-      while (current.getDate() <= end.getDate()) {
-        const key = current.toLocaleDateString("en-US", { timeZone: "America/New_York" });
+      while (current <= end) {
+        const key = current.toLocaleDateString("en-US", {
+          timeZone: "America/New_York"
+        });
+
         dateRange[key] = [];
         current.setDate(current.getDate() + 1);
       }
@@ -195,8 +198,8 @@ export default {
       }
     }
   },
-  mounted() {
-    this.fetchActivities();
+  async mounted() {
+    await this.fetchActivities();
   }
 };
 </script>
@@ -326,25 +329,27 @@ h2, h3, h4, h5, h6 {
 }
 
 #day-tag {
-    font-size: 40px;
+    font-size: 70px;
 }
 
+
 .table {
-  table-layout: fixed;
+  width: 75%;
+  margin-left: 100px;
+
 }
 
 /* Default (i.e., non-important) rows */
 .table th,
 .table td {
-  background-color: #a0dda3; /* dark background */
-  color: #5f8653;
-  border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: #231F20; /* dark background */
+  border-width: 3px;
+  border-color: #008350;
 }
 
 .table tr:hover th,
 .table tr:hover td {
-  background-color: #6c965d;
+  background-color: #231F20;
 }
 
 /* Important rows (both main and description) */
@@ -364,8 +369,8 @@ h2, h3, h4, h5, h6 {
 /* When hovered (both rows share same activity id) */
 .table .hovered-row th,
 .table .hovered-row td {
-  background-color: #6c965d !important; /* your hover color */
-  color: #fff !important;
+  background-color: #008350 !important; /* your hover color */
+  color: #231F20 !important;
   transition: background-color 0.25s ease;
 }
 
@@ -378,19 +383,29 @@ h2, h3, h4, h5, h6 {
 
 /* When hovered, make the card transparent so the hover color shows through */
 .table .hovered-row .activity-description {
-  background-color: transparent !important;
-  color: inherit !important;
+  background-color: #008350 !important;
+  color: #231F20 !important;
+  font-weight: bold;
 }
 
 /* Non-important dropdown card */
 .activity-description {
-  background-color: #a0dda3 !important;
-  color: #5f8653 !important;
+  background-color: #231F20 !important;
+  color: #008350 !important;
   border: none;
+  font-weight: bold;
+  font-size: 30px;
 }
 
 .activity-row-group:hover {
   cursor: pointer;
+  background-color: #231F20;
+}
+
+.activity-row-group {
+  background: #231F20;
+  color: #008350;
+  font-weight: bold;
 }
 
 .no-event-container {
