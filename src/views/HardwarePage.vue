@@ -135,17 +135,16 @@ export default {
         const allRawItems = groups.flatMap(group => {
 
           // Assume items are nested in 'items' array, or the group itself is the item.
-          const itemsSource = Array.isArray(group.items) ? group.items : [group];
+          if (!Array.isArray(group.items)) return [];
 
-          return itemsSource.map(p => {
+          return group.items.map(p => {
             const fullName = p.fullName || p.name || group.title || "Unknown Hardware";
-
             return {
               name: fullName,
               description: p.description || "No description available.",
               image: p.image || null,
               isUnavailable: p.isUnavailable,
-              isNonFunctional: p.functional === false
+              isNonFunctional: !p.isFunctional,
             };
           });
         });
