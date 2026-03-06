@@ -112,20 +112,21 @@ export default createStore({
     },
     async validateWithToken({ commit, state, dispatch }) {
         try {
-          const tokenCookie = document.cookie.split('; ').find(row => row.startsWith('token='));
+          const token = document.cookie.split('; ').find(row => row.startsWith('token='));
         
           // 2. Check for the cookie row first.
-          if (!tokenCookie) return { success: false, message: "No token found" };
+          if (!token) return { success: false, message: "No token found" };
           
-          const tokenString = tokenCookie.split('=')[1]; 
+          const tokenString = token.split('=')[1];
 
           // 3. Check if the string is empty/malformed.
           if (!tokenString) return { success: false, message: "No token string found" };
           
           // 4. Send the token string directly in the request body object.
-          const response = await axios.post(`http://localhost:3000/user/auth`, { token: tokenString }, {
+          const response = await axios.post(`http://localhost:3000/user/auth`, {}, {
             headers: {
               "Content-Type": "application/json",
+                "Authorization": `Bearer ${tokenString}`
             },
           });
 
