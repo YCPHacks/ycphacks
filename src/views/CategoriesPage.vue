@@ -47,8 +47,11 @@
 
               <!-- if open show list of prizes -->
               <div v-show="category.open">
-                <ul class="prize-list" v-if="category.prizes && category.prizes.length">
-                  <li v-for="(prize, pIndex) in category.prizes" :key="pIndex">
+                <ul class="prize-list" v-if="prizes && prizes.length">
+                  <li v-for="(prize, pIndex) in prizes
+                      .filter(p => p.categoryId === category.id)
+                      .sort((a, b) => a.placement - b.placement)"
+                      :key="pIndex">
                     {{ formatPlacement(prize.placement) }}: {{ prize.prizeName }}
                   </li>
                 </ul>
@@ -83,6 +86,7 @@ export default {
   data() {
     return {
       categories: [],
+      prizes: [],
       events: [],
       selectedEventId: null
     };
@@ -126,15 +130,15 @@ export default {
       if (category.open) {
         try {
           const response = await axios.get(
-            `http://localhost:3000/event/category/${category.id}/prizes`
+            'http://localhost:3000/prize/by-event/' + this.selectedEventId
           );
           // Sort prizes by placement
-          category.prizes = (response.data.prizes || []).sort(
+          this.prizes = (response.data.prizes || []).sort(
             (a, b) => a.placement - b.placement
           );
         } catch (error) {
           console.error('Error fetching prizes:', error);
-          category.prizes = [];
+          this.prizes = [];
         }
       }
     },
