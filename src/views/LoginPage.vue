@@ -13,6 +13,11 @@
             required
           />
         </div>
+        <div v-if="isLoading" class="loading-overlay">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
 
         <div class="form-group">
           <label for="password">Password</label>
@@ -23,6 +28,16 @@
             placeholder="Password"
             required
           />
+        </div>
+
+        <div v-if="showAlert">
+          <b-alert
+            v-model="showAlert"
+            variant="danger"
+            class="error-box"
+            >
+            <span><strong>Error: </strong>{{message}}</span>
+          </b-alert>
         </div>
 
         <button type="submit" class="btn">Sign In</button>
@@ -44,21 +59,33 @@ export default {
       username: '',
       password: '',
       showPassword: false,
+      message: "",
+      showAlert: false,
+      isLoading: false
     };
   },
   methods: {
     async handleSubmit() {
+      this.isLoading = true;
+      this.showAlert = false;
+
       try {
         // Attempt login with entered credentials
-        await this.$store.dispatch('loginUser', {
+        const result = await this.$store.dispatch('loginUser', {
           email: this.username,
           password: this.password,
         });
 
-        // Redirect after successful login
-        this.$router.push('/activities');
-      } catch (err) {
-        console.warn('Login failed:', err.message);
+        if (result.success) {
+          // Redirect after successful login
+          this.$router.push('/activities');
+        } else {
+          this.message = result.message;
+          this.showAlert = true;
+        }
+
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -174,4 +201,17 @@ input[type="password"]:focus {
 .footer-text router-link:hover {
   color: #4caf50;
 }
+
+.error-box {
+  background-color: rgba(255, 182, 193, 0.2); /* Translucent pink */
+  border: 1px solid #ffb6c1; /* Solid pink border */
+  color: #d81b60; /* Pink text */
+  padding: 14px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 0.9rem;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(255, 182, 193, 0.1);
+}
+
 </style>

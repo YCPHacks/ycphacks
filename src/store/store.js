@@ -106,8 +106,10 @@ export default createStore({
 
         // await dispatch('getActiveEvent');
         await dispatch('fetchUserTeamStatus');
+
+        return { success: true };
       } catch (err) {
-        throw new Error(err.response?.data?.message || 'Login failed');
+          return { success: false, message: err.response?.data?.message || 'Login failed'};
       }
     },
     async validateWithToken({ commit, state, dispatch }) {
