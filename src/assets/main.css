@@ -43,3 +43,10 @@ html, body{
     position: relative;
     overflow: hidden;
 }
+
+.container-fluid {
+    background-color: #231F20;
+    position: relative; /* Ensure this is the context for absolute positioning */
+    overflow: hidden;
+    min-height: 100vh;
+}

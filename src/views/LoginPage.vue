@@ -43,7 +43,7 @@
         <button type="submit" class="btn">Sign In</button>
 
         <p class="footer-text">
-          <a href="#">Forgot password?</a> | 
+          <router-link to="/passwordLink">Forgot password?</router-link> |
           <router-link to="/register">Sign up</router-link>
         </p>
       </form>

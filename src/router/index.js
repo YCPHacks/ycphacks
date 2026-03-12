@@ -9,6 +9,8 @@ import HardwarePage from '../views/HardwarePage.vue';
 import TeamsPage from '@/views/TeamsPage.vue';
 import CategoriesPage from '../views/CategoriesPage.vue';
 import CheckinPage from "@/views/CheckinPage.vue";
+import PasswordRecoveryPage from "@/views/PasswordRecoveryPage.vue";
+import PasswordLinkPage from "@/views/PasswordLinkPage.vue"
 
 const routes = [
     {
@@ -55,6 +57,16 @@ const routes = [
         component: CategoriesPage,
     },
     {
+        path: '/passwordRecovery',
+        name: 'PasswordRecovery',
+        component: PasswordRecoveryPage
+    },
+    {
+        path: '/passwordLink',
+        name: 'PasswordLink',
+        component: PasswordLinkPage
+    },
+    {
         path: '/profile',
         name: 'Profile',
         component: LandingPage // Should be replaced with the profile component once it is implemented
@@ -74,7 +86,7 @@ router.beforeEach(async (to, from, next) => {
     }
 
     // Allow routing to login if NOT authenticated
-    if (to.path === '/login' || to.path === '/register') {
+    if (to.path === '/login' || to.path === '/register' || to.path === '/passwordLink' || to.path  === '/passwordRecovery') {
         if (isAuthenticated) {
             return next('/'); // already logged in, redirect away
         } else {
