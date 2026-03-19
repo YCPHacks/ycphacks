@@ -4,13 +4,14 @@ import { formatDateToEST } from "@/utils/formatDate.js";
 
 // Optional: a small adapter for user objects
 class UserAdapter {
-  constructor({ id, email, firstName, lastName, token, role }) {
+  constructor({ id, email, firstName, lastName, token, role, isEmailVerified }) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
     this.token = token;
     this.role = role;
+    this.isEmailVerified = isEmailVerified;
   }
 }
 
@@ -26,11 +27,15 @@ export default createStore({
     getUser: (state) => state.user,
     getActivities: (state) => state.activities,
     getEvent: (state) => state.event,
-    getUserTeamId: (state) => state.userTeamId
+    getUserTeamId: (state) => state.userTeamId,
+    isEmailVerified: (state) => !!state.user.isEmailVerified
   },
   mutations: {
     setUser(state, user) {
       state.user = user;
+    },
+    setUserEmailVerification(state, user, isEmailVerified) {
+        state.user.ieEmailVerified = isEmailVerified;
     },
     clearUser(state) {
       state.user = null;
@@ -83,6 +88,18 @@ export default createStore({
             return { success: false, message: 'An error occurred during registration. Please try again.' };
         }
     },
+
+    async updateIsEmailVerified({ state, commit }) {
+        const response = await fetch(`${state.apiBaseUrl}/user/${state.user.id}/info`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        const data = await response.json();
+
+        const user = new UserAdapter(data.data);
+        commit("setUser", user);
+    },
     async createParticipantEntry({ state }, { userId, eventId }) {
       // This assumes you have a new backend endpoint: POST /participant/create
       const response = await fetch(`${state.apiBaseUrl}/participant/create`, {
@@ -101,6 +118,7 @@ export default createStore({
       try {
         const response = await axios.post(`${state.apiBaseUrl}/user/login`, { email, password });
         const data = response.data;
+          console.log(data);
         commit('setUser', new UserAdapter(data.data));
         document.cookie = `token=${data.data.token}; path=/;`;
 

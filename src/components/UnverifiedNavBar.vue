@@ -1,41 +1,17 @@
 <template>
-  <nav class="navbar">
-    <a
-        id="mlh-trust-badge"
-        style="display:block;max-width:100px;min-width:60px;position:fixed;left:0px;top:0;width:10%;z-index:10000"
-        href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2024-season&utm_content=white"
-        target="_blank"
-    >
-      <img
-          src="https://s3.amazonaws.com/logged-assets/trust-badge/2024/mlh-trust-badge-2024-white.svg"
-          alt="Major League Hacking 2024 Hackathon Season"
-          style="width:100%"
-      />
-    </a>
+  <div class="nav">
+    <div class="nav-right">
+      <router-link class="nav-link" to="/emailVerification">Verify Your Email</router-link>
+      <div class="dropdown user-dropdown">
+        <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
+        <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
+          <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
+          <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
+        </ul>
+      </div>
 
-    <div class="nav">
-        <div class="nav-right" v-if="isLoggedIn">
-          <router-link class = "nav-link" to="/checkin">Check In</router-link>
-          <router-link class="nav-link" to="/teams">Team Information</router-link>
-          <router-link class="nav-link" to="/activities">Activities</router-link>
-          <div class="dropdown hardware-dropdown">
-            <a class="dropdown-button nav-link" href="/hardware">Hardware</a>
-          </div>
-
-          <div class="dropdown hardware-dropdown">
-            <a class="dropdown-button nav-link" href="/categories">Hack Categories</a>
-          </div>
-          
-          <div class="dropdown user-dropdown">
-            <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
-            <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
-              <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
-              <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
-            </ul>
-          </div>
-        </div>
     </div>
-  </nav>
+  </div>
 </template>
 
 <script>
@@ -55,10 +31,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['isLoggedIn', 'getIsEmailVerified']),
+    ...mapGetters(['isLoggedIn', 'isEmailVerified']),
     isInTeam(){
       return !!this.$store.getters.getUserTeamId;
     }
+
   },
   // mounted(){
   //   if(store.getters.isLoggedIn){

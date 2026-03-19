@@ -10,7 +10,8 @@ import TeamsPage from '@/views/TeamsPage.vue';
 import CategoriesPage from '../views/CategoriesPage.vue';
 import CheckinPage from "@/views/CheckinPage.vue";
 import PasswordRecoveryPage from "@/views/PasswordRecoveryPage.vue";
-import PasswordLinkPage from "@/views/PasswordLinkPage.vue"
+import PasswordLinkPage from "@/views/PasswordLinkPage.vue";
+import EmailVerificationPage from "@/views/EmailVerification.vue";
 
 const routes = [
     {
@@ -70,6 +71,11 @@ const routes = [
         path: '/profile',
         name: 'Profile',
         component: LandingPage // Should be replaced with the profile component once it is implemented
+    },
+    {
+        path: '/emailVerification',
+        name:'EmailVerification',
+        component: EmailVerificationPage
     }
 ];
 
@@ -80,6 +86,8 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     let isAuthenticated = !!store.state.user;
+    const userEmailVerified = store.state.user?.isEmailVerified;
+
     if (!isAuthenticated) {
         const result = await store.dispatch('validateWithToken');
         isAuthenticated = result.success;
@@ -92,6 +100,11 @@ router.beforeEach(async (to, from, next) => {
         } else {
             return next(); // allow login/register page
         }
+    }
+
+    //Allowed routes for login but not Email Verified
+    if(to.path !== '/' && !userEmailVerified) {
+        return next('/');
     }
 
     // For all other routes that require auth
