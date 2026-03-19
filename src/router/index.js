@@ -12,6 +12,7 @@ import CheckinPage from "@/views/CheckinPage.vue";
 import PasswordRecoveryPage from "@/views/PasswordRecoveryPage.vue";
 import PasswordLinkPage from "@/views/PasswordLinkPage.vue";
 import EmailVerificationPage from "@/views/EmailVerification.vue";
+import VerifyPage from "@/views/VerifyPage.vue";
 
 const routes = [
     {
@@ -76,6 +77,11 @@ const routes = [
         path: '/emailVerification',
         name:'EmailVerification',
         component: EmailVerificationPage
+    },
+    {
+        path: '/pleaseVerify',
+        name: 'PleaseVerify',
+        component: VerifyPage
     }
 ];
 
@@ -86,12 +92,13 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     let isAuthenticated = !!store.state.user;
-    const userEmailVerified = store.state.user?.isEmailVerified;
 
     if (!isAuthenticated) {
         const result = await store.dispatch('validateWithToken');
         isAuthenticated = result.success;
     }
+
+    const userEmailVerified = store.state.user?.isEmailVerified;
 
     // Allow routing to login if NOT authenticated
     if (to.path === '/login' || to.path === '/register' || to.path === '/passwordLink' || to.path  === '/passwordRecovery') {
@@ -102,13 +109,15 @@ router.beforeEach(async (to, from, next) => {
         }
     }
 
-    //Allowed routes for login but not Email Verified
-    if(to.path !== '/' && !userEmailVerified) {
-        return next('/');
+    if (isAuthenticated && !userEmailVerified) {
+        if (to.path === '/emailVerification' || to.path === '/pleaseVerify' || to.path === '/') {
+            return next();
+        }
+        return next('/emailVerification');
     }
 
     // For all other routes that require auth
-    if (to.path !== '/' && !isAuthenticated) {
+    if (to.path !== '/' && !isAuthenticated)  {
         return next('/'); // redirect to landing page
     }
 

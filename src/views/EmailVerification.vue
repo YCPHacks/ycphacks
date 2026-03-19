@@ -9,12 +9,13 @@
   </div>
 
   <div class="container-fluid">
-    <button @click="sendEmailVerification">Resend Email Verification</button>
+    <button class="verify" @click="sendEmailVerification">Resend Email Verification</button>
   </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
+import router from "@/router/index.js";
 
 export default {
   name: "EmailVerification",
@@ -32,8 +33,10 @@ export default {
   },
 
   methods: {
+
     async sendEmailVerification() {
       try {
+        this.$router.push('/pleaseVerify');
         const baseUrl = this.$store.state.apiBaseUrl;
         const emailToVerify = this.getUser?.email;
         const response = await fetch(`${baseUrl}/verify/resendVerification`, {
@@ -47,10 +50,9 @@ export default {
           })
         });
         const data = await response.json();
-
         this.message = data.message || "Reset link sent if email exists.";
         this.email = "";
-        this.handleLogout();
+
       } catch (err) {
         console.error(err);
         this.error = "Something went wrong. Please try again.";
@@ -61,5 +63,20 @@ export default {
 </script>
 
 <style scoped>
+.verify {
+  color: #008350;
+  background-color: #231F20;
+  border: 4px solid #fff;
+  font-weight:bolder;
+  font-size: 45px;
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+  height: 20vh; /* full viewport height */
+}
 
+.verify:hover {
+  background-color: #fbfbfd;
+  border: 6px solid #008350;
+}
 </style>
