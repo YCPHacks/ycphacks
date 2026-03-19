@@ -17,13 +17,8 @@
           <router-link class = "nav-link" to="/checkin">Check In</router-link>
           <router-link class="nav-link" to="/teams">Team Information</router-link>
           <router-link class="nav-link" to="/activities">Activities</router-link>
-          <div class="dropdown hardware-dropdown">
-            <a class="dropdown-button nav-link" href="/hardware">Hardware</a>
-          </div>
-
-          <div class="dropdown hardware-dropdown">
-            <a class="dropdown-button nav-link" href="/categories">Hack Categories</a>
-          </div>
+          <router-link class="nav-link" to="/hardware">Hardware</router-link>
+          <router-link class="nav-link" to="/categories">Hack Categories</router-link>
           
           <div class="dropdown user-dropdown">
             <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>

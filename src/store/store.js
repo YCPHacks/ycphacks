@@ -14,9 +14,34 @@ class UserAdapter {
   }
 }
 
+class ProfileAdapter {
+    constructor({
+                    id, firstName, lastName,
+                    age, gender, pronouns, country,
+                    school, major, graduationYear,
+                    levelOfStudy, tShirtSize, hackathonsAttended,
+                    dietaryRestrictions }) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.gender = gender;
+        this.pronouns = pronouns;
+        this.country = country;
+        this.school = school;
+        this.major = major;
+        this.graduationYear = graduationYear;
+        this.levelOfStudy = levelOfStudy;
+        this.tShirtSize = tShirtSize;
+        this.hackathonsAttended = hackathonsAttended;
+        this.dietaryRestrictions = dietaryRestrictions;
+    }
+}
+
 export default createStore({
   state: {
-    user: null,
+    user: null, 
+    profile: null,
     activities: [],
     event: {},
     apiBaseUrl: import.meta.env.VITE_API_BASE_URL
@@ -24,6 +49,7 @@ export default createStore({
   getters: {
     isLoggedIn: (state) => !!state.user,
     getUser: (state) => state.user,
+    getProfile: (state) => state.profile,
     getActivities: (state) => state.activities,
     getEvent: (state) => state.event,
     getUserTeamId: (state) => state.userTeamId
@@ -35,6 +61,9 @@ export default createStore({
     clearUser(state) {
       state.user = null;
       state.userTeamId = null;
+    },
+    setProfile(state, profile) {
+      state.profile = profile;
     },
     setActivities(state, activities) {
         state.activities = activities;
@@ -111,6 +140,36 @@ export default createStore({
       } catch (err) {
           return { success: false, message: err.response?.data?.message || 'Login failed'};
       }
+    },
+
+    async getProfileById({commit, state}, id) {
+        try {
+            const response = await axios.get(`${state.apiBaseUrl}/user/${id}/profile`);
+            const data = response.data;
+
+            commit('setProfile', new ProfileAdapter(data.data));
+
+            return {success: true};
+        } catch (err) {
+            return {success: false, message: err.response?.data?.message || 'Failure to retrieve profile from ID'};
+        }
+    },
+
+    async updateProfile({ commit, state }, {id, updatedUser}) {
+        try {
+            const response = await axios.put(`${state.apiBaseUrl}/user/${id}`,
+                updatedUser, { headers: {'Content-Type': 'application/json'}});
+            const data = response.data;
+
+            const updatedProfile = new ProfileAdapter(data.data)
+            commit('setProfile', updatedProfile);
+
+            // await dispatch('getActiveEvent');
+
+            return { success: true };
+        } catch (err) {
+            return { success: false, message: err.response?.data?.message || 'Update failed'};
+        }
     },
     async validateWithToken({ commit, state, dispatch }) {
         try {

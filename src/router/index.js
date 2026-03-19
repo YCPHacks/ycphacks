@@ -10,7 +10,8 @@ import TeamsPage from '@/views/TeamsPage.vue';
 import CategoriesPage from '../views/CategoriesPage.vue';
 import CheckinPage from "@/views/CheckinPage.vue";
 import PasswordRecoveryPage from "@/views/PasswordRecoveryPage.vue";
-import PasswordLinkPage from "@/views/PasswordLinkPage.vue"
+import PasswordLinkPage from "@/views/PasswordLinkPage.vue";
+import ProfilePage from "../views/ProfilePage.vue";
 
 const routes = [
     {
@@ -69,7 +70,7 @@ const routes = [
     {
         path: '/profile',
         name: 'Profile',
-        component: LandingPage // Should be replaced with the profile component once it is implemented
+        component: ProfilePage
     }
 ];
 
