@@ -53,7 +53,8 @@
           <div class="col">
             <b-form-group
               class="form-label"
-              label="First Name *"
+              label="First Name"
+              label-class="required-astrix"
               label-for="firstName"
             >
               <b-form-input
@@ -67,7 +68,8 @@
           <div class="col">
             <b-form-group
                 class="form-label"
-                label="Last Name *"
+                label="Last Name"
+                label-class="required-astrix"
                 label-for="lastName"
             >
               <b-form-input
@@ -85,7 +87,8 @@
           <div class="col">
             <b-form-group
                 class="form-label"
-                label="Email *"
+                label="Email"
+                label-class="required-astrix"
                 label-for="email"
             >
               <b-form-input
@@ -104,7 +107,8 @@
           <div class="col-md-6">
             <b-form-group
                 class="form-label"
-                label="Password *"
+                label="Password"
+                label-class="required-astrix"
                 label-for="password"
             >
               <b-form-input
@@ -120,7 +124,8 @@
           <div class="col-md-6">
             <b-form-group
                 class="form-label"
-                label="Phone Number *"
+                label="Phone Number"
+                label-class="required-astrix"
                 label-for="phoneNumber"
             >
               <b-form-input
@@ -139,7 +144,8 @@
           <div class="col">
             <b-form-group
                 class="form-label"
-                label="School *"
+                label="School"
+                label-class="required-astrix"
                 label-for="school"
             >
               <b-form-input
@@ -160,6 +166,7 @@
               <b-form-group
                   class="form-label"
                   label="Major"
+                  label-class="required-astrix"
                   label-for="major"
               >
                 <b-form-select
@@ -179,7 +186,8 @@
           <div class="col">
             <b-form-group
                 class="form-label"
-                label="Level of Study *"
+                label="Level of Study"
+                label-class="required-astrix"
                 label-for="levelOfStudy"
             >
               <b-form-select
@@ -216,7 +224,8 @@
           <div class="col-md-6">
             <b-form-group
                 class="form-label"
-                label="Country of residence *"
+                label="Country of residence"
+                label-class="required-astrix"
                 label-for="country"
             >
               <b-form-select
@@ -235,7 +244,8 @@
           <div class="col-sm-4">
             <b-form-group
                 class="form-label"
-                label="Age *"
+                label="Age"
+                label-class="required-astrix"
                 label-for="age"
             >
               <b-form-input
@@ -285,7 +295,8 @@
           <div class="col-sm-6">
             <b-form-group
                 class="form-label"
-                label="T-Shirt Size *"
+                label="T-Shirt Size"
+                label-class="required-astrix"
                 label-for="tShirtSize"
             >
               <b-form-select
@@ -361,7 +372,7 @@
                 v-model="form.mlhCodeOfConduct"
                 :required="true">
               <label class="form-check-label" for="mlhCodeOfConduct">
-                I have read and agree to the <a class="link" target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>. *
+                I have read and agree to the <a class="link" target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>. <label class="required-astrix"></label>
               </label>
             </b-form-checkbox>
             <p v-if="errors.mlhCodeOfConduct" class="text-danger">{{ errors.mlhCodeOfConduct }}</p>
@@ -376,7 +387,7 @@
                 v-model="form.mlhPrivacyPolicy"
                 :required="true">
               <label class="form-check-label" for="mlhPrivacyPolicy">
-                I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a> I further agree to the terms of both the <a class="link" href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank">MLH Contest Terms and Conditions</a> and the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a>  <label class="required">*</label>
+                I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a> I further agree to the terms of both the <a class="link" href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank">MLH Contest Terms and Conditions</a> and the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a>  <label class="required-astrix"></label>
               </label>
             </b-form-checkbox>
             <p v-if="errors.mlhPrivacyPolicy" class="text-danger">{{ errors.mlhPrivacyPolicy }}</p>
@@ -547,9 +558,11 @@ export default {
   padding: 5px;
   color: red;
 }
-
-.required {
+/* This will add a * to anything that requires this class label */
+:deep(.required-astrix)::after {
+  content: " *";
   color: red;
+  font-weight: bold
 }
 
 .bg-video {
