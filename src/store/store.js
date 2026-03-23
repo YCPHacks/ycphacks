@@ -60,7 +60,6 @@ export default createStore({
   actions: {
     async registerUser({ commit, state, dispatch }, formData) {
         const eventResult = await dispatch('getActiveEvent');
-
         const eventId = eventResult.event?.id;
 
         if(!eventId){

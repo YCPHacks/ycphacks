@@ -60,6 +60,7 @@
               <b-form-input
                   class="form-control"
                   v-model="form.firstName"
+                  :state="errors.firstName ? false : null"
                   required>
               </b-form-input>
               <p v-if="errors.firstName" class="text-danger">{{ errors.firstName }}</p>
@@ -152,6 +153,7 @@
                   class="form-control"
                   v-model="form.school"
                   placeholder="York College of Pennsylvania"
+                  :state="errors.school ? false : null"
                   required>
               </b-form-input>
               <p v-if="errors.school" class="text-danger">{{ errors.school }}</p>
@@ -232,9 +234,10 @@
                   class="form-control"
                   v-model="form.country"
                   :options="options.countries"
+                  :state="errors.country ? false : null"
                   :required="true">
               </b-form-select>
-              <p v-if="errors.country" class="text-danger">{{ errors.country }}</p>
+              <p v-if="errors.country" class="error-box">{{ errors.country }}</p>
             </b-form-group>
           </div>
         </div>
@@ -253,9 +256,10 @@
                   v-model="form.age"
                   type="number"
                   :min="0"
+                  :state="errors.age ? false : null"
                   required>
               </b-form-input>
-              <p v-if="errors.age" class="text-danger">{{ errors.age }}</p>
+              <p v-if="errors.age" class="error-box">{{ errors.age }}</p>
             </b-form-group>
           </div>
 
@@ -303,9 +307,10 @@
                   class="form-control"
                   v-model="form.tShirtSize"
                   :options="options.tShirtSizes"
+                  :state="errors.tShirtSize ? false : null"
                   :required="true">
               </b-form-select>
-              <p v-if="errors.tShirtSize" class="text-danger">{{ errors.tShirtSize }}</p>
+              <p v-if="errors.tShirtSize" class="error-box">{{ errors.tShirtSize }}</p>
             </b-form-group>
           </div>
 
@@ -350,6 +355,7 @@
           <div class="col">
             <b-form-group
                 class="form-label"
+
                 label="LinkedIn URL"
                 label-for="linkedInUrl"
             >
@@ -357,9 +363,10 @@
                   class="form-control"
                   v-model="form.linkedInUrl"
                   type="url"
+                  :state="errors.linkedInUrl ? false : null"
               >
               </b-form-input>
-              <p v-if="errors.linkedInUrl" class="text-danger">{{ errors.linkedInUrl }}</p>
+              <p v-if="errors.linkedInUrl" class="error-box">{{ errors.linkedInUrl }}</p>
             </b-form-group>
           </div>
         </div>
@@ -563,6 +570,18 @@ export default {
   content: " *";
   color: red;
   font-weight: bold
+}
+
+.error-box {
+  background-color: rgba(255, 182, 193, 0.2); /* Translucent pink */
+  border: 1px solid #ffb6c1; /* Solid pink border */
+  color: #d81b60; /* Pink text */
+  padding: 7px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 0.9rem;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(255, 182, 193, 0.1);
 }
 
 .bg-video {
