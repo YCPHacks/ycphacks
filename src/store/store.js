@@ -20,7 +20,8 @@ class ProfileAdapter {
                     age, gender, pronouns, country,
                     school, major, graduationYear,
                     levelOfStudy, tShirtSize, hackathonsAttended,
-                    dietaryRestrictions }) {
+                    dietaryRestrictions, email, mlhEmails,
+                    phoneNumber, linkedInUrl}) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,6 +36,11 @@ class ProfileAdapter {
         this.tShirtSize = tShirtSize;
         this.hackathonsAttended = hackathonsAttended;
         this.dietaryRestrictions = dietaryRestrictions;
+
+        this.email = email;
+        this.mlhEmails = mlhEmails;
+        this.phoneNumber = phoneNumber;
+        this.linkedInUrl = linkedInUrl;
     }
 }
 
@@ -155,6 +161,22 @@ export default createStore({
         }
     },
 
+    async updatePassword({ state }, {id, currentPassword, updatedPassword, confirmedPassword}) {
+        try {
+            const response = await axios.put(`${state.apiBaseUrl}/user/${id}/updatePassword`,
+          {
+                    currentPassword: currentPassword,
+                    updatedPassword: updatedPassword,
+                    confirmedPassword: confirmedPassword
+                },
+         { headers: {'Content-Type': 'application/json'}});
+
+            return { success: true };
+        } catch (err) {
+            return { success: false, message: err.response?.data?.error || "Update Failed"};
+        }
+    },
+
     async updateProfile({ commit, state }, {id, updatedUser}) {
         try {
             const response = await axios.put(`${state.apiBaseUrl}/user/${id}`,
@@ -163,8 +185,6 @@ export default createStore({
 
             const updatedProfile = new ProfileAdapter(data.data)
             commit('setProfile', updatedProfile);
-
-            // await dispatch('getActiveEvent');
 
             return { success: true };
         } catch (err) {

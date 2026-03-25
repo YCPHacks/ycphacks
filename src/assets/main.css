@@ -34,6 +34,13 @@ html, body{
     border-top: 5px solid #fff;
 }
 
+hr.form-line {
+    width: clamp(80%, 90%, 90%);
+    margin: 0.5rem auto 0;
+    border-top: 5px solid #fff;
+    color: #222
+}
+
 .container-top{
     background-color: #231F20;
     position: relative;
