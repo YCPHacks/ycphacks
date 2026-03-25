@@ -53,12 +53,14 @@
           <div class="col">
             <b-form-group
               class="form-label"
-              label="First Name *"
+              label="First Name"
+              label-class="required-astrix"
               label-for="firstName"
             >
               <b-form-input
                   class="form-control"
                   v-model="form.firstName"
+                  :state="errors.firstName ? false : null"
                   required>
               </b-form-input>
               <p v-if="errors.firstName" class="text-danger">{{ errors.firstName }}</p>
@@ -67,7 +69,8 @@
           <div class="col">
             <b-form-group
                 class="form-label"
-                label="Last Name *"
+                label="Last Name"
+                label-class="required-astrix"
                 label-for="lastName"
             >
               <b-form-input
@@ -85,7 +88,8 @@
           <div class="col">
             <b-form-group
                 class="form-label"
-                label="Email *"
+                label="Email"
+                label-class="required-astrix"
                 label-for="email"
             >
               <b-form-input
@@ -104,7 +108,8 @@
           <div class="col-md-6">
             <b-form-group
                 class="form-label"
-                label="Password *"
+                label="Password"
+                label-class="required-astrix"
                 label-for="password"
             >
               <b-form-input
@@ -120,7 +125,8 @@
           <div class="col-md-6">
             <b-form-group
                 class="form-label"
-                label="Phone Number *"
+                label="Phone Number"
+                label-class="required-astrix"
                 label-for="phoneNumber"
             >
               <b-form-input
@@ -139,13 +145,15 @@
           <div class="col">
             <b-form-group
                 class="form-label"
-                label="School *"
+                label="School"
+                label-class="required-astrix"
                 label-for="school"
             >
               <b-form-input
                   class="form-control"
                   v-model="form.school"
                   placeholder="York College of Pennsylvania"
+                  :state="errors.school ? false : null"
                   required>
               </b-form-input>
               <p v-if="errors.school" class="text-danger">{{ errors.school }}</p>
@@ -160,6 +168,7 @@
               <b-form-group
                   class="form-label"
                   label="Major"
+                  label-class="required-astrix"
                   label-for="major"
               >
                 <b-form-select
@@ -179,7 +188,8 @@
           <div class="col">
             <b-form-group
                 class="form-label"
-                label="Level of Study *"
+                label="Level of Study"
+                label-class="required-astrix"
                 label-for="levelOfStudy"
             >
               <b-form-select
@@ -216,16 +226,18 @@
           <div class="col-md-6">
             <b-form-group
                 class="form-label"
-                label="Country of residence *"
+                label="Country of residence"
+                label-class="required-astrix"
                 label-for="country"
             >
               <b-form-select
                   class="form-control"
                   v-model="form.country"
                   :options="options.countries"
+                  :state="errors.country ? false : null"
                   :required="true">
               </b-form-select>
-              <p v-if="errors.country" class="text-danger">{{ errors.country }}</p>
+              <p v-if="errors.country" class="error-box">{{ errors.country }}</p>
             </b-form-group>
           </div>
         </div>
@@ -235,7 +247,8 @@
           <div class="col-sm-4">
             <b-form-group
                 class="form-label"
-                label="Age *"
+                label="Age"
+                label-class="required-astrix"
                 label-for="age"
             >
               <b-form-input
@@ -243,9 +256,10 @@
                   v-model="form.age"
                   type="number"
                   :min="0"
+                  :state="errors.age ? false : null"
                   required>
               </b-form-input>
-              <p v-if="errors.age" class="text-danger">{{ errors.age }}</p>
+              <p v-if="errors.age" class="error-box">{{ errors.age }}</p>
             </b-form-group>
           </div>
 
@@ -285,16 +299,18 @@
           <div class="col-sm-6">
             <b-form-group
                 class="form-label"
-                label="T-Shirt Size *"
+                label="T-Shirt Size"
+                label-class="required-astrix"
                 label-for="tShirtSize"
             >
               <b-form-select
                   class="form-control"
                   v-model="form.tShirtSize"
                   :options="options.tShirtSizes"
+                  :state="errors.tShirtSize ? false : null"
                   :required="true">
               </b-form-select>
-              <p v-if="errors.tShirtSize" class="text-danger">{{ errors.tShirtSize }}</p>
+              <p v-if="errors.tShirtSize" class="error-box">{{ errors.tShirtSize }}</p>
             </b-form-group>
           </div>
 
@@ -339,6 +355,7 @@
           <div class="col">
             <b-form-group
                 class="form-label"
+
                 label="LinkedIn URL"
                 label-for="linkedInUrl"
             >
@@ -346,9 +363,10 @@
                   class="form-control"
                   v-model="form.linkedInUrl"
                   type="url"
+                  :state="errors.linkedInUrl ? false : null"
               >
               </b-form-input>
-              <p v-if="errors.linkedInUrl" class="text-danger">{{ errors.linkedInUrl }}</p>
+              <p v-if="errors.linkedInUrl" class="error-box">{{ errors.linkedInUrl }}</p>
             </b-form-group>
           </div>
         </div>
@@ -361,7 +379,7 @@
                 v-model="form.mlhCodeOfConduct"
                 :required="true">
               <label class="form-check-label" for="mlhCodeOfConduct">
-                I have read and agree to the <a class="link" target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>. *
+                I have read and agree to the <a class="link" target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>. <label class="required-astrix"></label>
               </label>
             </b-form-checkbox>
             <p v-if="errors.mlhCodeOfConduct" class="text-danger">{{ errors.mlhCodeOfConduct }}</p>
@@ -376,7 +394,7 @@
                 v-model="form.mlhPrivacyPolicy"
                 :required="true">
               <label class="form-check-label" for="mlhPrivacyPolicy">
-                I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a> I further agree to the terms of both the <a class="link" href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank">MLH Contest Terms and Conditions</a> and the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a>  <label class="required">*</label>
+                I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a> I further agree to the terms of both the <a class="link" href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank">MLH Contest Terms and Conditions</a> and the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a>  <label class="required-astrix"></label>
               </label>
             </b-form-checkbox>
             <p v-if="errors.mlhPrivacyPolicy" class="text-danger">{{ errors.mlhPrivacyPolicy }}</p>
@@ -547,9 +565,23 @@ export default {
   padding: 5px;
   color: red;
 }
-
-.required {
+/* This will add a * to anything that requires this class label */
+:deep(.required-astrix)::after {
+  content: " *";
   color: red;
+  font-weight: bold
+}
+
+.error-box {
+  background-color: rgba(255, 182, 193, 0.2); /* Translucent pink */
+  border: 1px solid #ffb6c1; /* Solid pink border */
+  color: #d81b60; /* Pink text */
+  padding: 7px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 0.9rem;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(255, 182, 193, 0.1);
 }
 
 .bg-video {
