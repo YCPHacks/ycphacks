@@ -13,23 +13,19 @@
       />
     </a>
 
-    <div class="nav">
-        <div class="nav-right" v-if="isLoggedIn">
-          <router-link class = "nav-link" to="/checkin">Check In</router-link>
-          <router-link class="nav-link" to="/teams">Team Information</router-link>
-          <router-link class="nav-link" to="/activities">Activities</router-link>
-          <router-link class="nav-link" to="/hardware">Hardware</router-link>
-          <router-link class="nav-link" to="/categories">Hack Categories</router-link>
-          
-          <div class="dropdown user-dropdown">
-            <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
-            <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
-              <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
-              <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
-            </ul>
-          </div>
-        </div>
+  <div class="nav">
+    <div class="nav-right">
+      <router-link class="nav-link" to="/emailVerification">Verify Your Email</router-link>
+      <div class="dropdown user-dropdown">
+        <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
+        <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
+          <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
+          <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
+        </ul>
+      </div>
+
     </div>
+  </div>
   </nav>
 </template>
 
@@ -50,10 +46,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['isLoggedIn', 'getIsEmailVerified']),
+    ...mapGetters(['isLoggedIn', 'isEmailVerified']),
     isInTeam(){
       return !!this.$store.getters.getUserTeamId;
     }
+
   },
   // mounted(){
   //   if(store.getters.isLoggedIn){
