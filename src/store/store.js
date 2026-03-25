@@ -124,7 +124,7 @@ export default createStore({
     },
 
     async updateIsEmailVerified({ state, commit }) {
-        const response = await fetch(`${state.apiBaseUrl}/user/${state.user.id}/info`, {
+        const response = await fetch(`${state.apiBaseUrl}/user/${state.user.id}`, {
             method: 'GET',
             credentials: 'include'
         });
