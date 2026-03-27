@@ -64,9 +64,9 @@
                         />
                       </div>
 
-                      <div class="flex-grow-1">
+                      <div class="flex">
 
-                        <div class="text-end small fw-semibold mb-2">
+                        <div class="flex">
                           <span :class="{'text-danger': item.isUnavailable, 'text-success': !item.isUnavailable}">
                             {{ item.availabilityText }}
                           </span>
@@ -270,36 +270,6 @@ export default {
   background-color: #008350;
 }
 
-body {
-  font-family: Lato, sans-serif;
-  color: #fff;
-  font-weight: 300;
-  font-size: 18px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.container-fluid {
-  background-color: #231F20;
-  position: relative; /* Ensure this is the context for absolute positioning */
-  overflow: hidden;
-  min-height: 100vh;
-}
-/* TOC pushed down even more */
-.toc-box {
-  margin-top: 0; /* increase this if you want it lower */
-}
-
-/* Main content slightly lower */
-.main-box {
-  margin-top: 0;
-}
-/* background-color: #64965d; */
-
-/* Sidebar min width */
-aside {
-  min-width: 200px;
-}
 
 /* Card hover effect */
 .hardware-card {
@@ -317,6 +287,11 @@ aside {
 }
 .not-found-box h2, .not-found-box o{
   color: #495057 !important;
+}
+
+.flex {
+  font-size: 20px;
+  margin-left: 150px;
 }
 
 

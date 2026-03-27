@@ -207,22 +207,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-body {
-    font-family: Lato, sans-serif;
-    font-weight: 300;
-    font-size: 18px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-.container-fluid {
-    background-color: #231F20;
-    position: relative; 
-    overflow: hidden;
-    min-height: 100vh;
-}
-.main-box {
-    margin-top: 0;
-}
-</style>

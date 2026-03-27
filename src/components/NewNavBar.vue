@@ -19,8 +19,13 @@
           <router-link class="nav-link" to="/teams">Team Information</router-link>
           <router-link class="nav-link" to="/activities">Activities</router-link>
           <router-link class="nav-link" to="/hardware">Hardware</router-link>
-          <router-link class="nav-link" to="/categories">Hack Categories</router-link>
-          
+          <router-link class="nav-link" to="categories">Hack Categories</router-link>
+
+          <div class="theme-switch">
+            <input type="checkbox" id="toggle" v-model="isDark" @change="toggleTheme" />
+            <label for="toggle" class="slider"></label>
+          </div>
+
           <div class="dropdown user-dropdown">
             <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
             <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
@@ -65,6 +70,9 @@ export default {
     document.removeEventListener('click', this.closeMenusOutside);
   },
   methods: {
+    toggleTheme() {
+        document.body.classList.toggle('light');
+    },
     closeMenusOutside(event){
       const dropdownElements = this.$el.querySelectorAll('.dropdown');
       let clickInsideDropdown = false;
@@ -90,40 +98,14 @@ export default {
 <style scoped>
 .navbar {
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  width: 100%;
-  height: 60px;
-  background-color: #008350;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
 }
 
 .navbar a {
   text-decoration: none;
 }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 20px; /* space between links */
-  color: #231F20;
-}
-
 .dropdown {
   position: relative;
-}
-
-.dropdown-button {
-  font-weight: bold;
-  background: none;
-  border: none;
-  color: black;
-  font-size: 16px;
-  cursor: pointer;
 }
 
 .dropdown-menu {
@@ -143,33 +125,15 @@ export default {
   margin: 5px 0;
 }
 
-.dropdown-menu .nav-link {
+.dropdown-menu {
   color: black;
   font-weight: bold;
   text-decoration: none;
   display: inline-block;
+  margin: auto 0;
   padding: 0;
 }
 
-.dropdown-menu .nav-link:hover {
-  text-decoration: underline;
-}
-
-.nav {
-  display: flex;
-  gap: 20px;
-  margin-right: 0;
-  margin-left: auto;
-}
-
-.nav-link {
-  color: black;
-  text-decoration: none;
-}
-
-.nav-link:hover {
-  text-decoration: underline;
-}
 
 .hardware-dropdown .hardware-menu, .user-dropdown .user-menu {
   display: none;
@@ -181,10 +145,27 @@ export default {
   display: block;
   opacity: 1;
 }
-.navbar a {
-  font-weight: bold;
-  color: black;
-  text-decoration: none;
+
+
+/* Container */
+.theme-switch {
+  display: flex;
+  align-items: center;
+}
+
+/* Hide the default checkbox */
+.theme-switch input {
+  display: none;
+}
+
+/* Move knob when checked */
+input:checked + .slider::before {
+  transform: translateX(26px);
+}
+
+/* Optional: change track color when checked */
+input:checked + .slider {
+  background-color: #008350; /* darker track */
 }
 
 </style>

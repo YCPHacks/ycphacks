@@ -38,7 +38,7 @@
       <div v-if="showAlert">
         <b-alert
             v-model="showAlert"
-            :dismissible="true"
+            class="registration-error-box"
             variant="danger"
         >
           <span>Registration failed!</span>
@@ -63,7 +63,7 @@
                   :state="errors.firstName ? false : null"
                   required>
               </b-form-input>
-              <p v-if="errors.firstName" class="text-danger">{{ errors.firstName }}</p>
+              <p v-if="errors.firstName" class="error-box">{{ errors.firstName }}</p>
             </b-form-group>
           </div>
           <div class="col">
@@ -76,9 +76,10 @@
               <b-form-input
                   class="form-control"
                   v-model="form.lastName"
+                  :state="errors.lastName ? false : null"
                   required>
               </b-form-input>
-              <p v-if="errors.lastName" class="text-danger">{{ errors.lastName }}</p>
+              <p v-if="errors.lastName" class="error-box">{{ errors.lastName }}</p>
             </b-form-group>
           </div>
         </div>
@@ -96,9 +97,10 @@
                   class="form-control"
                   v-model="form.email"
                   type="email"
+                  :state="errors.email ? false : null"
                   required>
               </b-form-input>
-              <p v-if="errors.email" class="text-danger">{{ errors.email }}</p>
+              <p v-if="errors.email" class="error-box">{{ errors.email }}</p>
             </b-form-group>
           </div>
         </div>
@@ -115,10 +117,11 @@
               <b-form-input
                   class="form-control"
                   v-model="form.password"
+                  :state="errors.password ? false : null"
                   type="password"
                   required>
               </b-form-input>
-              <p v-if="errors.password" class="text-danger">{{ errors.password }}</p>
+              <p v-if="errors.password" class="error-box">{{ errors.password }}</p>
             </b-form-group>
           </div>
 
@@ -132,10 +135,11 @@
               <b-form-input
                   class="form-control"
                   v-model="form.phoneNumber"
+                  :state="errors.phoneNumber ? false : null"
                   type="tel"
                   required>
               </b-form-input>
-              <p v-if="errors.phoneNumber" class="text-danger">{{ errors.phoneNumber }}</p>
+              <p v-if="errors.phoneNumber" class="error-box">{{ errors.phoneNumber }}</p>
             </b-form-group>
           </div>
         </div>
@@ -156,7 +160,7 @@
                   :state="errors.school ? false : null"
                   required>
               </b-form-input>
-              <p v-if="errors.school" class="text-danger">{{ errors.school }}</p>
+              <p v-if="errors.school" class="error-box">{{ errors.school }}</p>
             </b-form-group>
           </div>
         </div>
@@ -168,16 +172,16 @@
               <b-form-group
                   class="form-label"
                   label="Major"
-                  label-class="required-astrix"
                   label-for="major"
               >
                 <b-form-select
                     class="form-control"
                     v-model="form.major"
                     :options="options.majors"
+                    :state="errors.majors ? false : null"
                 >
                 </b-form-select>
-                <p v-if="errors.major" class="text-danger">{{ errors.major }}</p>
+                <p v-if="errors.major" class="error-box">{{ errors.major }}</p>
               </b-form-group>
             </div>
           </div>
@@ -196,9 +200,10 @@
                   class="form-control"
                   v-model="form.levelOfStudy"
                   :options="options.levelsOfStudy"
+                  :state="errors.levelOfStudy ? false : null"
               >
               </b-form-select>
-              <p v-if="errors.levelsOfStudy" class="text-danger">{{ errors.levelsOfStudy }}</p>
+              <p v-if="errors.levelOfStudy" class="error-box">{{ errors.levelOfStudy }}</p>
             </b-form-group>
           </div>
         </div>
@@ -214,12 +219,13 @@
               <b-form-input
                   class="form-control"
                   v-model="form.graduationYear"
+                  :state="errors.graduationYear ? false : null"
                   type="number"
                   :min="1900"
                   placeholder="2026"
               >
               </b-form-input>
-              <p v-if="errors.graduationYear" class="text-danger">{{ errors.graduationYear }}</p>
+              <p v-if="errors.graduationYear" class="error-box">{{ errors.graduationYear }}</p>
             </b-form-group>
           </div>
 
@@ -272,9 +278,10 @@
               <b-form-select
                   class="form-control"
                   v-model="form.gender"
-                  :options="options.genders">
+                  :options="options.genders"
+                  :state="errors.genders ? false : null">
               </b-form-select>
-              <p v-if="errors.gender" class="text-danger">{{ errors.gender }}</p>
+              <p v-if="errors.gender" class="error-box">{{ errors.gender }}</p>
             </b-form-group>
           </div>
 
@@ -287,9 +294,10 @@
               <b-form-select
                   class="form-control"
                   v-model="form.pronouns"
-                  :options="options.pronouns">
+                  :options="options.pronouns"
+                  :state="errors.pronouns ? false : null">
               </b-form-select>
-              <p v-if="errors.pronouns" class="text-danger">{{ errors.pronouns }}</p>
+              <p v-if="errors.pronouns" class="error-box">{{ errors.pronouns }}</p>
             </b-form-group>
           </div>
         </div>
@@ -323,11 +331,12 @@
               <b-form-input
                   class="form-control"
                   v-model="form.hackathonsAttended"
+                  :state = "errors.hackathonsAttended ? false: null"
                   type="number"
                   :min="0"
               >
               </b-form-input>
-              <p v-if="errors.hackathonsAttended" class="text-danger">{{ errors.hackathonsAttended }}</p>
+              <p v-if="errors.hackathonsAttended" class="error-box">{{ errors.hackathonsAttended }}</p>
             </b-form-group>
           </div>
         </div>
@@ -345,7 +354,7 @@
                   v-model="form.dietaryRestrictions"
               >
               </b-form-input>
-              <p v-if="errors.dietaryRestrictions" class="text-danger">{{ errors.dietaryRestrictions }}</p>
+              <p v-if="errors.dietaryRestrictions" class="error-box">{{ errors.dietaryRestrictions }}</p>
             </b-form-group>
           </div>
         </div>
@@ -382,7 +391,7 @@
                 I have read and agree to the <a class="link" target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>. <label class="required-astrix"></label>
               </label>
             </b-form-checkbox>
-            <p v-if="errors.mlhCodeOfConduct" class="text-danger">{{ errors.mlhCodeOfConduct }}</p>
+            <p v-if="errors.mlhCodeOfConduct" class="error-box">{{ errors.mlhCodeOfConduct }}</p>
           </b-form-group>
         </div>
 
@@ -397,7 +406,7 @@
                 I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a> I further agree to the terms of both the <a class="link" href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md" target="_blank">MLH Contest Terms and Conditions</a> and the <a class="link" href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy.</a>  <label class="required-astrix"></label>
               </label>
             </b-form-checkbox>
-            <p v-if="errors.mlhPrivacyPolicy" class="text-danger">{{ errors.mlhPrivacyPolicy }}</p>
+            <p v-if="errors.mlhPrivacyPolicy" class="error-box">{{ errors.mlhPrivacyPolicy }}</p>
           </b-form-group>
         </div>
 
@@ -417,7 +426,6 @@
 
         <!-- Submit Button -->
         <b-button variant="success" type="submit" class="w-100">Submit</b-button>
-        <p class="error">{{ message }}</p>
       </b-form>
     </div>
   </div>
@@ -580,6 +588,18 @@ export default {
   border-radius: 8px;
   margin: 15px 0;
   font-size: 0.9rem;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(255, 182, 193, 0.1);
+}
+
+.registration-error-box {
+  background-color: rgba(255, 182, 193, 0.2); /* Translucent pink */
+  border: 1px solid #ffb6c1; /* Solid pink border */
+  color: #d81b60; /* Pink text */
+  padding: 7px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 1.5rem;
   text-align: center;
   box-shadow: 0 2px 10px rgba(255, 182, 193, 0.1);
 }
