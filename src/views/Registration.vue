@@ -200,10 +200,10 @@
                   class="form-control"
                   v-model="form.levelOfStudy"
                   :options="options.levelsOfStudy"
-                  :state="errors.levelsOfStudy ? false : null"
+                  :state="errors.levelOfStudy ? false : null"
               >
               </b-form-select>
-              <p v-if="errors.levelsOfStudy" class="error-box">{{ errors.levelsOfStudy }}</p>
+              <p v-if="errors.levelOfStudy" class="error-box">{{ errors.levelOfStudy }}</p>
             </b-form-group>
           </div>
         </div>
