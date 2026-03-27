@@ -64,9 +64,9 @@
                         />
                       </div>
 
-                      <div class="flex-grow-1">
+                      <div class="flex">
 
-                        <div class="text-end small fw-semibold mb-2">
+                        <div class="flex">
                           <span :class="{'text-danger': item.isUnavailable, 'text-success': !item.isUnavailable}">
                             {{ item.availabilityText }}
                           </span>
@@ -287,6 +287,11 @@ export default {
 }
 .not-found-box h2, .not-found-box o{
   color: #495057 !important;
+}
+
+.flex {
+  font-size: 20px;
+  margin-left: 150px;
 }
 
 
