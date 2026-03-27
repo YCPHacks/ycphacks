@@ -13,10 +13,7 @@
 
   </div>
 
-    <div class="categories">
-
-        <!-- Spacer to push dropdown lower -->
-        <div style="height: 20px;"></div>
+    <div class="container-fluid">
 
         <!-- Centered dropdown -->
         <div class="dropdown-row">
@@ -156,98 +153,3 @@ export default {
   }//end methods
 };
 </script>
-
-
-
-
-
-<!-- Styling  -->
-<style scoped>
-
-.event-dropdown label {
-  font-weight: bolder;
-  font-size: clamp(1rem, 10vw, 2rem);
-  color: #FAF9F6
-}
-
-.event-dropdown select {
-  background-color: #FAF9F6;
-  border: 1px solid;
-  border-radius: 5px;
-  font-size: clamp(1rem, 2vw, 2rem);
-  font-weight: bold;
-}
-
-.event-dropdown option {
-  background-color: #fff;
-}
-
-.dropdown-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
-.event-dropdown {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-}
-
-.categories {
-  background-color: #231F20;
-}
-
-.categories-list {
-  list-style-type: none;
-  width: 70%;
-  align-self: center;
-  padding: 0;             
-  margin: 0 auto;
-}
-
-.category {
-  margin-top: 30px;
-  height: 100%;
-  margin-bottom: 20px;
-  text-align: left;
-  background-color: #008350;
-  padding: 10px 15px;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.category-header {
-  cursor: pointer;
-  font-weight: bolder;
-  font-size: 35px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.category-description {
-  margin: 10px 0;
-  font-size: 16px;
-  font-style: italic;
-  color: #444;
-}
-
-.prize-list {
-  margin-top: 10px;
-  margin-left: 20px;
-  list-style-type: circle;
-  font-size: 24px;
-}
-
-.no-events-message,
-.no-categories-message {
-  color: #444;
-  font-size: 20px;
-  margin: 30px 0;
-  font-style: italic;
-}
-
-</style>
-<!-- end Styling  -->

@@ -1,6 +1,6 @@
 <template>
   <div v-if="!isLoading" class="container-top" id="schedule">
-    <div v-if="event && Object.keys(event).length > 0" class="container-top" style="color: #ffffff">
+    <div v-if="event && Object.keys(event).length > 0" class="container-top">
       <div class="container-top">
         <header class="main-header">
           <div class="text-center py-4">
@@ -11,16 +11,16 @@
       </div>
 
 
-      <div class="schedule-content">
-        <div v-for="(activities, date) in groupedActivities" :key="date" style="margin-bottom: 50px;">
-          <span id="day-tag" style="color: #008350; margin-left: 75px;">
+      <div class="container-fluid">
+        <div v-for="(activities, date) in groupedActivities" :key="date">
+          <span id="day-tag" style="margin-left: 75px;">
             <b>{{ new Date(date).toLocaleDateString("en-US", { weekday: "long" }) }}
             {{ new Date(date).toLocaleDateString("en-US", { month: "long" }) }}
             {{ getOrdinalDay(date) }},
             {{ new Date(date).getFullYear() }}</b>
           </span>
-          <table v-if="activities.length > 0" class="table table-bordered" style="margin-bottom:35px; background: #231F20">
-            <tbody style="background: #231F20; width: 50%; ">
+          <table v-if="activities.length > 0" class="table table-bordered">
+            <tbody style="background: #8d8d8d; width: 50%; ">
               <template v-for="activity in activities" :key="activity.id">
                 <!-- Main row -->
                 <tr
@@ -33,7 +33,7 @@
                       'hovered-row': hoveredRow === activity.id
                     }"
                 >
-                  <th scope="row" style="color: #008350; font-weight: bold; font-size: 35px;">
+                  <th>
                     {{ new Date(activity.activityDate).toLocaleTimeString("en-US", {
                     timeZone: "America/New_York",
                     hour: "numeric",
@@ -41,7 +41,7 @@
                     hour12: true
                   }) }}
                   </th>
-                  <th style="color: #008350; font-weight: bold; font-size: 35px;">{{ activity.activityName }}</th>
+                  <th>{{ activity.activityName }}</th>
                 </tr>
 
                 <!-- Description row -->
@@ -65,9 +65,9 @@
               </template>
             </tbody>
           </table>
-          <div v-else style="padding:15px 0; color: #008350; margin-left: 100px; font-size: 25px; font-weight:bold;">There are no activities currently set for this date. Please check back later!</div>
+          <div v-else class ="text">There are no activities currently set for this date. Please check back later!</div>
         </div>
-        <div class ="text-center py-4" style="padding:15px 0; color:#008350; font-size: 30px">* Schedule is subject to change.</div>
+        <div class ="text">* Schedule is subject to change.</div>
       </div>
     </div>
     <div v-else class="no-event-container">
@@ -82,11 +82,6 @@
           Please check back later!
         </p>
       </div>
-    </div>
-  </div>
-  <div v-else class="loading-overlay">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
     </div>
   </div>
 </template>
@@ -205,165 +200,27 @@ export default {
 </script>
 
 <style scoped>
-
-.bounce {
-    -webkit-animation-name: bounce;
-    animation-name: bounce;
-    -webkit-transform-origin: center bottom;
-    -ms-transform-origin: center bottom;
-    transform-origin: center bottom;
-}
-.animated {
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-}
-a {
-    background-color: transparent;
-}
-.landing-page {
-  text-align: center;
-  background-color: #ccffcc;
-  position: relative; /* Ensure this is the context for absolute positioning */
-  overflow: hidden;
-}
-
-.intro {
-  position: relative;
-  z-index: 1;
-  color:white;
-  background-color: rgba(0, 0, 0, 0.01);
-  /* margin-top: 10px; */
-  padding:20px;
-  bottom: 850px;
-  display: block;
-  align-items: center;
-  justify-content: center;
-  text-align: center; /* Center content */
-}
-
-.intro h2 {
-  font-size: 30px;
-}
-
-
-.container {
-    position: relative;
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 38px 20px;
-    box-sizing: border-box;
-}
-
-@media (min-width: 550px) {
-    .container {
-        width: 80%;
-    }
-}
-@media (min-width: 400px) {
-    .container {
-        width: 85%;
-        padding: 0;
-    }
-}
-.header {
-    text-align: center;
-}
-
-pre, blockquote, dl, figure, table, p, ul, ol, form {
-    margin-bottom: 2.5rem;
-}
-.intro #fountain {
-    display: block;
-    position: relative;
-    margin: auto;
-    max-height: 100px;
-    margin-bottom: -100px;
-}
-img{
-  border:0;
-}
-
- .attend {
-  position: relative;
-  text-align: center;
-  padding-bottom: 100px;
-  padding-top: 100px;
-  background-color: transparent; /* Make the background transparent */
-}
-
-.green-box {
-  background-color: #64965d; /* Green color */
-  padding: 50px; /* Padding to add space inside the green box */
-  border-radius: 10px; /* Rounded corners for the green box */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for visual effect */
-}
-
-.container1 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 50px; /* Add margin between the videos */
-  position: relative;
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 38px 20px;
-    box-sizing: border-box;
-}
-
-#fountain2 {
-  margin-bottom: 0;
-}
-
-iframe {
-  border-radius: 10px; /* Rounded corners for videos */
-}
-
-h2, h3, h4, h5, h6 {
-    margin-top: 0;
-    margin-bottom: 2rem;
-    font-weight: 300;
-}
-
-#day-tag {
-    font-size: 70px;
-}
-
-
 .table {
   width: 75%;
   margin-left: 100px;
-
 }
 
-/* Default (i.e., non-important) rows */
 .table th,
 .table td {
-  background-color: #231F20; /* dark background */
+  background-color: #8d8d8d;
   border-width: 3px;
-  border-color: #008350;
+  border-color: #231F20;
+}
+
+th, td {
+  color: #008350 !important;
+  font-weight: bold;
+  font-size: 35px;
 }
 
 .table tr:hover th,
 .table tr:hover td {
-  background-color: #231F20;
-}
-
-/* Important rows (both main and description) */
-.table .important-row th,
-.table .important-row td {
-  background-color: #fff !important;
-  color: #000 !important;
-}
-
-/* Make card match the row color */
-.table .important-row .activity-description {
-  background-color: #fff !important;
-  color: #000 !important;
-  border: none;
+  background-color: #8d8d8d;
 }
 
 /* When hovered (both rows share same activity id) */
@@ -372,13 +229,6 @@ h2, h3, h4, h5, h6 {
   background-color: #008350 !important; /* your hover color */
   color: #231F20 !important;
   transition: background-color 0.25s ease;
-}
-
-/* Important-row hover (white version) */
-.table .important-row.hovered-row th,
-.table .important-row.hovered-row td {
-  background-color: #e6e6e6 !important;
-  color: #000 !important;
 }
 
 /* When hovered, make the card transparent so the hover color shows through */
@@ -390,7 +240,7 @@ h2, h3, h4, h5, h6 {
 
 /* Non-important dropdown card */
 .activity-description {
-  background-color: #231F20 !important;
+  background-color: #8d8d8d !important;
   color: #008350 !important;
   border: none;
   font-weight: bold;
@@ -403,7 +253,7 @@ h2, h3, h4, h5, h6 {
 }
 
 .activity-row-group {
-  background: #231F20;
+  background: #8d8d8d;
   color: #008350;
   font-weight: bold;
 }
@@ -428,6 +278,14 @@ h2, h3, h4, h5, h6 {
   color: #fff;
   max-width: 400px;
   line-height: 1.5;
+}
+
+.text {
+  padding:15px 0;
+  color: #008350;
+  margin-left: 100px;
+  font-size: 25px;
+  font-weight:bold;
 }
 
 </style>

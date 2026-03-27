@@ -270,36 +270,6 @@ export default {
   background-color: #008350;
 }
 
-body {
-  font-family: Lato, sans-serif;
-  color: #fff;
-  font-weight: 300;
-  font-size: 18px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.container-fluid {
-  background-color: #231F20;
-  position: relative; /* Ensure this is the context for absolute positioning */
-  overflow: hidden;
-  min-height: 100vh;
-}
-/* TOC pushed down even more */
-.toc-box {
-  margin-top: 0; /* increase this if you want it lower */
-}
-
-/* Main content slightly lower */
-.main-box {
-  margin-top: 0;
-}
-/* background-color: #64965d; */
-
-/* Sidebar min width */
-aside {
-  min-width: 200px;
-}
 
 /* Card hover effect */
 .hardware-card {

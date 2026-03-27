@@ -38,8 +38,5 @@ export default {
 </script>
 
 <style>
-#app {
-  min-height: 100vh;
-  background-color: #231F20;
-}
+
 </style>

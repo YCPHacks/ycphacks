@@ -61,22 +61,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.verify {
-  color: #008350;
-  background-color: #231F20;
-  border: 4px solid #fff;
-  font-weight:bolder;
-  font-size: 45px;
-  display: block;
-  margin: 0 auto;
-  width: 50%;
-  height: 20vh; /* full viewport height */
-}
-
-.verify:hover {
-  background-color: #fbfbfd;
-  border: 6px solid #008350;
-}
-</style>

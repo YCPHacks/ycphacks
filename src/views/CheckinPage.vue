@@ -47,24 +47,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-body {
-  font-family: Lato, sans-serif;
-  color: #fff;
-  font-weight: 300;
-  font-size: 18px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.container-fluid {
-  background-color: #93dda3;
-  position: relative;
-  overflow: hidden;
-  min-height: 100vh;
-}
-.main-box {
-  margin-top: 0;
-}
 
 .qr-image {
   height: 300px;
