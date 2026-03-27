@@ -21,8 +21,8 @@ class ProfileAdapter {
                     age, gender, pronouns, country,
                     school, major, graduationYear,
                     levelOfStudy, tShirtSize, hackathonsAttended,
-                    dietaryRestrictions, email, mlhEmails,
-                    phoneNumber, linkedInUrl}) {
+                    dietaryRestrictions, email, isEmailVerified,
+                    mlhEmails, phoneNumber, linkedInUrl}) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,6 +39,7 @@ class ProfileAdapter {
         this.dietaryRestrictions = dietaryRestrictions;
 
         this.email = email;
+        this.isEmailVerified = isEmailVerified;
         this.mlhEmails = mlhEmails;
         this.phoneNumber = phoneNumber;
         this.linkedInUrl = linkedInUrl;

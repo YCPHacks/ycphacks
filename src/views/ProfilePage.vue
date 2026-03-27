@@ -118,12 +118,23 @@
                 <div class="mt-4 mx-2">
                   <h4 class="mb-1 ms-2">Email</h4>
 
-                  <div class="row">
-                    <div class="col col-9">
-                      <input v-model="currentAccountInfoEmail" type="email" class="form-control" required/>
+                  <div class="row align-items-center">
+                    <div class="col-9">
+                      <div class="position-relative d-flex align-items-center">
+                        <input v-model="currentAccountInfoEmail" type="email" class="form-control" required/>
+
+                        <div id="verified-email-marker" class="position-absolute rounded-pill mb-0 d-flex flex-row justify-content-center">
+                          <p v-if="profileData.isEmailVerified" class="me-2">Verified</p>
+                          <p v-if="profileData.isEmailVerified">&check;</p>
+
+                          <p v-if="!profileData.isEmailVerified" class="me-2">Unverified</p>
+                          <p v-if="!profileData.isEmailVerified">&cross;</p>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col col-3 d-flex justify-content-end">
-                      <button class="btn w-75" type="button">Verify</button>
+
+                    <div class="col-3 d-flex justify-content-end">
+                      <button class="btn w-75" type="button" @click="">Verify</button>
                     </div>
                   </div>
 
@@ -283,6 +294,7 @@ const profileData = ref({
   dietaryRestrictions: null,
 
   email: null,
+  isEmailVerified: null,
   mlhEmails: null,
   phoneNumber: null,
   linkedInUrl: null
@@ -319,6 +331,8 @@ const currentChangePasswordNew2 = ref(null);
 onMounted(async () => {
   try {
     await fetchProfileData();
+    await setCurrentDataToProfileData();
+    await setEmailIsVerifiedCSS();
   } catch (err) {
     console.error('Failed to ...:', err)
   }
@@ -336,8 +350,16 @@ const fetchProfileData = async () => {
   } catch (e) {
     console.error("Could not retrieve profile data.", e);
   }
+}
 
-  await setCurrentDataToProfileData();
+const setEmailIsVerifiedCSS = async () => {
+  console.log(profileData.value)
+  const isEmailVerified = !!profileData.value.isEmailVerified;
+
+  const verifiedDiv = document.getElementById("verified-email-marker");
+  verifiedDiv.style.backgroundColor = isEmailVerified?
+      "green" :
+      "#ED1C24";// pigment red
 }
 
 const setCurrentDataToProfileData = async () => {
@@ -456,13 +478,15 @@ const handleAccountInfoUpdate = async () => {
 }
 
 const revertAccountInfoChanges = async () => {
-  console.log("Test");
   currentAccountInfoEmail.value = profileData.value.email;
   currentAccountInfoReceiveEmails.value = profileData.value.mlhEmails;
   currentAccountInfoPhoneNumber.value = profileData.value.phoneNumber;
   currentAccountInfoLinkedInUrl.value = profileData.value.linkedInUrl;
 }
 
+const handleVerifyEmail = async () => {
+
+}
 
 const openChangePasswordPopup = async () => {
   showChangePasswordPopup.value = true;
@@ -504,7 +528,6 @@ const handleChangePassword = async () => {
 </script>
 
 <style scoped>
-
 
 .group-header-text {
   color: #fff;
@@ -577,15 +600,17 @@ body {
   width: 100%;
 }
 
-
-/* .popup-content input.form-control {
-  border-radius: 1px;
-} */
+#verified-email-marker {
+  top: 6px;
+  right: 10px;
+  height: 67%;
+  padding-left: 7px;
+  padding-right: 7px;
+}
 
 /* Sidebar min width */
 aside {
   min-width: 200px;
 }
-
 
 </style>
