@@ -1,7 +1,7 @@
 <template>
   <div class="landing-page">
     <!-- Intro / Event Header with Top Video -->
-    <div v-if="!isLoggedIn" class="intro-container">
+    <div class="intro-container">
       <video id="bgvideo" autoplay loop muted preload="auto">
         <source src="/bg.mp4" type="video/mp4" />
       </video>
@@ -11,12 +11,12 @@
           {{ formatDate(activeEvent.startDate) }} – {{ formatDate(activeEvent.endDate) }}
         </p>
         <h2 style="font-weight: bold">York College of Pennsylvania</h2>
-        <router-link class="register-button" to="/register">Create Account</router-link>
+        <router-link v-if="!isLoggedIn" class="register-button" to="/register">Create Account</router-link>
       </div>
     </div>
 
     <!-- About Section -->
-    <div v-if="!isLoggedIn" class="container-top" id="about">
+    <div class="container-top" id="about">
       <header class="main-header">
         <div class="text-center py-4">
           <h1 class="mb-2">About</h1>
@@ -29,7 +29,7 @@
     </div>
 
     <!-- Recap Videos -->
-    <div v-if="!isLoggedIn" class="attend" id="attend">
+    <div class="attend" id="attend">
       <div class="green-box">
         <div class="video-row">
           <div class="video-text">2021 Recap Video</div>
