@@ -153,3 +153,85 @@ export default {
   }//end methods
 };
 </script>
+
+<style>
+.category {
+  margin-top: 30px;
+  height: 100%;
+  margin-bottom: 20px;
+  text-align: left;
+  padding: 10px 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.category-header {
+  cursor: pointer;
+  font-weight: bolder;
+  font-size: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.categories-list {
+  list-style-type: none;
+  width: 70%;
+  align-self: center;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.event-dropdown label {
+  font-weight: bolder;
+  font-size: clamp(1rem, 10vw, 2rem);
+}
+
+.event-dropdown select {
+  border: 1px solid;
+  border-radius: 5px;
+  font-size: clamp(1rem, 2vw, 2rem);
+  font-weight: bold;
+}
+
+.no-events-message,
+.no-categories-message {
+  font-size: 50px;
+  margin: auto 0;
+  font-weight: bolder;
+}
+
+.event-dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.prize-list {
+  margin-top: 10px;
+  margin-left: 20px;
+  list-style-type: circle;
+  font-size: 24px;
+}
+
+/* Mobile Support */
+@media (max-width: 768px) {
+
+  .categories-list {
+    list-style-type: none;
+    width: 100%;
+    align-self: center;
+    padding: 0;
+    margin: 0 auto;
+  }
+
+  .event-dropdown label {
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+}
+</style>

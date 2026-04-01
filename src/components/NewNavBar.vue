@@ -52,6 +52,7 @@ export default {
     return {
       menuDropdownVisible: false,
       // isLoggedIn: true,
+      isDark: true,
     };
   },
   computed: {

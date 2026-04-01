@@ -200,6 +200,10 @@ export default {
 </script>
 
 <style scoped>
+#day-tag {
+  font-size: clamp(3rem, 5vw + 1rem, 5rem);
+}
+
 .table {
   width: 75%;
   margin-left: 100px;

@@ -61,3 +61,17 @@ export default {
   }
 };
 </script>
+
+<style>
+
+
+.verify {
+  font-weight:bolder;
+  font-size: 45px;
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+  height: 20vh; /* full viewport height */
+}
+
+</style>
