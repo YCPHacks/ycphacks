@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="mobile-nav">
-      <button class="dropdown-button" id="hamburger" @click="handleMenu()">
+      <button class="dropdown" id="hamburger" @click="handleMenu()">
         ☰
       </button>
       <div class="nav-down" v-if="isLoggedIn && isOpen">
@@ -200,7 +200,7 @@ export default {
 }
 
 
-#hamburger.dropdown-button {
+#hamburger.dropdown {
   display: none;
 }
 
@@ -209,7 +209,7 @@ export default {
     display: none;
   }
 
-  #hamburger.dropdown-button {
+  #hamburger.dropdown {
     font-size: 24px;
     display: flex;
     margin-right: 30px;

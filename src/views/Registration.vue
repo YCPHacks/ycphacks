@@ -523,6 +523,7 @@ export default {
   },
   methods: {
     async handleSubmit() {
+      this.showAlert = false;
       this.isLoading = true;
       const formData = { ...this.form };
 

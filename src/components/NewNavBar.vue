@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="mobile-nav">
-        <button class="dropdown-button" id="hamburger" @click="handleMenu()">
+        <button class="dropdown" id="hamburger" @click="handleMenu()">
           ☰
         </button>
         <div class="nav-down" v-if="isLoggedIn && isOpen">
@@ -189,7 +189,7 @@ input:checked + .slider {
   background-color: #008350; /* darker track */
 }
 
-#hamburger.dropdown-button {
+#hamburger.dropdown {
   display: none;
 }
 
@@ -198,7 +198,7 @@ input:checked + .slider {
     display: none;
   }
 
-  #hamburger.dropdown-button {
+  #hamburger.dropdown {
     font-size: 24px;
     display: flex;
     margin-right: 30px;
