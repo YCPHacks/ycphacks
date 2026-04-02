@@ -50,7 +50,8 @@
           <router-link class="nav-link" to="/activities" @click="isOpen = false">Activities</router-link>
           <router-link class="nav-link" to="/hardware" @click="isOpen = false">Hardware</router-link>
           <router-link class="nav-link" to="categories" @click="isOpen = false">Hack Categories</router-link>
-          <button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button>
+          <router-link class="nav-link" to="/profile" @click="isOpen = false">Profile</router-link>
+          <button class="nav-link" @click="handleLogout(); isOpen = false">Logout</button>
         </div>
       </div>
     </div>
