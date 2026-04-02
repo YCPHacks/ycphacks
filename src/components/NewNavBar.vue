@@ -37,6 +37,10 @@
         </div>
       </div>
       <div class="mobile-nav">
+        <div class="theme-switch">
+          <input type="checkbox" id="toggle" v-model="isDark" @change="toggleTheme" />
+          <label for="toggle" class="slider"></label>
+        </div>
         <button class="dropdown" id="hamburger" @click="handleMenu()">
           ☰
         </button>
@@ -189,7 +193,7 @@ input:checked + .slider {
   background-color: #008350; /* darker track */
 }
 
-#hamburger.dropdown {
+.mobile-nav{
   display: none;
 }
 
@@ -198,6 +202,9 @@ input:checked + .slider {
     display: none;
   }
 
+  .mobile-nav{
+    display: flex;
+  }
   #hamburger.dropdown {
     font-size: 24px;
     display: flex;
@@ -218,6 +225,10 @@ input:checked + .slider {
     font-weight: bold;
     text-decoration: none;
     display: inline-block;
+  }
+
+  .theme-switch {
+    margin-right: 20px;
   }
 }
 </style>

@@ -146,4 +146,22 @@ button:hover {
   margin-top: 20px;
 }
 
+@media(max-width: 768px) {
+  .form-grid {
+    display: grid;
+    grid-template-columns: 120px 3fr;
+    align-items: center;
+  }
+  .form-grid label {
+    width: 30%;
+    margin-left: 0;
+    font-size: 20px;
+  }
+  .form-grid input {
+    margin-left: 0;
+    width: 99%;
+    font-size: 20px;
+  }
+}
+
 </style>
