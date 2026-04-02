@@ -294,5 +294,12 @@ export default {
   margin-left: 150px;
 }
 
+@media (max-width: 768px) {
+  .flex {
+    margin-left: 0;
+    font-size: 15px;
+  }
+
+}
 
 </style>

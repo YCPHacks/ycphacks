@@ -12,19 +12,6 @@
         style="width:100%"
       />
     </a>
-    <div class="dropdown">
-      <button class="dropdown-button" @click="toggleDropdown">
-        Menu
-      </button>
-      <ul v-if="dropdownVisible" class="dropdown-menu">
-        <li><a class="nav-link" href="#about">About</a></li>
-        <li><a class="nav-link" href="#attend">Attend</a></li>
-        <li><a class="nav-link" href="#schedule">Schedule</a></li>
-        <li><a class="nav-link" href="#faq">FAQs</a></li>
-        <li><a class="nav-link" href="#prizes">Prizes</a></li>
-        <li><a class="nav-link" href="#sponsors">Sponsors</a></li>
-      </ul>
-    </div>
     <div class="nav">
       <router-link to="/register" class="nav-link">Register</router-link>
       <router-link to="/login" class="nav-link">Login</router-link>

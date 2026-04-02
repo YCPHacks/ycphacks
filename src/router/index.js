@@ -111,7 +111,7 @@ router.beforeEach(async (to, from, next) => {
     }
 
     if (isAuthenticated && !userEmailVerified) {
-        if (to.path === '/emailVerification' || to.path === '/pleaseVerify' || to.path === '/') {
+        if (to.path === '/emailVerification' || to.path === '/pleaseVerify' || to.path === '/' || to.path === '/profile') {
             return next();
         }
         return next('/emailVerification');

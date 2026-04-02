@@ -64,7 +64,6 @@ export default {
 
 <style>
 
-
 .verify {
   font-weight:bolder;
   font-size: 45px;
@@ -72,6 +71,14 @@ export default {
   margin: 0 auto;
   width: 50%;
   height: 20vh; /* full viewport height */
+}
+
+@media (max-width: 768px) {
+  .verify {
+    font-size: 35px;
+    width: 80%;
+    height: 40vh;
+  }
 }
 
 </style>

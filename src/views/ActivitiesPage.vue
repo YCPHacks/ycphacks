@@ -13,7 +13,7 @@
 
       <div class="container-fluid">
         <div v-for="(activities, date) in groupedActivities" :key="date">
-          <span id="day-tag" style="margin-left: 75px;">
+          <span id="day-tag">
             <b>{{ new Date(date).toLocaleDateString("en-US", { weekday: "long" }) }}
             {{ new Date(date).toLocaleDateString("en-US", { month: "long" }) }}
             {{ getOrdinalDay(date) }},
@@ -202,6 +202,7 @@ export default {
 <style scoped>
 #day-tag {
   font-size: clamp(3rem, 5vw + 1rem, 5rem);
+  margin-left: 75px;
 }
 
 .table {
@@ -292,4 +293,17 @@ th, td {
   font-weight:bold;
 }
 
+@media (max-width: 768px) {
+  .table {
+    width: 100%;
+    margin-left: 0;
+  }
+  .text {
+    margin-left: 0;
+  }
+  #day-tag {
+    margin-left: 0;
+    font-size: clamp(3rem, 5vw + 1rem, 5rem);
+  }
+}
 </style>

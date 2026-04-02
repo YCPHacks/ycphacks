@@ -57,6 +57,7 @@ html, body{
 .main-header h1 {
   font-weight: bolder;
   font-size: clamp(3rem, 5vw + 1rem, 5rem);
+  width: 100%;
 }
 
 .header-line{

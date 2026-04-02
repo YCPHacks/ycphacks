@@ -14,6 +14,7 @@
     </a>
 
     <div class="nav">
+      <div class="desktop-nav">
         <div class="nav-right" v-if="isLoggedIn">
           <router-link class = "nav-link" to="/checkin">Check In</router-link>
           <router-link class="nav-link" to="/teams">Team Information</router-link>
@@ -34,6 +35,20 @@
             </ul>
           </div>
         </div>
+      </div>
+      <div class="mobile-nav">
+        <button class="dropdown-button" id="hamburger" @click="handleMenu()">
+          ☰
+        </button>
+        <div class="nav-down" v-if="isLoggedIn && isOpen">
+          <router-link class = "nav-link" to="/checkin" @click="isOpen = false">Check In</router-link>
+          <router-link class="nav-link" to="/teams" @click="isOpen = false">Team Information</router-link>
+          <router-link class="nav-link" to="/activities" @click="isOpen = false">Activities</router-link>
+          <router-link class="nav-link" to="/hardware" @click="isOpen = false">Hardware</router-link>
+          <router-link class="nav-link" to="categories" @click="isOpen = false">Hack Categories</router-link>
+          <button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button>
+        </div>
+      </div>
     </div>
   </nav>
 </template>
@@ -44,15 +59,17 @@ import {BDropdown} from "bootstrap-vue-3";
 import router from "@/router/index.js";
 import { mapGetters } from "vuex";
 import { computed } from "vue";
+import PasswordLink from "@/views/PasswordLinkPage.vue";
 
 export default {
   name: "NewNavBar",
-  components: {BDropdown},
+  components: {PasswordLink, BDropdown},
   data() {
     return {
       menuDropdownVisible: false,
       // isLoggedIn: true,
       isDark: true,
+      isOpen: false,
     };
   },
   computed: {
@@ -91,6 +108,9 @@ export default {
     async handleLogout() {
       await this.$store.dispatch('logout');
       this.$router.push("/login");
+    },
+    async handleMenu() {
+      this.isOpen = !this.isOpen;
     }
   },
 };
@@ -169,4 +189,35 @@ input:checked + .slider {
   background-color: #008350; /* darker track */
 }
 
+#hamburger.dropdown-button {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  #hamburger.dropdown-button {
+    font-size: 24px;
+    display: flex;
+    margin-right: 30px;
+  }
+
+  .nav-down {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    list-style: none;
+    margin: 0;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+  }
+}
 </style>

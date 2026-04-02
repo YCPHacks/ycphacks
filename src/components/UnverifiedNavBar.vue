@@ -14,16 +14,27 @@
     </a>
 
   <div class="nav">
-    <div class="nav-right">
-      <router-link class="nav-link" to="/emailVerification">Verify Your Email</router-link>
-      <div class="dropdown user-dropdown">
-        <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
-        <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
-          <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
-          <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
-        </ul>
+    <div class="desktop-nav">
+      <div class="nav-right">
+        <router-link class="nav-link" to="/emailVerification">Verify Your Email</router-link>
+        <div class="dropdown user-dropdown">
+          <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
+          <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
+            <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
+            <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
+          </ul>
+        </div>
       </div>
-
+    </div>
+    <div class="mobile-nav">
+      <button class="dropdown-button" id="hamburger" @click="handleMenu()">
+        ☰
+      </button>
+      <div class="nav-down" v-if="isLoggedIn && isOpen">
+        <router-link class = "nav-link" to="/emailVerification" @click="isOpen = false">Email Verification</router-link>
+        <router-link class="nav-link" to="/profile" @click="isOpen = false">Profile</router-link>
+        <button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button>
+      </div>
     </div>
   </div>
   </nav>
@@ -43,6 +54,7 @@ export default {
     return {
       menuDropdownVisible: false,
       // isLoggedIn: true,
+      isOpen: false,
     };
   },
   computed: {
@@ -79,6 +91,9 @@ export default {
     async handleLogout() {
       await this.$store.dispatch('logout');
       this.$router.push("/login");
+    },
+    async handleMenu() {
+      this.isOpen = !this.isOpen;
     }
   },
 };
@@ -182,6 +197,39 @@ export default {
   font-weight: bold;
   color: black;
   text-decoration: none;
+}
+
+
+#hamburger.dropdown-button {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  #hamburger.dropdown-button {
+    font-size: 24px;
+    display: flex;
+    margin-right: 30px;
+  }
+
+  .nav-down {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    list-style: none;
+    margin: 0;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+  }
 }
 
 </style>

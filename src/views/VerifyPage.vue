@@ -22,6 +22,10 @@
   width: 90%;
   height: 20vh;
 }
+
+.main-header {
+  margin-top: 0;
+}
 </style>
 <script setup>
 </script>
