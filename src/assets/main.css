@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap');
 
+/* Standard Pages layout (Coloring) */
 *{
     font-family: "Fira Code", monospace;
     font-optical-sizing: auto;
@@ -10,6 +11,239 @@
     box-sizing: border-box;
 }
 
-html, body{
-    overflow-x: hidden;
+#app {
+    background-color: #231F20;
 }
+
+html, body{
+    background-color: #231F20;
+}
+
+.main-header{
+    color: #FAF9F6;
+}
+
+.main-header h1 {
+    color: #fff;
+}
+
+.header-line{
+    border-color: #fff;
+}
+
+hr.form-line {
+    border-color:#fff;
+}
+
+.container-top{
+    background-color: #231F20;
+}
+
+.container-fluid {
+    background-color: #231F20;
+}
+
+/* Standard Nav bars layout and coloring since navbar, nav-right, nav, and navlink are all used in multiple areas*/
+.navbar {
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 60px;
+    background-color: #008350;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #231F20;
+    font-weight: bold;
+    margin: auto 0;
+}
+
+.nav {
+    display: flex;
+    gap: 20px;
+    color: #231F20;
+    font-weight: bold;
+    margin-right: 0;
+    margin-left: auto;
+}
+
+.nav .nav-link,
+.nav .nav-link:hover,
+.nav .nav-link:focus,
+.nav .nav-link:active {
+    color: #231F20;
+}
+
+.dropdown-button {
+    font-weight: bold;
+    background: none;
+    border: none;
+    color: #231F20;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+/* Activities Page Styling */
+#day-tag {
+    color: #008350;
+}
+
+/* Email Verification Button */
+.verify {
+    color: #008350;
+    background-color: #231F20;
+    border: 4px solid #fff;
+}
+
+.verify:hover {
+    background-color: #fbfbfd;
+    border: 6px solid #008350;
+}
+
+/* Categories Page Styling */
+.category {
+    background-color: #008350;
+}
+
+.event-dropdown label {
+    color: #FAF9F6
+}
+
+.event-dropdown select {
+    background-color: #FAF9F6;
+}
+
+.event-dropdown option {
+    background-color: #fff;
+}
+
+.no-events-message,
+.no-categories-message {
+    color: #008350;
+}
+
+/* The slider track */
+.theme-switch .slider {
+    width: 50px;
+    height: 24px;
+    background-color: #231F20 !important;
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* The toggle knob */
+.theme-switch .slider::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 2px;
+    top: 2px;
+    background-color: #008350    !important;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+/* Light Mode Styling Sheet */
+
+body.light #app {
+    background-color: #d3d3d3 !important;
+}
+
+body.light html, body.light {
+    background-color: #d3d3d3 !important;
+}
+body.light .main-header{
+    color: #006f3c;
+}
+
+body.light .mb-2 {
+    font-weight: bolder;
+    font-size: clamp(3rem, 5vw + 1rem, 5rem);
+}
+
+body.light .main-header h1 {
+    color: #006f3c;
+}
+
+body.light .header-line{
+    border-color: #006f3c;
+}
+
+body.light .container-top{
+    background-color: #d3d3d3;
+}
+
+body.light .container-fluid {
+    background-color: #d3d3d3;
+}
+
+/* Standard Nav bars layout */
+body.light .navbar {
+    background-color: #231F20;
+}
+
+body.light .dropdown-button,
+body.light .nav,
+body.light .nav-right {
+    color: #008350;
+}
+
+
+
+body.light .nav .nav-link,
+body.light .nav .nav-link:hover,
+body.light .nav .nav-link:focus,
+body.light .nav .nav-link:active {
+    color: #008350;
+}
+
+/* Activities Page Styling */
+body.light #day-tag {
+    color: #008350;
+}
+
+/* Email Verification Button */
+body.light .verify {
+    color: #008350;
+    background-color: #231F20;
+}
+
+body.light .verify:hover {
+    background-color: #fbfbfd;
+    border: 6px solid #008350;
+}
+
+
+/* Categories Page Styling */
+
+body.light .category {
+    background-color: #008350;
+}
+
+body.light .no-events-message,
+body.light .no-categories-message {
+    color: #008350;
+}
+
+/* The slider track */
+body.light .theme-switch .slider {
+    background-color: #008350 !important; /* black track */
+}
+
+/* The toggle knob */
+body.light .theme-switch .slider::before {
+    background-color: #231F20 !important; /* green knob */
+}
+

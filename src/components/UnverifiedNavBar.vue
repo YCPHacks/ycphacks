@@ -13,48 +13,30 @@
       />
     </a>
 
-    <div class="nav">
-      <div class="desktop-nav">
-        <div class="nav-right" v-if="isLoggedIn">
-          <router-link class = "nav-link" to="/checkin">Check In</router-link>
-          <router-link class="nav-link" to="/teams">Team Information</router-link>
-          <router-link class="nav-link" to="/activities">Activities</router-link>
-          <router-link class="nav-link" to="/hardware">Hardware</router-link>
-          <router-link class="nav-link" to="categories">Hack Categories</router-link>
-
-          <div class="theme-switch">
-            <input type="checkbox" id="toggle" v-model="isDark" @change="toggleTheme" />
-            <label for="toggle" class="slider"></label>
-          </div>
-
-          <div class="dropdown user-dropdown">
-            <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
-            <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
-              <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
-              <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="mobile-nav">
-        <div class="theme-switch">
-          <input type="checkbox" id="toggle" v-model="isDark" @change="toggleTheme" />
-          <label for="toggle" class="slider"></label>
-        </div>
-        <button class="dropdown" id="hamburger" @click="handleMenu()">
-          ☰
-        </button>
-        <div class="nav-down" v-if="isLoggedIn && isOpen">
-          <router-link class = "nav-link" to="/checkin" @click="isOpen = false">Check In</router-link>
-          <router-link class="nav-link" to="/teams" @click="isOpen = false">Team Information</router-link>
-          <router-link class="nav-link" to="/activities" @click="isOpen = false">Activities</router-link>
-          <router-link class="nav-link" to="/hardware" @click="isOpen = false">Hardware</router-link>
-          <router-link class="nav-link" to="categories" @click="isOpen = false">Hack Categories</router-link>
-          <router-link class="nav-link" to="/profile" @click="isOpen = false">Profile</router-link>
-          <button class="nav-link" @click="handleLogout(); isOpen = false">Logout</button>
+  <div class="nav">
+    <div class="desktop-nav">
+      <div class="nav-right">
+        <router-link class="nav-link" to="/emailVerification">Verify Your Email</router-link>
+        <div class="dropdown user-dropdown">
+          <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
+          <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
+            <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
+            <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
+          </ul>
         </div>
       </div>
     </div>
+    <div class="mobile-nav">
+      <button class="dropdown" id="hamburger" @click="handleMenu()">
+        ☰
+      </button>
+      <div class="nav-down" v-if="isLoggedIn && isOpen">
+        <router-link class = "nav-link" to="/emailVerification" @click="isOpen = false">Email Verification</router-link>
+        <router-link class="nav-link" to="/profile" @click="isOpen = false">Profile</router-link>
+        <button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button>
+      </div>
+    </div>
+  </div>
   </nav>
 </template>
 
@@ -64,24 +46,23 @@ import {BDropdown} from "bootstrap-vue-3";
 import router from "@/router/index.js";
 import { mapGetters } from "vuex";
 import { computed } from "vue";
-import PasswordLink from "@/views/PasswordLinkPage.vue";
 
 export default {
   name: "NewNavBar",
-  components: {PasswordLink, BDropdown},
+  components: {BDropdown},
   data() {
     return {
       menuDropdownVisible: false,
       // isLoggedIn: true,
-      isDark: true,
       isOpen: false,
     };
   },
   computed: {
-    ...mapGetters(['isLoggedIn', 'getIsEmailVerified']),
+    ...mapGetters(['isLoggedIn', 'isEmailVerified']),
     isInTeam(){
       return !!this.$store.getters.getUserTeamId;
     }
+
   },
   // mounted(){
   //   if(store.getters.isLoggedIn){
@@ -93,9 +74,6 @@ export default {
     document.removeEventListener('click', this.closeMenusOutside);
   },
   methods: {
-    toggleTheme() {
-        document.body.classList.toggle('light');
-    },
     closeMenusOutside(event){
       const dropdownElements = this.$el.querySelectorAll('.dropdown');
       let clickInsideDropdown = false;
@@ -124,14 +102,40 @@ export default {
 <style scoped>
 .navbar {
   position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 60px;
+  background-color: #008350;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
 }
 
 .navbar a {
   text-decoration: none;
 }
 
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* space between links */
+  color: #231F20;
+}
+
 .dropdown {
   position: relative;
+}
+
+.dropdown-button {
+  font-weight: bold;
+  background: none;
+  border: none;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .dropdown-menu {
@@ -151,15 +155,33 @@ export default {
   margin: 5px 0;
 }
 
-.dropdown-menu {
+.dropdown-menu .nav-link {
   color: black;
   font-weight: bold;
   text-decoration: none;
   display: inline-block;
-  margin: auto 0;
   padding: 0;
 }
 
+.dropdown-menu .nav-link:hover {
+  text-decoration: underline;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+  margin-right: 0;
+  margin-left: auto;
+}
+
+.nav-link {
+  color: black;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
 
 .hardware-dropdown .hardware-menu, .user-dropdown .user-menu {
   display: none;
@@ -171,30 +193,14 @@ export default {
   display: block;
   opacity: 1;
 }
-
-
-/* Container */
-.theme-switch {
-  display: flex;
-  align-items: center;
+.navbar a {
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
 }
 
-/* Hide the default checkbox */
-.theme-switch input {
-  display: none;
-}
 
-/* Move knob when checked */
-input:checked + .slider::before {
-  transform: translateX(26px);
-}
-
-/* Optional: change track color when checked */
-input:checked + .slider {
-  background-color: #008350; /* darker track */
-}
-
-.mobile-nav{
+#hamburger.dropdown {
   display: none;
 }
 
@@ -203,9 +209,6 @@ input:checked + .slider {
     display: none;
   }
 
-  .mobile-nav{
-    display: flex;
-  }
   #hamburger.dropdown {
     font-size: 24px;
     display: flex;
@@ -227,9 +230,6 @@ input:checked + .slider {
     text-decoration: none;
     display: inline-block;
   }
-
-  .theme-switch {
-    margin-right: 20px;
-  }
 }
+
 </style>

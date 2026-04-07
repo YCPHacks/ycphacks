@@ -10,7 +10,7 @@
   <div class="container-fluid">
     <div class="row align-items-start mt-5">
       <main class="col-md-12 col-lg-8 offset-lg-2">
-        <div class="p-4 border rounded bg-white shadow-sm main-box">
+        <div class="p-4">
 
           <div class="mb-4">
             <input
@@ -64,9 +64,9 @@
                         />
                       </div>
 
-                      <div class="flex-grow-1">
+                      <div class="flex">
 
-                        <div class="text-end small fw-semibold mb-2">
+                        <div class="flex">
                           <span :class="{'text-danger': item.isUnavailable, 'text-success': !item.isUnavailable}">
                             {{ item.availabilityText }}
                           </span>
@@ -135,17 +135,16 @@ export default {
         const allRawItems = groups.flatMap(group => {
 
           // Assume items are nested in 'items' array, or the group itself is the item.
-          const itemsSource = Array.isArray(group.items) ? group.items : [group];
+          if (!Array.isArray(group.items)) return [];
 
-          return itemsSource.map(p => {
+          return group.items.map(p => {
             const fullName = p.fullName || p.name || group.title || "Unknown Hardware";
-
             return {
               name: fullName,
               description: p.description || "No description available.",
               image: p.image || null,
               isUnavailable: p.isUnavailable,
-              isNonFunctional: p.functional === false
+              isNonFunctional: !p.isFunctional,
             };
           });
         });
@@ -251,54 +250,26 @@ export default {
 }
 /* ------------------------------------------ */
 
-body {
-  font-family: Lato, sans-serif;
+.p-4 {
+  background-color: #008350;
+  border: none;
+}
+
+.form-control::placeholder {
+  color:#fff;
+  font-weight: bolder;
+  font-size: 22px;
+}
+
+.mb-4 input {
+  background-color: #008350;
+  border-color: #fff;
   color: #fff;
-  font-weight: 300;
-  font-size: 18px;
-  overflow-y: scroll;
-  overflow-x: hidden;
 }
-.container-top{
-  background-color: #64965d;
-  position: relative;
-  overflow: hidden;
-}
-.container-fluid {
-  background-color: #93dda3;
-  position: relative; /* Ensure this is the context for absolute positioning */
-  overflow: hidden;
-  min-height: 100vh;
-}
-/* TOC pushed down even more */
-.toc-box {
-  margin-top: 0; /* increase this if you want it lower */
+.p-5 {
+  background-color: #008350;
 }
 
-/* Main content slightly lower */
-.main-box {
-  margin-top: 0;
-}
-/* background-color: #64965d; */
-.main-header{
-  margin-top: 6rem;
-  margin-bottom: 0;
-  color: #6c757d;
-  width: 100%;
-}
-.main-header h1 {
-  color: #f8f9fa;
-}
-.header-line{
-  width: 60%;
-  margin: 0.5rem auto 0;
-  border-top: 3px solid #f8f9fa;
-}
-
-/* Sidebar min width */
-aside {
-  min-width: 200px;
-}
 
 /* Card hover effect */
 .hardware-card {
@@ -310,15 +281,25 @@ aside {
 .not-found-box{
   padding: 30px !important;
   margin-top: 30px;
-  border: 1px dashed #ced4da;
+  border: 1px dashed #fff;
   border-radius: 8px;
-  background-color: #f8f9fa;
+  background-color: #008350;
 }
 .not-found-box h2, .not-found-box o{
   color: #495057 !important;
 }
 
-html, body{
-  height: 100%;
+.flex {
+  font-size: 20px;
+  margin-left: 150px;
 }
+
+@media (max-width: 768px) {
+  .flex {
+    margin-left: 0;
+    font-size: 15px;
+  }
+
+}
+
 </style>

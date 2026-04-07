@@ -1,30 +1,35 @@
 <template>
   <div class="landing-page">
     <!-- Intro / Event Header with Top Video -->
-    <div v-if="!isLoggedIn" class="intro-container">
+    <div class="intro-container">
       <video id="bgvideo" autoplay loop muted preload="auto">
         <source src="/bg.mp4" type="video/mp4" />
       </video>
       <div class="intro">
-        <h1>{{ activeEvent?.eventName }}</h1>
-        <p v-if="activeEvent" class="event-date">
+        <h1 style="font-weight: bolder;">{{ activeEvent?.eventName }}</h1>
+        <p v-if="activeEvent" class="event-date" style ="color: #fff; font-weight: bold;">
           {{ formatDate(activeEvent.startDate) }} – {{ formatDate(activeEvent.endDate) }}
         </p>
-        <h2>York College of Pennsylvania</h2>
-        <router-link class="register-button" to="/register">Create Account</router-link>
+        <h2 style="font-weight: bold">York College of Pennsylvania</h2>
+        <router-link v-if="!isLoggedIn" class="register-button" to="/register">Create Account</router-link>
       </div>
     </div>
 
     <!-- About Section -->
-    <div v-if="!isLoggedIn" class="about" id="about">
-      <h3>About</h3>
+    <div class="container-top" id="about">
+      <header class="main-header">
+        <div class="text-center py-4">
+          <h1 class="mb-2">About</h1>
+          <hr class="header-line" />
+        </div>
+      </header>
       <p>
         Conveniently nestled in rural Pennsylvania, YCP Hacks is a college-level hackathon with small-town charm. An hour north of Baltimore, an hour and a half from Philadelphia, and 2 hours from Penn State places it right in the middle of Pennsylvania Dutch Country. Our mission is to promote technical knowledge, innovation, and entrepreneurship in York and beyond.
       </p>
     </div>
 
     <!-- Recap Videos -->
-    <div v-if="!isLoggedIn" class="attend" id="attend">
+    <div class="attend" id="attend">
       <div class="green-box">
         <div class="video-row">
           <div class="video-text">2021 Recap Video</div>
@@ -35,7 +40,7 @@
           <iframe width="500" height="380" src="https://www.youtube.com/embed/k5A2QTasITs" frameborder="0" allowfullscreen></iframe>
         </div>
 
-        <h3 class="apply-now-heading">Can't wait to apply?</h3>
+        <h3 class="apply-now-heading" style="color: #008350; font-weight: bold;">Can't wait to apply?</h3>
         <p>Sign up <a href="http://146.190.66.30:4174/">here</a> and we'll let you know when applications open!</p>
       </div>
     </div>
@@ -44,8 +49,14 @@
     <Activities />
 
     <!-- FAQ Section -->
-    <div class="faq" id="faq">
-      <h3>FAQ</h3>
+    <div class="container-top" id="faq">
+      <header class="main-header">
+        <div class="text-center py-4">
+          <h1 class="mb-2">FAQ</h1>
+          <hr class="header-line" />
+        </div>
+      </header>
+
       <div class="question">
         <h4>What's a hackathon?</h4>
         <p>A 36-hour event where you work with a team to make something awesome. Mentors are available to help!</p>
@@ -61,8 +72,15 @@
     </div>
 
     <!-- Prizes -->
-    <div class="prizes" id="prizes">
-      <h3>Prizes</h3>
+    <div class="container-top" id="prizes">
+
+      <header class="main-header">
+        <div class="text-center py-4">
+          <h1 class="mb-2">Prizes</h1>
+          <hr class="header-line" />
+        </div>
+      </header>
+
       <div class="prize-titles">
         <div>Quest 3</div>
         <div>Smart TV</div>
@@ -86,8 +104,14 @@
     </div>
 
     <!-- Sponsors -->
-    <div class="sponsors" id="sponsors">
-      <h3>2024 Sponsors</h3>
+    <div class="container-top" id="sponsors">
+      <header class="main-header">
+        <div class="text-center py-4">
+          <h1 class="mb-2">Sponsors</h1>
+          <hr class="header-line" />
+        </div>
+      </header>
+
       <div class="sponsor-images">
         <a v-for="sponsor in sponsors" :key="sponsor.name" :href="sponsor.website" target="_blank" class="sponsor-link">
           <img v-if="sponsor.imageUrl" :src="sponsor.imageUrl" :alt="`${sponsor.name} Logo`" :style="getSponsorStyle(sponsor)" />
@@ -98,8 +122,15 @@
     </div>
 
     <!-- Staff -->
-    <div class="staff-team" id="staff-team">
-      <h3>Meet the Staff Team</h3>
+    <div class="container-top" id="staff-team">
+
+      <header class="main-header">
+        <div class="text-center py-4">
+          <h1 class="mb-2">Meet The Staff Team</h1>
+          <hr class="header-line" />
+        </div>
+      </header>
+
       <div class="staff-grid">
         <div v-for="member in staff" :key="member.id" class="staff-member">
           {{ member.firstName }} {{ member.lastName }}
@@ -279,15 +310,14 @@ export default {
 }
 
 /* Recap Videos */
-.attend {
-  padding: 80px 20px;
-}
+
 .green-box {
-  background: #64965d;
-  padding: 50px;
+  background: #231F20;
+  padding: 25px;
   border-radius: 10px;
   color: white;
   text-align: center;
+  font-weight: bolder;
 }
 .video-row {
   display: flex;
@@ -300,26 +330,29 @@ export default {
 .video-text {
   font-size: 50px;
   font-weight: bold;
+  color: #008350;
 }
 iframe {
   border-radius: 10px;
 }
 
 /* FAQ */
-.faq {
-  background: #ccffcc;
-  padding: 80px 20px;
-  text-align: center;
-}
+
 .faq h3 {
   font-size: 56px;
   margin-bottom: 40px;
 }
 .question h4 {
-  margin-top: 20px;
+  color: #008350;
+  font-size: 60px;
+  font-weight: bolder;
+  text-align: center;
+  padding-top: 30px;
 }
+
 .question p {
-  margin-bottom: 20px;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 /* Prizes */
@@ -334,6 +367,8 @@ iframe {
   justify-content: center;
   gap: 20px;
   font-size: 24px;
+  color: #008350;
+  font-weight: bolder;
 }
 
 /* Sponsors */
@@ -342,12 +377,22 @@ iframe {
   background: #ccffcc;
   text-align: center;
 }
+
 .sponsor-images {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
 }
+
+p {
+  color: #008350;
+  font-size: 30px;
+  text-align: center;
+  font-weight: bolder;
+  margin-bottom: 10px;
+}
+
 .sponsor-link img {
   object-fit: contain;
 }

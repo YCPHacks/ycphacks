@@ -1,22 +1,26 @@
 <template>
-  <div v-if="!isLoading" class="schedule" id="schedule">
-    <div v-if="event && Object.keys(event).length > 0" class="container" style="color: #ffffff">
-      <div class="header" style="margin-bottom: 10px;">
-        <div class="circle" style="font-size:27px; height:100px;">
-          <p>{{ new Date(event.startDate).getFullYear() || '' }} Schedule</p>
-        </div>
+  <div v-if="!isLoading" class="container-top" id="schedule">
+    <div v-if="event && Object.keys(event).length > 0" class="container-top">
+      <div class="container-top">
+        <header class="main-header">
+          <div class="text-center py-4">
+            <h1 class="mb-2">Activities</h1>
+            <hr class="header-line" />
+          </div>
+        </header>
       </div>
 
-      <div class="schedule-content">
+
+      <div class="container-fluid">
         <div v-for="(activities, date) in groupedActivities" :key="date">
-          <span id="day-tag" style="color: #5f8653">
+          <span id="day-tag">
             <b>{{ new Date(date).toLocaleDateString("en-US", { weekday: "long" }) }}
             {{ new Date(date).toLocaleDateString("en-US", { month: "long" }) }}
             {{ getOrdinalDay(date) }},
             {{ new Date(date).getFullYear() }}</b>
           </span>
-          <table v-if="activities.length > 0" class="table table-bordered" style="margin-bottom:35px">
-            <tbody>
+          <table v-if="activities.length > 0" class="table table-bordered">
+            <tbody style="background: #8d8d8d; width: 50%; ">
               <template v-for="activity in activities" :key="activity.id">
                 <!-- Main row -->
                 <tr
@@ -29,7 +33,7 @@
                       'hovered-row': hoveredRow === activity.id
                     }"
                 >
-                  <th scope="row">
+                  <th>
                     {{ new Date(activity.activityDate).toLocaleTimeString("en-US", {
                     timeZone: "America/New_York",
                     hour: "numeric",
@@ -61,9 +65,9 @@
               </template>
             </tbody>
           </table>
-          <div v-else style="padding:15px 0; color: #5f8653">There are no activities currently set for this date. Please check back later!</div>
+          <div v-else class ="text">There are no activities currently set for this date. Please check back later!</div>
         </div>
-        <div style="padding:15px 0; color:#5f8653;">* Schedule is subject to change.</div>
+        <div class ="text">* Schedule is subject to change.</div>
       </div>
     </div>
     <div v-else class="no-event-container">
@@ -78,11 +82,6 @@
           Please check back later!
         </p>
       </div>
-    </div>
-  </div>
-  <div v-else class="loading-overlay">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
     </div>
   </div>
 </template>
@@ -144,13 +143,16 @@ export default {
     },
     // Returns a list of all dates between the event start and end dates, inclusive
     getDateRangeOfEvent() {
-      const start = this.event.startDate;
-      const end = this.event.endDate;
+      const start = new Date(this.event.startDate);
+      const end = new Date(this.event.endDate);
       const dateRange = {};
       const current = new Date(start);
 
-      while (current.getDate() <= end.getDate()) {
-        const key = current.toLocaleDateString("en-US", { timeZone: "America/New_York" });
+      while (current <= end) {
+        const key = current.toLocaleDateString("en-US", {
+          timeZone: "America/New_York"
+        });
+
         dateRange[key] = [];
         current.setDate(current.getDate() + 1);
       }
@@ -191,300 +193,74 @@ export default {
       }
     }
   },
-  mounted() {
-    this.fetchActivities();
+  async mounted() {
+    await this.fetchActivities();
   }
 };
 </script>
 
 <style scoped>
-body {
-    font-family: Lato, sans-serif;
-    color: #fff;
-    font-weight: 300;
-    font-size: 18px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-.na
-.intro .main-header {
-    text-align: center;
-    display: block;
-    position: relative;
-    z-index: 100;
-}
-.intro .circle {
-    display: inline-block;
-    width: 200px;
-    height: 100px;
-    margin-top: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
-    border-radius: 10%;
-    border: 6px solid #fff;
-    text-align: center;
-    color: white;
-    line-height: 100px;
-    font-size: 20px;
-    transition: all .3s ease;
-}
-.bounce {
-    -webkit-animation-name: bounce;
-    animation-name: bounce;
-    -webkit-transform-origin: center bottom;
-    -ms-transform-origin: center bottom;
-    transform-origin: center bottom;
-}
-.animated {
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-}
-a {
-    background-color: transparent;
-}
-.landing-page {
-  text-align: center;
-  background-color: #ccffcc;
-  position: relative; /* Ensure this is the context for absolute positioning */
-  overflow: hidden;
-}
-
-.intro {
-  position: relative;
-  z-index: 1;
-  color:white;
-  background-color: rgba(0, 0, 0, 0.01);
-  /* margin-top: 10px; */
-  padding:20px;
-  bottom: 850px;
-  display: block;
-  align-items: center;
-  justify-content: center;
-  text-align: center; /* Center content */
-}
-
-.intro h1 {
-  font-family: 'Headliner', sans-serif;
-  font-size: 60px;
-}
-
-.intro h2 {
-  font-size: 30px;
-}
-
-.circle {
-  display: inline-block;
-  width: 200px;
-  height: 100px;
-  margin-top: 10px;
-  margin-left: 20px;
-  margin-right: 20px;
-  border-radius: 0;
-  border: 6px solid #fff;
-  text-align: center;
-  color: white;
-  font-size: 20px;
-  transition: all 0.3s ease;
-  padding-bottom: 10%;
-}
-
-.header .circle {
-    background: #fff;
-    position: relative;
-    -webkit-transform: skew(-20deg);
-    -moz-transform: skew(-20deg);
-    -o-transform: skew(-20deg);
-    transform: skew(-20deg);
-}
-.container {
-    position: relative;
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 38px 20px;
-    box-sizing: border-box;
-}
-
-@media (min-width: 550px) {
-    .container {
-        width: 80%;
-    }
-}
-@media (min-width: 400px) {
-    .container {
-        width: 85%;
-        padding: 0;
-    }
-}
-.header {
-    text-align: center;
-}
-.circle p {
-    font-size: 32px;
-    -webkit-transform: skew(20deg);
-    -moz-transform: skew(20deg);
-    -o-transform: skew(20deg);
-    transform: skew(20deg);
-}
-pre, blockquote, dl, figure, table, p, ul, ol, form {
-    margin-bottom: 2.5rem;
-}
-.intro #fountain {
-    display: block;
-    position: relative;
-    margin: auto;
-    max-height: 100px;
-    margin-bottom: -100px;
-}
-img{
-  border:0;
-}
-.intro h1 {
-    padding-top: 100px;
-   font-family: 'Headliner', sans-serif;
-    font-size: 60px;
-}
-.circle p {
-    font-size: 32px;
-    -webkit-transform: skew(20deg);
-    -moz-transform: skew(20deg);
-    -o-transform: skew(20deg);
-    transform: skew(20deg);
-}
- .attend {
-  position: relative;
-  text-align: center;
-  padding-bottom: 100px;
-  padding-top: 100px;
-  background-color: transparent; /* Make the background transparent */
-}
-
-.green-box {
-  background-color: #64965d; /* Green color */
-  padding: 50px; /* Padding to add space inside the green box */
-  border-radius: 10px; /* Rounded corners for the green box */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for visual effect */
-}
-
-.container1 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 50px; /* Add margin between the videos */
-  position: relative;
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 38px 20px;
-    box-sizing: border-box;
-}
-
-#fountain2 {
-  margin-bottom: 0;
-}
-
-iframe {
-  border-radius: 10px; /* Rounded corners for videos */
-}
-
-h1{
-  line-height:1.2;
-  letter-spacing:-.1rem;
-}
-h1, h2, h3, h4, h5, h6 {
-    margin-top: 0;
-    margin-bottom: 2rem;
-    font-weight: 300;
-}
-h1 {
-    font-size: 2em;
-    margin: 0.67em 0;
-}
-.schedule {
-    padding-top: 60px;
-    background-color: #a0dda3;
-    min-height: 100vh;
-}
-.schedule .header .circle {
-    font-size: 40px;
-}
-
-.circle p {
-    color:#64965d;
-    font-size: 32px;
-    -webkit-transform: skew(20deg);
-    -moz-transform: skew(20deg);
-    -o-transform: skew(20deg);
-    transform: skew(20deg);
-}
 #day-tag {
-    font-size: 40px;
+  font-size: clamp(3rem, 5vw + 1rem, 5rem);
+  margin-left: 75px;
 }
 
 .table {
-  table-layout: fixed;
+  width: 75%;
+  margin-left: 100px;
 }
 
-/* Default (i.e., non-important) rows */
 .table th,
 .table td {
-  background-color: #a0dda3; /* dark background */
-  color: #5f8653;
-  border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: #8d8d8d;
+  border-width: 3px;
+  border-color: #231F20;
+}
+
+th, td {
+  color: #008350 !important;
+  font-weight: bold;
+  font-size: 35px;
 }
 
 .table tr:hover th,
 .table tr:hover td {
-  background-color: #6c965d;
-}
-
-/* Important rows (both main and description) */
-.table .important-row th,
-.table .important-row td {
-  background-color: #fff !important;
-  color: #000 !important;
-}
-
-/* Make card match the row color */
-.table .important-row .activity-description {
-  background-color: #fff !important;
-  color: #000 !important;
-  border: none;
+  background-color: #8d8d8d;
 }
 
 /* When hovered (both rows share same activity id) */
 .table .hovered-row th,
 .table .hovered-row td {
-  background-color: #6c965d !important; /* your hover color */
-  color: #fff !important;
+  background-color: #008350 !important; /* your hover color */
+  color: #231F20 !important;
   transition: background-color 0.25s ease;
-}
-
-/* Important-row hover (white version) */
-.table .important-row.hovered-row th,
-.table .important-row.hovered-row td {
-  background-color: #e6e6e6 !important;
-  color: #000 !important;
 }
 
 /* When hovered, make the card transparent so the hover color shows through */
 .table .hovered-row .activity-description {
-  background-color: transparent !important;
-  color: inherit !important;
+  background-color: #008350 !important;
+  color: #231F20 !important;
+  font-weight: bold;
 }
 
 /* Non-important dropdown card */
 .activity-description {
-  background-color: #a0dda3 !important;
-  color: #5f8653 !important;
+  background-color: #8d8d8d !important;
+  color: #008350 !important;
   border: none;
+  font-weight: bold;
+  font-size: 30px;
 }
 
 .activity-row-group:hover {
   cursor: pointer;
+  background-color: #231F20;
+}
+
+.activity-row-group {
+  background: #8d8d8d;
+  color: #008350;
+  font-weight: bold;
 }
 
 .no-event-container {
@@ -509,4 +285,25 @@ h1 {
   line-height: 1.5;
 }
 
+.text {
+  padding:15px 0;
+  color: #008350;
+  margin-left: 100px;
+  font-size: 25px;
+  font-weight:bold;
+}
+
+@media (max-width: 768px) {
+  .table {
+    width: 100%;
+    margin-left: 0;
+  }
+  .text {
+    margin-left: 0;
+  }
+  #day-tag {
+    margin-left: 0;
+    font-size: clamp(3rem, 5vw + 1rem, 5rem);
+  }
+}
 </style>

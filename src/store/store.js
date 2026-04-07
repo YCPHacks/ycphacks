@@ -4,19 +4,52 @@ import { formatDateToEST } from "@/utils/formatDate.js";
 
 // Optional: a small adapter for user objects
 class UserAdapter {
-  constructor({ id, email, firstName, lastName, token, role }) {
+  constructor({ id, email, firstName, lastName, token, role, isEmailVerified }) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
     this.token = token;
     this.role = role;
+    this.isEmailVerified = isEmailVerified;
   }
+}
+
+class ProfileAdapter {
+    constructor({
+                    id, firstName, lastName,
+                    age, gender, pronouns, country,
+                    school, major, graduationYear,
+                    levelOfStudy, tShirtSize, hackathonsAttended,
+                    dietaryRestrictions, email, isEmailVerified,
+                    mlhEmails, phoneNumber, linkedInUrl}) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.gender = gender;
+        this.pronouns = pronouns;
+        this.country = country;
+        this.school = school;
+        this.major = major;
+        this.graduationYear = graduationYear;
+        this.levelOfStudy = levelOfStudy;
+        this.tShirtSize = tShirtSize;
+        this.hackathonsAttended = hackathonsAttended;
+        this.dietaryRestrictions = dietaryRestrictions;
+
+        this.email = email;
+        this.isEmailVerified = isEmailVerified;
+        this.mlhEmails = mlhEmails;
+        this.phoneNumber = phoneNumber;
+        this.linkedInUrl = linkedInUrl;
+    }
 }
 
 export default createStore({
   state: {
-    user: null,
+    user: null, 
+    profile: null,
     activities: [],
     event: {},
     apiBaseUrl: import.meta.env.VITE_API_BASE_URL
@@ -24,17 +57,25 @@ export default createStore({
   getters: {
     isLoggedIn: (state) => !!state.user,
     getUser: (state) => state.user,
+    getProfile: (state) => state.profile,
     getActivities: (state) => state.activities,
     getEvent: (state) => state.event,
-    getUserTeamId: (state) => state.userTeamId
+    getUserTeamId: (state) => state.userTeamId,
+    isEmailVerified: (state) => !!state.user.isEmailVerified
   },
   mutations: {
     setUser(state, user) {
       state.user = user;
     },
+    setUserEmailVerification(state, user, isEmailVerified) {
+        state.user.ieEmailVerified = isEmailVerified;
+    },
     clearUser(state) {
       state.user = null;
       state.userTeamId = null;
+    },
+    setProfile(state, profile) {
+      state.profile = profile;
     },
     setActivities(state, activities) {
         state.activities = activities;
@@ -55,7 +96,6 @@ export default createStore({
   actions: {
     async registerUser({ commit, state, dispatch }, formData) {
         const eventResult = await dispatch('getActiveEvent');
-
         const eventId = eventResult.event?.id;
 
         if(!eventId){
@@ -83,6 +123,18 @@ export default createStore({
             return { success: false, message: 'An error occurred during registration. Please try again.' };
         }
     },
+
+    async updateIsEmailVerified({ state, commit }) {
+        const response = await fetch(`${state.apiBaseUrl}/user/${state.user.id}`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        const data = await response.json();
+
+        const user = new UserAdapter(data.data);
+        commit("setUser", user);
+    },
     async createParticipantEntry({ state }, { userId, eventId }) {
       // This assumes you have a new backend endpoint: POST /participant/create
       const response = await fetch(`${state.apiBaseUrl}/participant/create`, {
@@ -101,31 +153,79 @@ export default createStore({
       try {
         const response = await axios.post(`${state.apiBaseUrl}/user/login`, { email, password });
         const data = response.data;
+          console.log(data);
         commit('setUser', new UserAdapter(data.data));
         document.cookie = `token=${data.data.token}; path=/;`;
 
         // await dispatch('getActiveEvent');
         await dispatch('fetchUserTeamStatus');
+
+        return { success: true };
       } catch (err) {
-        throw new Error(err.response?.data?.message || 'Login failed');
+          return { success: false, message: err.response?.data?.message || 'Login failed'};
       }
+    },
+
+    async getProfileById({commit, state}, id) {
+        try {
+            const response = await axios.get(`${state.apiBaseUrl}/user/${id}/profile`);
+            const data = response.data;
+
+            commit('setProfile', new ProfileAdapter(data.data));
+
+            return {success: true};
+        } catch (err) {
+            return {success: false, message: err.response?.data?.message || 'Failure to retrieve profile from ID'};
+        }
+    },
+
+    async updatePassword({ state }, {id, currentPassword, updatedPassword, confirmedPassword}) {
+        try {
+            const response = await axios.put(`${state.apiBaseUrl}/user/${id}/updatePassword`,
+          {
+                    currentPassword: currentPassword,
+                    updatedPassword: updatedPassword,
+                    confirmedPassword: confirmedPassword
+                },
+         { headers: {'Content-Type': 'application/json'}});
+
+            return { success: true };
+        } catch (err) {
+            return { success: false, message: err.response?.data?.error || "Update Failed"};
+        }
+    },
+
+    async updateProfile({ commit, state }, {id, updatedUser}) {
+        try {
+            const response = await axios.put(`${state.apiBaseUrl}/user/${id}`,
+                updatedUser, { headers: {'Content-Type': 'application/json'}});
+            const data = response.data;
+
+            const updatedProfile = new ProfileAdapter(data.data)
+            commit('setProfile', updatedProfile);
+
+            return { success: true };
+        } catch (err) {
+            return { success: false, message: err.response?.data?.message || 'Update failed'};
+        }
     },
     async validateWithToken({ commit, state, dispatch }) {
         try {
-          const tokenCookie = document.cookie.split('; ').find(row => row.startsWith('token='));
+          const token = document.cookie.split('; ').find(row => row.startsWith('token='));
         
           // 2. Check for the cookie row first.
-          if (!tokenCookie) return { success: false, message: "No token found" };
+          if (!token) return { success: false, message: "No token found" };
           
-          const tokenString = tokenCookie.split('=')[1]; 
+          const tokenString = token.split('=')[1];
 
           // 3. Check if the string is empty/malformed.
           if (!tokenString) return { success: false, message: "No token string found" };
           
           // 4. Send the token string directly in the request body object.
-          const response = await axios.post(`http://localhost:3000/user/auth`, { token: tokenString }, {
+          const response = await axios.post(`http://localhost:3000/user/auth`, {}, {
             headers: {
               "Content-Type": "application/json",
+                "Authorization": `Bearer ${tokenString}`
             },
           });
 
