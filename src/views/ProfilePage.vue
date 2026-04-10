@@ -540,10 +540,10 @@ const downloadFile = (filePath, filename) => {
   link.click();
 };
 const downloadMinorPaperwork = async () => {
-  downloadFile("/Documents/PCaRF.pdf", "PCaRF.pdf");
+  downloadFile("/Documents/PhotographyConsentAndReleaseForm.pdf", "PhotographyConsentAndReleaseForm.pdf");
 }
 const downloadMinorPaperworkConsentForm = async () => {
-  downloadFile("/Documents/RaCF.pdf", "RaCF.pdf");
+  downloadFile("/Documents/ReleaseAndConsentForm.pdf", "ReleaseAndConsentForm.pdf");
 }
 
 </script>
