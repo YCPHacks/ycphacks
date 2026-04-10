@@ -9,6 +9,10 @@
       </header>
     </div>
 
+  <div class="download-buttons">
+    <button v-if="isMinor" @click="downloadMinorPaperwork" class="btn btn-primary download-btn">Download Photography Consent and Release Form</button>
+    <button v-if="isMinor" @click="downloadMinorPaperworkConsentForm" class="btn btn-primary download-btn">Download Release and Consent Form</button>
+  </div>
     <!-- Page Content -->
     <div class="container-fluid">
       <div class="row align-items-start mt-5">
@@ -220,9 +224,10 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import majorData from "@/assets/majors.json";
+
 
 const store = useStore();
 
@@ -297,7 +302,7 @@ const profileData = ref({
   isEmailVerified: null,
   mlhEmails: null,
   phoneNumber: null,
-  linkedInUrl: null
+  linkedInUrl: null,
 });
 
 const currentEditBioError = ref(null);
@@ -314,6 +319,9 @@ const currentBioLevelOfStudy = ref(null);
 const currentBioTshirtSize = ref(null);
 const currentBioHacksAttended = ref(null);
 const currentBioDietaryRestrictions = ref(null);
+const isMinor = computed(() => {
+  return currentBioAge.value < 18;
+});
 
 const currentEditAccountInfoError = ref(null);
 const currentAccountInfoEmail = ref(null);
@@ -525,6 +533,19 @@ const handleChangePassword = async () => {
   await closeChangePasswordPopup();
 }
 
+const downloadFile = (filePath, filename) => {
+  const link = document.createElement("a");
+  link.href = filePath;
+  link.download = filename;
+  link.click();
+};
+const downloadMinorPaperwork = async () => {
+  downloadFile("/Documents/PCaRF.pdf", "PCaRF.pdf");
+}
+const downloadMinorPaperworkConsentForm = async () => {
+  downloadFile("/Documents/RaCF.pdf", "RaCF.pdf");
+}
+
 </script>
 
 <style scoped>
@@ -608,9 +629,23 @@ body {
   padding-right: 7px;
 }
 
+.download-btn {
+  position: relative;
+  width: 20%;
+  margin-left: 20%;
+}
+
 /* Sidebar min width */
 aside {
   min-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .download-btn {
+    width: 25%;
+    margin-left: 20%;
+    font-size: 13px;
+  }
 }
 
 </style>
