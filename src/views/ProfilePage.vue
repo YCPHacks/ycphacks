@@ -305,6 +305,8 @@ const profileData = ref({
   linkedInUrl: null,
 });
 
+const isMinor = ref(false);
+
 const currentEditBioError = ref(null);
 const currentBioFirstName = ref(null);
 const currentBioLastName = ref(null);
@@ -319,9 +321,6 @@ const currentBioLevelOfStudy = ref(null);
 const currentBioTshirtSize = ref(null);
 const currentBioHacksAttended = ref(null);
 const currentBioDietaryRestrictions = ref(null);
-const isMinor = computed(() => {
-  return currentBioAge.value < 18;
-});
 
 const currentEditAccountInfoError = ref(null);
 const currentAccountInfoEmail = ref(null);
@@ -341,10 +340,15 @@ onMounted(async () => {
     await fetchProfileData();
     await setCurrentDataToProfileData();
     await setEmailIsVerifiedCSS();
+    await updateMinorStatus();
   } catch (err) {
     console.error('Failed to ...:', err)
   }
 })
+
+const updateMinorStatus = async () => {
+  isMinor.value = profileData.value.age < 18;
+}
 
 const fetchProfileData = async () => {
   try {
@@ -361,7 +365,6 @@ const fetchProfileData = async () => {
 }
 
 const setEmailIsVerifiedCSS = async () => {
-  console.log(profileData.value)
   const isEmailVerified = !!profileData.value.isEmailVerified;
 
   const verifiedDiv = document.getElementById("verified-email-marker");
@@ -427,11 +430,13 @@ const handleBioUpdate = async () => {
       }
     });
 
-    if (updateUserResp.success)
+    if (!updateUserResp.success)
       return;
 
     profileData.value = store.getters.getProfile;
+
     await setCurrentDataToProfileData();
+    await updateMinorStatus();
 
     currentEditBioError.value = updateUserResp.errors;
   }
@@ -539,6 +544,7 @@ const downloadFile = (filePath, filename) => {
   link.download = filename;
   link.click();
 };
+
 const downloadMinorPaperwork = async () => {
   downloadFile("/Documents/PhotographyConsentAndReleaseForm.pdf", "PhotographyConsentAndReleaseForm.pdf");
 }
@@ -555,6 +561,11 @@ const downloadMinorPaperworkConsentForm = async () => {
   font-weight: bolder;
   font-size: clamp(2rem, 4vw + 1rem, 4rem);
 }
+
+body.light .group-header-text {
+  color: #000;
+}
+
 
 .info-group-body {
   background-color: #008350;
@@ -597,7 +608,7 @@ body {
 }
 
 .container-fluid {
-  background-color: #231F20;
+  background-color: #231f20;
   position: relative; /* Ensure this is the context for absolute positioning */
   overflow: hidden;
   min-height: 100vh;
