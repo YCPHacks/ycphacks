@@ -12,6 +12,24 @@
         style="width:100%"
       />
     </a>
+
+    <a
+        id="ycphacks-logo"
+        style="display:block;max-width:80px;min-width:60px;position:fixed;left:120px;top:2.5px;width:10%;z-index:10000"
+        href="/"
+    >
+      <img v-if="isDark"
+           src="../assets/fountain_black.png"
+           alt="YCP Hacks Fountain Logo"
+           style="width:100%"
+      />
+      <img v-if="!isDark"
+           src="../assets/fountain_white.png"
+           alt="YCP Hacks Fountain Logo"
+           style="width:100%"
+      />
+    </a>
+
     <div class="nav">
       <router-link to="/register" class="nav-link">Register</router-link>
       <router-link to="/login" class="nav-link">Login</router-link>
