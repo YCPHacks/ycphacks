@@ -58,7 +58,7 @@
       </header>
 
       <div class="question">
-        <h4>What's a hackathon?</h4>
+        <h4>What's a hackathon? woah the deployment works!!</h4>
         <p>A 36-hour event where you work with a team to make something awesome. Mentors are available to help!</p>
         <h4>Can I come?</h4>
         <p>Any college student 18+ can attend.</p>
