@@ -426,6 +426,7 @@
 
         <!-- Submit Button -->
         <b-button variant="success" type="submit" class="w-100">Submit</b-button>
+        <p class="error">{{ message }}</p>
       </b-form>
     </div>
   </div>
