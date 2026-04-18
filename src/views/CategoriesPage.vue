@@ -89,7 +89,7 @@ export default {
     };
   },
   created() {
-    axios.get('http://localhost:3000/event/all')
+    axios.get(`http://45.55.167.149:3000/event/all`)
       .then(response => {
         this.events = response.data.events
           ? response.data.events.map(event => ({ ...event }))
@@ -110,7 +110,7 @@ export default {
         console.log(this.categories);
         return;
       }
-        axios.get(`http://localhost:3000/category/by-event/${this.selectedEventId}`)
+        axios.get(`http://45.55.167.149:3000/category/by-event/${this.selectedEventId}`)
         .then(response => {
           this.categories = response.data.categories
             ? response.data.categories.map(category => ({ ...category, open: false }))
@@ -127,7 +127,7 @@ export default {
       if (category.open) {
         try {
           const response = await axios.get(
-            'http://localhost:3000/prize/by-event/' + this.selectedEventId
+            'http://45.55.167.149:3000/prize/by-event/' + this.selectedEventId
           );
           // Sort prizes by placement
           this.prizes = (response.data.prizes || []).sort(
