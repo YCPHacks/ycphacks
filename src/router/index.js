@@ -99,7 +99,7 @@ router.beforeEach(async (to, from, next) => {
         isAuthenticated = result.success;
     }
 
-    const userEmailVerified = store.state.user?.isEmailVerified;
+    const userEmailVerified = true;// || store.state.user?.isEmailVerified;
 
     // Allow routing to login if NOT authenticated
     if (to.path === '/login' || to.path === '/register' || to.path === '/passwordLink' || to.path  === '/passwordRecovery') {
