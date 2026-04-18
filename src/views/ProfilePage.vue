@@ -641,6 +641,7 @@ body {
 }
 
 .download-btn {
+  background-color: cornflowerblue;
   position: relative;
   width: 20%;
   margin-left: 20%;

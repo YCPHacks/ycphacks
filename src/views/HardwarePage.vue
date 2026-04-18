@@ -22,69 +22,63 @@
           </div>
 
           <template v-if="filteredItems.length > 0">
-            <div id="hardwareAccordion" class="accordion">
-              <div
-                  v-for="(item, index) in filteredItems"
-                  :key="item.name"
-                  class="accordion-item mb-3"
-              >
+            <div class="row align-items-start">
+              <div class="hardware-item-div col-md-4 col-sm-6 col-xs-12 p-2 pt-0" v-for="item in filteredItems">
+                <div class="hardware-item-card w-100 h-100 card rounded-4 p-2 d-flex flex-column">
 
-                <h2 :id="'heading-' + getSafeId(item.name)" class="accordion-header">
-                  <button
-                      class="accordion-button collapsed hardware-item-header"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      :data-bs-target="'#collapse-' + getSafeId(item.name)"
-                      aria-expanded="false"
-                      :aria-controls="'collapse-' + getSafeId(item.name)"
-                  >
-                    <span class="me-3">
-                      <i
-                          :class="['bi', getAvailabilityIconClass(item.availabilityStatus).icon, getAvailabilityIconClass(item.availabilityStatus).color]"
-                          style="font-size: 1.1rem;"
-                      ></i>
-                    </span>
-                    <div class="fw-bold">{{ item.name }}</div>
-                  </button>
-                </h2>
+                  <div class="hardware-img-background ratio ratio-1x1 rounded-2">
+                    <img
+                        class="hardware-img rounded-2"
+                        :src="item.image"
+                        :alt="item.name"
+                    />
+                  </div>
 
-                <div
-                    :id="'collapse-' + getSafeId(item.name)"
-                    class="accordion-collapse collapse"
-                    :aria-labelledby="'heading-' + getSafeId(item.name)"
-                    data-bs-parent="#hardwareAccordion"
-                >
-                  <div class="accordion-body">
-                    <div class="d-flex align-items-start">
-                      <div class="flex-shrink-0 me-4">
-                        <img
-                            :src="item.image"
-                            :alt="item.name"
-                            class="img-thumbnail hardware-image"
-                        />
-                      </div>
+                  <div class="hardware-item-info d-flex flex-column mt-1">
+                    <h3 class="text-center">{{item.name}}</h3>
 
-                      <div class="flex">
+                    <div class="container">
+                      <div class="row d-flex align-items-center justify-content-center">
 
-                        <div class="flex">
-                          <span :class="{'text-danger': item.isUnavailable, 'text-success': !item.isUnavailable}">
-                            {{ item.availabilityText }}
-                          </span>
+                        <div class="col col-6 col-md-12 col-lg-6 mb-0 px-0">
+                          <p class="text-center m-0">
+                            <span v-if="item.availableCount === 0">None </span>
+                            <span v-else>{{item.availableCount}} </span>
+                            Open
+                          </p>
                         </div>
 
-                        <p class="mb-3">
-                          {{ item.description }}
-                        </p>
-
+                        <div class="col col-6 col-md-12 col-lg-6 mb-0 px-0" v-if="item.availableCount!==0">
+                          <p class="text-center m-0">
+                            <span v-if="item.functionalCount===0">None </span>
+                            <span v-else>{{item.functionalCount}} </span>
+                            Working
+                          </p>
+                        </div>
+  <!--                      <p class="col col-1"></p>-->
                       </div>
+                    </div>
+
+                    <div class="row m-0 mt-4 p-0 d-flex align-items-center">
+                      <div class="col m-0 p-0">
+                        <h5 class="m-0 p-0 text-start">Description</h5>
+                      </div>
+
+                      <div class="col-auto d-flex align-items-end" @click="item.showItemDescription = !item.showItemDescription">
+                        <i v-if="item.showItemDescription" class="bi bi-chevron-down icon-bold"></i>
+                        <i v-else class="bi bi-chevron-left icon-bold"></i>
+                      </div>
+                    </div>
+
+                    <div class="m-0 mt-1 p-0">
+                      <p v-if="item.showItemDescription" class="p-0 m-0">{{item.description}}</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </template>
-          <div v-else class="text-center p-5 not-found-box">
-          </div>
+          <div v-else class="text-center p-5 not-found-box"></div>
         </div>
       </main>
     </div>
@@ -142,7 +136,7 @@ export default {
             return {
               name: fullName,
               description: p.description || "No description available.",
-              image: p.image || null,
+              image: p.image || new URL('../assets/placeholder.png', import.meta.url).href,
               isUnavailable: p.isUnavailable,
               isNonFunctional: !p.isFunctional,
             };
@@ -169,13 +163,15 @@ export default {
             totalCount: 0,
             unavailableCount: 0,
             nonFunctionalCount: 0,
+            showItemDescription: true
           };
         }
+
         grouped[name].totalCount += 1;
         if(p.isUnavailable){
           grouped[name].unavailableCount += 1;
         }
-        if (p.isNonFunctional) {
+        else if (p.isNonFunctional) {
           grouped[name].nonFunctionalCount += 1;
         }
       });
@@ -185,7 +181,7 @@ export default {
         const functionalCount = item.totalCount - item.nonFunctionalCount;
 
         // 2. Calculate the available count (Functional MINUS Unavailable)
-        const availableCount = functionalCount - item.unavailableCount;
+        const availableCount = item.totalCount - item.unavailableCount;
 
         let availabilityText;
         let isUnavailable = false;
@@ -239,16 +235,43 @@ export default {
 </script>
 
 <style scoped>
-/* ... (existing styles above hardware-image) ... */
-
 /* --- NEW CSS CLASS FOR LARGER IMAGE SIZE --- */
-.hardware-image {
-  /* Increased from 150px to 200px */
-  width: 250px !important;
-  height: 250px !important;
-  object-fit: contain !important;
+
+.hardware-item-div {
+  aspect-ratio: auto;
 }
-/* ------------------------------------------ */
+
+.hardware-item-card {
+  background-color: #221F20FF;
+}
+
+.hardware-img-background {
+  background-color: lightgrey;
+}
+
+.hardware-img {
+  width: 100%;
+}
+
+.hardware-item-info > h3 {
+  color: #fff;
+}
+
+.hardware-item-info h5 {
+  color: #fff;
+}
+
+.hardware-item-info p {
+  color: #fff;
+}
+
+.hardware-item-info i {
+  color: #fff;
+}
+
+.icon-bold {
+  -webkit-text-stroke-width: 0.75px;
+}
 
 .p-4 {
   background-color: #008350;
