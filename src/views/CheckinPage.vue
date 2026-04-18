@@ -36,10 +36,10 @@ onMounted(async () => {
       return
     }
 
-    const userId = user.id
+    const userEmail = user.email
     const baseUrl = store.state.apiBaseUrl
 
-    const response = await axios.get(`${baseUrl}/user/${userId}/qrcode`)
+    const response = await axios.get(`${baseUrl}/user/${userEmail}/qrcode`)
     qrCode.value = response.data.qr;
   } catch (err) {
     console.error('Failed to load QR code:', err)
