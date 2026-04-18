@@ -222,7 +222,7 @@ export default createStore({
           if (!tokenString) return { success: false, message: "No token string found" };
           
           // 4. Send the token string directly in the request body object.
-          const response = await axios.post(`http://localhost:3000/user/auth`, {}, {
+          const response = await axios.post(`${state.apiBaseUrl}/user/auth`, {}, {
             headers: {
               "Content-Type": "application/json",
                 "Authorization": `Bearer ${tokenString}`
@@ -295,7 +295,7 @@ export default createStore({
       const eventId = 1;  //getters.getEvent.id ||
 
       try{
-        const response = await axios.get(`http://localhost:3000/teams/${userId}/team`, {
+        const response = await axios.get(`${state.apiBaseUrl}/teams/${userId}/team`, {
           params: { eventId }
         });
 
