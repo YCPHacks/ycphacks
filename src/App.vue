@@ -2,8 +2,7 @@
   <div id="app">
     <Navbar v-if="!isLoggedIn" />
     <!-- Show Navbar on all other pages -->
-    <UnverifiedNavBar v-else-if="!hideNavBar" />
-    <NewNavBar v-else-if="!hideNavBar" />
+    <NewNavBar v-else />
     <router-view />
   </div>
 </template>
@@ -30,9 +29,6 @@ components: {
       console.log(this.isEmailVerified);
       return this.isEmailVerified;
     },
-      hideNavBar() {
-        return this.$route.path === '/pleaseVerify'
-      }
     }
 };
 </script>
