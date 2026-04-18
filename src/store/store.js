@@ -11,7 +11,7 @@ class UserAdapter {
     this.lastName = lastName;
     this.token = token;
     this.role = role;
-    this.isEmailVerified = isEmailVerified;
+    this.isEmailVerified = true//isEmailVerified;
   }
 }
 
@@ -39,7 +39,7 @@ class ProfileAdapter {
         this.dietaryRestrictions = dietaryRestrictions;
 
         this.email = email;
-        this.isEmailVerified = isEmailVerified;
+        this.isEmailVerified = true//isEmailVerified;
         this.mlhEmails = mlhEmails;
         this.phoneNumber = phoneNumber;
         this.linkedInUrl = linkedInUrl;
@@ -61,7 +61,7 @@ export default createStore({
     getActivities: (state) => state.activities,
     getEvent: (state) => state.event,
     getUserTeamId: (state) => state.userTeamId,
-    isEmailVerified: (state) => !!state.user.isEmailVerified
+    isEmailVerified: (state) => true//!!state.user.isEmailVerified
   },
   mutations: {
     setUser(state, user) {
