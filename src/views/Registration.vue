@@ -489,7 +489,7 @@ export default {
           { value: null, text: '-Select One-' },
           { value: "he/him/his", text: 'he/him/his' },
           { value: "she/her/her", text: 'she/her/her' },
-          { value: "they, them, their", text: 'they, them, their' }
+          { value: "they, them, their", text: 'they/them/their' }
         ],
         tShirtSizes: [
           { value: null, text: '-Select One-' },

@@ -64,9 +64,9 @@
                         <h5 class="m-0 p-0 text-start">Description</h5>
                       </div>
 
-                      <div class="col-auto d-flex align-items-end" @click="item.showItemDescription = !item.showItemDescription">
-                        <i v-if="item.showItemDescription" class="bi bi-chevron-down icon-bold"></i>
-                        <i v-else class="bi bi-chevron-left icon-bold"></i>
+                      <div class="hover-pointer col-auto d-flex align-items-end" @click="item.showItemDescription = !item.showItemDescription">
+                        <i v-if="item.showItemDescription" class="bi bi-chevron-down icon-bold cursor-pointer"></i>
+                        <i v-else class="bi bi-chevron-left icon-bold cursor-pointer"></i>
                       </div>
                     </div>
 
@@ -163,7 +163,7 @@ export default {
             totalCount: 0,
             unavailableCount: 0,
             nonFunctionalCount: 0,
-            showItemDescription: true
+            showItemDescription: false
           };
         }
 
@@ -236,6 +236,10 @@ export default {
 
 <style scoped>
 /* --- NEW CSS CLASS FOR LARGER IMAGE SIZE --- */
+
+.hover-pointer {
+  cursor: pointer;
+}
 
 .hardware-item-div {
   aspect-ratio: auto;

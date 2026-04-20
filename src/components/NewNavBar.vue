@@ -3,11 +3,11 @@
     <a
         id="mlh-trust-badge"
         style="display:block;max-width:100px;min-width:60px;position:fixed;left:0px;top:0;width:10%;z-index:10000"
-        href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2024-season&utm_content=white"
+        href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
         target="_blank"
     >
       <img
-          src="https://s3.amazonaws.com/logged-assets/trust-badge/2024/mlh-trust-badge-2024-white.svg"
+          src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-white.svg"
           alt="Major League Hacking 2024 Hackathon Season"
           style="width:100%"
       />
@@ -33,6 +33,7 @@
     <div class="nav">
       <div class="desktop-nav">
         <div class="nav-right" v-if="isLoggedIn">
+          <router-link class="nav-link" to="/">Home</router-link>
           <router-link class = "nav-link" to="/checkin">Check In</router-link>
           <router-link class="nav-link" to="/teams">Team Information</router-link>
           <router-link class="nav-link" to="/activities">Activities</router-link>
@@ -62,7 +63,8 @@
           ☰
         </button>
         <div class="nav-down" v-if="isLoggedIn && isOpen">
-          <router-link class = "nav-link" to="/checkin" @click="isOpen = false">Check In</router-link>
+          <router-link class="nav-link" to="/" @click="isOpen = false">Home</router-link>
+          <router-link class="nav-link" to="/checkin" @click="isOpen = false">Check In</router-link>
           <router-link class="nav-link" to="/teams" @click="isOpen = false">Team Information</router-link>
           <router-link class="nav-link" to="/activities" @click="isOpen = false">Activities</router-link>
           <router-link class="nav-link" to="/hardware" @click="isOpen = false">Hardware</router-link>
@@ -229,7 +231,7 @@ input:checked + .slider {
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .desktop-nav {
     display: none;
   }

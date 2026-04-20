@@ -12,28 +12,28 @@
 
 
       <div class="container-fluid">
-        <div v-for="(activities, date) in groupedActivities" :key="date">
-          <span id="day-tag">
+        <div class="row justify-content-center">
+          <div v-for="(activities, date) in groupedActivities" :key="date">
+          <h3 id="day-tag" class="text-center">
             <b>{{ new Date(date).toLocaleDateString("en-US", { weekday: "long" }) }}
             {{ new Date(date).toLocaleDateString("en-US", { month: "long" }) }}
             {{ getOrdinalDay(date) }},
             {{ new Date(date).getFullYear() }}</b>
-          </span>
-          <table v-if="activities.length > 0" class="table table-bordered">
+          </h3>
+          <table v-if="activities.length > 0" class="table table-bordered mx-auto">
             <tbody style="background: #8d8d8d; width: 50%; ">
               <template v-for="activity in activities" :key="activity.id">
                 <!-- Main row -->
                 <tr
+                    class="hovered-row"
                     @click="toggleRow(activity.id)"
                     @mouseenter="hoveredRow = activity.id"
                     @mouseleave="hoveredRow = null"
                     :class="{
-                      'important-row': isImportantActivity(activity.activityName),
                       'activity-row-group': isLoggedIn,
-                      'hovered-row': hoveredRow === activity.id
                     }"
                 >
-                  <th>
+                  <th class="col col-5">
                     {{ new Date(activity.activityDate).toLocaleTimeString("en-US", {
                     timeZone: "America/New_York",
                     hour: "numeric",
@@ -41,18 +41,15 @@
                     hour12: true
                   }) }}
                   </th>
-                  <th>{{ activity.activityName }}</th>
+                  <th class="col col-5">{{ activity.activityName }}</th>
                 </tr>
 
                 <!-- Description row -->
                 <tr
+                    class="hovered-row"
                     v-if="isLoggedIn"
                     @mouseenter="hoveredRow = activity.id"
                     @mouseleave="hoveredRow = null"
-                    :class="{
-                      'important-row': isImportantActivity(activity.activityName),
-                      'hovered-row': hoveredRow === activity.id
-                    }"
                 >
                   <td colspan="2" class="p-0">
                     <b-collapse :visible="expandedRows.includes(activity.id)">
@@ -65,9 +62,10 @@
               </template>
             </tbody>
           </table>
-          <div v-else class ="text">There are no activities currently set for this date. Please check back later!</div>
+          <div v-else class="text text-center">There are no activities currently set for this date. Please check back later!</div>
         </div>
-        <div class ="text">* Schedule is subject to change.</div>
+          <div class ="text text-center">* Schedule is subject to change.</div>
+        </div>
       </div>
     </div>
     <div v-else class="no-event-container">
@@ -202,7 +200,7 @@ export default {
 <style scoped>
 #day-tag {
   font-size: clamp(3rem, 5vw + 1rem, 5rem);
-  margin-left: 75px;
+  align-self: center;
 }
 
 .table {
@@ -286,9 +284,7 @@ th, td {
 }
 
 .text {
-  padding:15px 0;
   color: #008350;
-  margin-left: 100px;
   font-size: 25px;
   font-weight:bold;
 }
