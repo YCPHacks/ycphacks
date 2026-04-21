@@ -9,7 +9,10 @@
   </div>
 
   <div class="container-fluid">
-    <button class="verify" @click="sendEmailVerification">Resend Email Verification</button>
+    <button class="verify" @click="sendEmailVerification" :disabled="loading">{{ loading ? "Sending..." : "Resend Email Verification" }}</button>
+    <p v-if = "error" class="error-message">
+      {{ error }}
+    </p>
   </div>
 </template>
 
@@ -24,7 +27,8 @@ export default {
     return {
       message: "",
       error: "",
-      isLoading: false
+      loading: false,
+      email: ""
     };
   },
 
@@ -35,12 +39,13 @@ export default {
   methods: {
 
     async sendEmailVerification() {
+      this.loading = true;
+
       try {
-        this.$router.push('/pleaseVerify');
         const baseUrl = this.$store.state.apiBaseUrl;
         const emailToVerify = this.getUser?.email;
-        const response = await fetch(`${baseUrl}/verify/resendVerification`, {
 
+        const response = await fetch(`${baseUrl}/verify/resendVerification`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -49,13 +54,25 @@ export default {
             email: emailToVerify
           })
         });
+
         const data = await response.json();
-        this.message = data.message || "Reset link sent if email exists.";
+
+        if (!response.ok) {
+          this.error = data.message;
+          this.message = "";
+          return;
+        }
+
+        this.message = data.message || "Email sent";
+        this.error = "";
         this.email = "";
 
       } catch (err) {
         console.error(err);
         this.error = "Something went wrong. Please try again.";
+
+      } finally {
+        this.loading = false;
       }
     }
   }
@@ -71,6 +88,13 @@ export default {
   margin: 0 auto;
   width: 50%;
   height: 20vh; /* full viewport height */
+}
+
+.error-message {
+  font-weight: bolder;
+  font-size: 30px;
+  display: block;
+  color: #008350;
 }
 
 @media (max-width: 768px) {

@@ -41,7 +41,7 @@ describe('NewNavBar.vue (unit test only)', () => {
 
         //check that all links exist
         const totalLinks = anchors.length + routerLinks.length;
-        expect(totalLinks).toBe(6);
+        expect(totalLinks).toBe(8);
     });
 
     // Dropdown should be hidden by default

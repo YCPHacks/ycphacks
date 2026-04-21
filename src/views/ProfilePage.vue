@@ -9,6 +9,10 @@
       </header>
     </div>
 
+  <div class="download-buttons">
+    <button v-if="isMinor" @click="downloadMinorPaperwork" class="btn btn-primary download-btn">Download Photography Consent and Release Form</button>
+    <button v-if="isMinor" @click="downloadMinorPaperworkConsentForm" class="btn btn-primary download-btn">Download Release and Consent Form</button>
+  </div>
     <!-- Page Content -->
     <div class="container-fluid">
       <div class="row align-items-start mt-5">
@@ -152,7 +156,7 @@
                       <input class="form-control" type="text" :value="'*'.repeat(passwordRandomAsteriskCount)" readonly/>
                     </div>
                     <div class="col col-3 d-flex justify-content-end">
-                      <button class="btn w-75" type="button" @click="openChangePasswordPopup">Change</button>
+                      <button class="btn w-75" type="button">Change</button><!-- @click="openChangePasswordPopup" -->
                     </div>
                   </div>
 
@@ -220,9 +224,10 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import majorData from "@/assets/majors.json";
+
 
 const store = useStore();
 
@@ -245,7 +250,7 @@ const options = ref({
     { value: null, text: '-Select One-' },
     { value: "he/him/his", text: 'he/him/his' },
     { value: "she/her/her", text: 'she/her/her' },
-    { value: "they, them, their", text: 'they, them, their' }
+    { value: "they, them, their", text: 'they/them/their' }
   ],
       tShirtSizes: [
     { value: null, text: '-Select One-' },
@@ -297,8 +302,10 @@ const profileData = ref({
   isEmailVerified: null,
   mlhEmails: null,
   phoneNumber: null,
-  linkedInUrl: null
+  linkedInUrl: null,
 });
+
+const isMinor = ref(false);
 
 const currentEditBioError = ref(null);
 const currentBioFirstName = ref(null);
@@ -333,10 +340,15 @@ onMounted(async () => {
     await fetchProfileData();
     await setCurrentDataToProfileData();
     await setEmailIsVerifiedCSS();
+    await updateMinorStatus();
   } catch (err) {
     console.error('Failed to ...:', err)
   }
 })
+
+const updateMinorStatus = async () => {
+  isMinor.value = profileData.value.age < 18;
+}
 
 const fetchProfileData = async () => {
   try {
@@ -353,7 +365,6 @@ const fetchProfileData = async () => {
 }
 
 const setEmailIsVerifiedCSS = async () => {
-  console.log(profileData.value)
   const isEmailVerified = !!profileData.value.isEmailVerified;
 
   const verifiedDiv = document.getElementById("verified-email-marker");
@@ -419,11 +430,13 @@ const handleBioUpdate = async () => {
       }
     });
 
-    if (updateUserResp.success)
+    if (!updateUserResp.success)
       return;
 
     profileData.value = store.getters.getProfile;
+
     await setCurrentDataToProfileData();
+    await updateMinorStatus();
 
     currentEditBioError.value = updateUserResp.errors;
   }
@@ -525,6 +538,20 @@ const handleChangePassword = async () => {
   await closeChangePasswordPopup();
 }
 
+const downloadFile = (filePath, filename) => {
+  const link = document.createElement("a");
+  link.href = filePath;
+  link.download = filename;
+  link.click();
+};
+
+const downloadMinorPaperwork = async () => {
+  downloadFile("/Documents/PhotographyConsentAndReleaseForm.pdf", "PhotographyConsentAndReleaseForm.pdf");
+}
+const downloadMinorPaperworkConsentForm = async () => {
+  downloadFile("/Documents/ReleaseAndConsentForm.pdf", "ReleaseAndConsentForm.pdf");
+}
+
 </script>
 
 <style scoped>
@@ -534,6 +561,11 @@ const handleChangePassword = async () => {
   font-weight: bolder;
   font-size: clamp(2rem, 4vw + 1rem, 4rem);
 }
+
+body.light .group-header-text {
+  color: #000;
+}
+
 
 .info-group-body {
   background-color: #008350;
@@ -576,7 +608,7 @@ body {
 }
 
 .container-fluid {
-  background-color: #231F20;
+  background-color: #231f20;
   position: relative; /* Ensure this is the context for absolute positioning */
   overflow: hidden;
   min-height: 100vh;
@@ -608,9 +640,24 @@ body {
   padding-right: 7px;
 }
 
+.download-btn {
+  background-color: cornflowerblue;
+  position: relative;
+  width: 20%;
+  margin-left: 20%;
+}
+
 /* Sidebar min width */
 aside {
   min-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .download-btn {
+    width: 25%;
+    margin-left: 20%;
+    font-size: 13px;
+  }
 }
 
 </style>

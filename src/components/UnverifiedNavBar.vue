@@ -3,13 +3,25 @@
     <a
         id="mlh-trust-badge"
         style="display:block;max-width:100px;min-width:60px;position:fixed;left:0px;top:0;width:10%;z-index:10000"
-        href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2024-season&utm_content=white"
+        href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
         target="_blank"
     >
       <img
-          src="https://s3.amazonaws.com/logged-assets/trust-badge/2024/mlh-trust-badge-2024-white.svg"
+          src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-white.svg"
           alt="Major League Hacking 2024 Hackathon Season"
           style="width:100%"
+      />
+    </a>
+
+    <a
+        id="ycphacks-logo"
+        style="display:block;max-width:80px;min-width:60px;position:fixed;left:120px;top:2.5px;width:10%;z-index:10000"
+        href="/"
+    >
+      <img
+           src="../assets/fountain_black.png"
+           alt="YCP Hacks Fountain Logo"
+           style="width:100%"
       />
     </a>
 
@@ -27,9 +39,7 @@
       </div>
     </div>
     <div class="mobile-nav">
-      <button class="dropdown" id="hamburger" @click="handleMenu()">
-        ☰
-      </button>
+      <button class="dropdown" id="hamburger" @click="handleMenu()">☰</button>
       <div class="nav-down" v-if="isLoggedIn && isOpen">
         <router-link class = "nav-link" to="/emailVerification" @click="isOpen = false">Email Verification</router-link>
         <router-link class="nav-link" to="/profile" @click="isOpen = false">Profile</router-link>

@@ -2,7 +2,7 @@
   <div id="app">
     <Navbar v-if="!isLoggedIn" />
     <!-- Show Navbar on all other pages -->
-    <!--    <UnverifiedNavBar v-else-if="!isVerified && !hideNavBar" />-->
+<!--    <UnverifiedNavBar v-else-if="!isVerified && !hideNavBar" />-->
     <NewNavBar v-else/><!---if="!hideNavBar" />-->
     <router-view />
   </div>
