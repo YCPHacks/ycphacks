@@ -45,7 +45,7 @@
         </b-alert>
       </div>
 
-      <b-form v-if="!isLoading" @submit.prevent="handleSubmit">
+      <b-form v-if="!isLoading"> <!-- @submit.prevent="handleSubmit" -->
         <h3 class="mb-4">Create an Account</h3>
 
         <!-- First Name and Last Name -->
@@ -425,7 +425,7 @@
         </div>
 
         <!-- Submit Button -->
-        <b-button variant="success" type="submit" class="w-100">Submit</b-button>
+        <b-button variant="secondary" type="submit" class="w-100">Submit</b-button>
       </b-form>
     </div>
   </div>
