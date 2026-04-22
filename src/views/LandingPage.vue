@@ -104,9 +104,9 @@
     </div>
 
     <!-- Sponsors -->
-    <div class="container-top" id="sponsors">
+    <div class="container-top py-4" id="sponsors">
       <header class="main-header">
-        <div class="text-center py-4">
+        <div class="text-center">
           <h1 class="mb-2">Sponsors</h1>
           <hr class="header-line" />
         </div>

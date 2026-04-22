@@ -25,7 +25,7 @@
             </div>
 
             <div class="card info-group-body px-3 pt-1">
-              <form @submit.prevent="handleBioUpdate">
+              <form> <!-- @submit.prevent="handleBioUpdate" -->
                 <div class="mb-5">
                   <div class="row mt-4">
                       <div class="col mx-2">
@@ -102,7 +102,7 @@
                   <div class="row my-3">
                     <div class="col d-flex justify-content-end">
                       <button class="btn mx-2 btn-form-cancel" @click="revertBioChanges">Revert Changes</button>
-                      <button type="submit" class="btn mx-2 btn-form-submit">Save Changes</button>
+                      <button type="submit" class="btn mx-2 btn-form-cancel">Save Changes</button>
                     </div>
                   </div>
                 </div>
@@ -118,7 +118,7 @@
 
             <div class="card info-group-body px-3 pt-1">
 
-              <form @submit.prevent="handleAccountInfoUpdate">
+              <form>  <!-- @submit.prevent="handleAccountInfoUpdate" -->
                 <div class="mt-4 mx-2">
                   <h4 class="mb-1 ms-2">Email</h4>
 
@@ -178,7 +178,7 @@
                 <div class="row my-3">
                   <div class="col d-flex justify-content-end">
                     <button class="btn mx-2 btn-form-cancel" type="button" @click="revertAccountInfoChanges">Revert Changes</button>
-                    <button type="submit" class="btn mx-2 btn-form-submit">Save Changes</button>
+                    <button type="submit" class="btn mx-2 btn-form-cancel">Save Changes</button>
                   </div>
                 </div>
               </form>
@@ -192,7 +192,7 @@
         <div class="card py-3 px-4 popup-content">
           <h5>Change Password</h5>
 
-          <form @submit.prevent="handleChangePassword">
+          <form> <!-- @submit.prevent="handleChangePassword" -->
             <div v-if="changePasswordError" class="alert alert-danger p-2 mb-3" role="alert">
               <i class="bi bi-exclamation-triangle-fill"></i> {{ changePasswordError }}
             </div>
@@ -589,7 +589,7 @@ body.light .group-header-text {
 }
 
 .info-group-body button.btn-form-cancel {
-  background-color: indianred;
+  background-color: rgb(119, 136, 153);
 }
 
 .form-control::placeholder {

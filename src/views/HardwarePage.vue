@@ -177,11 +177,12 @@ export default {
       });
 
       return Object.values(grouped).map(item => {
-        // 1. Calculate the total pool of functional items
-        const functionalCount = item.totalCount - item.nonFunctionalCount;
-
-        // 2. Calculate the available count (Functional MINUS Unavailable)
+        // 1. Calculate the available count (Functional MINUS Unavailable)
         const availableCount = item.totalCount - item.unavailableCount;
+
+        // 2. Calculate the total pool of functional items
+        const functionalCount = availableCount - item.nonFunctionalCount;
+
 
         let availabilityText;
         let isUnavailable = false;
