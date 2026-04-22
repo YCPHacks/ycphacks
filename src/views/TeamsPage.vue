@@ -155,7 +155,7 @@ export default {
       this.errorMessage = null;
 
       try {
-        const url = `http://localhost:3000/teams/${this.teamId}/project-details`;
+        const url = `http://45.55.167.149:3000/teams/${this.teamId}/project-details`;
         const response = await axios.get(url);
         
         this.teamData = {
@@ -185,7 +185,7 @@ export default {
 
       try {
         // API Endpoint Assumption: PUT /teams/{teamId}/project-details
-        const url = `http://localhost:3000/teams/${this.teamId}/project-details`;
+        const url = `http://45.55.167.149:3000/teams/${this.teamId}/project-details`;
         const payload = {
           projectName: this.teamData.projectName,
           projectDescription: this.teamData.projectDescription,
