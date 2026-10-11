@@ -52,6 +52,7 @@ export default createStore({
     profile: null,
     activities: [],
     event: {},
+    enrollment: null,
     apiBaseUrl: import.meta.env.VITE_API_BASE_URL
   },
   getters: {
@@ -61,6 +62,8 @@ export default createStore({
     getActivities: (state) => state.activities,
     getEvent: (state) => state.event,
     getUserTeamId: (state) => state.userTeamId,
+    getEnrollment: (state) => state.enrollment,
+    isEnrolled: (state) => !!state.enrollment?.isEnrolled,
     isEmailVerified: (state) => true//!!state.user.isEmailVerified
   },
   mutations: {
@@ -73,6 +76,7 @@ export default createStore({
     clearUser(state) {
       state.user = null;
       state.userTeamId = null;
+      state.enrollment = null;
     },
     setProfile(state, profile) {
       state.profile = profile;
@@ -91,23 +95,18 @@ export default createStore({
     },
     setUserTeamId(state, teamId){
       state.userTeamId = teamId;
+    },
+    setEnrollment(state, enrollment) {
+      state.enrollment = enrollment;
     }
   },
   actions: {
-    async registerUser({ commit, state, dispatch }, formData) {
-        const eventResult = await dispatch('getActiveEvent');
-        const eventId = eventResult.event?.id;
-
-        if(!eventId){
-          console.error("Critical: Could not determine active event ID for registration.");
-          return { success: false, message: 'Registration failed: No active event found.' };
-        }
+    async registerUser({ commit, state }, formData) {
         try {
-          const finalFormData = { ...formData, eventId: eventId };
             const response = await fetch(`${state.apiBaseUrl}/user/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(finalFormData)
+                body: JSON.stringify(formData)
             });
 
             const data = await response.json();
@@ -307,6 +306,32 @@ export default createStore({
         console.error("Error fetching user team status: ", err);
         commit('setUserTeamId', null)
         return { success: false, message: "Failed to fetch team status" };
+      }
+    },
+
+    async fetchEnrollmentStatus({ commit, state, getters }) {
+      if (!getters.isLoggedIn) {
+        commit('setEnrollment', null);
+        return { success: false, message: 'Not logged in' };
+      }
+
+      try {
+        const response = await axios.get(`${state.apiBaseUrl}/user/${getters.getUser.id}/enrollment`);
+        commit('setEnrollment', response.data.data);
+        return { success: true, data: response.data.data };
+      } catch (err) {
+        commit('setEnrollment', null);
+        return { success: false, message: err.response?.data?.message || 'Failed to fetch enrollment status' };
+      }
+    },
+
+    async enrollInActiveEvent({ commit, state, getters }) {
+      try {
+        const response = await axios.post(`${state.apiBaseUrl}/user/${getters.getUser.id}/enrollment`);
+        commit('setEnrollment', response.data.data);
+        return { success: true, message: response.data.message };
+      } catch (err) {
+        return { success: false, message: err.response?.data?.message || 'Failed to register for event' };
       }
     },
 

@@ -77,8 +77,11 @@ export default {
         });
 
         if (result.success) {
-          // Redirect after successful login
-          this.$router.push('/activities');
+          // Send returning users who aren't registered for the active event to the enrollment page
+          const enrollment = await this.$store.dispatch('fetchEnrollmentStatus');
+          const needsEnrollment = enrollment.success && enrollment.data.event && !enrollment.data.isEnrolled;
+
+          this.$router.push(needsEnrollment ? '/enroll' : '/activities');
         } else {
           this.message = result.message;
           this.showAlert = true;

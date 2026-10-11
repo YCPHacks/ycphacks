@@ -49,6 +49,7 @@
             <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
             <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
               <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
+              <li><router-link class="nav-link" to="/enroll" @click="menuDropdownVisible = false">Event Registration</router-link></li>
               <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
             </ul>
           </div>
@@ -70,6 +71,7 @@
           <router-link class="nav-link" to="/hardware" @click="isOpen = false">Hardware</router-link>
           <router-link class="nav-link" to="categories" @click="isOpen = false">Hack Categories</router-link>
           <router-link class="nav-link" to="/profile" @click="isOpen = false">Profile</router-link>
+          <router-link class="nav-link" to="/enroll" @click="isOpen = false">Event Registration</router-link>
           <button class="nav-link" @click="handleLogout(); isOpen = false">Logout</button>
         </div>
       </div>
