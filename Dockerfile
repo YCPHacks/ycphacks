@@ -14,8 +14,6 @@ COPY . .
 ARG VITE_API_BASE_URL
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
-RUN echo "API BASE = [$VITE_API_BASE_URL]"
-
 # Build prod static files
 RUN npm run build
 
@@ -29,9 +27,6 @@ COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 
 # Copy your custom Nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose Nginx port 80
-EXPOSE 80
 
 # Start Nginx in foreground
 CMD ["nginx", "-g", "daemon off;"]
