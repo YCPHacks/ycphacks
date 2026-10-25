@@ -24,13 +24,12 @@
           </div>
 
           <button type="submit">Send Reset Link</button>
-          <p v-if="message">{{ message }}</p>
-          <p v-if="error">{{ error }}</p>
         </form>
   </div>
 </template>
 
 <script>
+import { toast } from '@/utils/toast.js';
 
 export default {
   name: "PasswordLink",
@@ -38,17 +37,12 @@ export default {
   data() {
     return {
       email: "",
-      message: "",
-      error: "",
       isLoading: false
     };
   },
 
   methods: {
     async submitEmail() {
-      this.message = "";
-      this.error = "";
-
       try {
         const baseUrl = this.$store.state.apiBaseUrl;
         const response = await fetch(`${baseUrl}/verify/forgot-password`, {
@@ -63,11 +57,11 @@ export default {
         });
         const data = await response.json();
 
-        this.message = data.message || "Reset link sent if email exists.";
+        toast.success(data.message || "Reset link sent if email exists.");
         this.email = "";
       } catch (err) {
         console.error(err);
-        this.error = "Something went wrong. Please try again.";
+        toast.error("Something went wrong. Please try again.");
       }
     }
   }

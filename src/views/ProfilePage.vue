@@ -101,8 +101,8 @@
 
                   <div class="row my-3">
                     <div class="col d-flex justify-content-end">
-                      <button class="btn mx-2 btn-form-cancel" @click="revertBioChanges">Revert Changes</button>
-                      <button type="submit" class="btn mx-2 btn-form-submit">Save Changes</button>
+                      <button class="btn mx-2 btn-form-cancel" type="button" @click="revertBioChanges">Revert Changes</button>
+                      <button type="submit" class="btn mx-2 btn-form-submit" :disabled="isSavingBio">Save Changes</button>
                     </div>
                   </div>
                 </div>
@@ -178,7 +178,7 @@
                 <div class="row my-3">
                   <div class="col d-flex justify-content-end">
                     <button class="btn mx-2 btn-form-cancel" type="button" @click="revertAccountInfoChanges">Revert Changes</button>
-                    <button type="submit" class="btn mx-2 btn-form-submit">Save Changes</button>
+                    <button type="submit" class="btn mx-2 btn-form-submit" :disabled="isSavingAccountInfo">Save Changes</button>
                   </div>
                 </div>
               </form>
@@ -227,6 +227,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import majorData from "@/assets/majors.json";
+import { toast } from '@/utils/toast.js';
 
 
 const store = useStore();
@@ -307,7 +308,7 @@ const profileData = ref({
 
 const isMinor = ref(false);
 
-const currentEditBioError = ref(null);
+const isSavingBio = ref(false);
 const currentBioFirstName = ref(null);
 const currentBioLastName = ref(null);
 const currentBioAge = ref(null);
@@ -322,7 +323,7 @@ const currentBioTshirtSize = ref(null);
 const currentBioHacksAttended = ref(null);
 const currentBioDietaryRestrictions = ref(null);
 
-const currentEditAccountInfoError = ref(null);
+const isSavingAccountInfo = ref(false);
 const currentAccountInfoEmail = ref(null);
 const currentAccountInfoReceiveEmails = ref(null);
 const currentAccountInfoPhoneNumber = ref(null);
@@ -402,46 +403,66 @@ const setCurrentDataToProfileData = async () => {
   currentAccountInfoLinkedInUrl.value = profileData.value.linkedInUrl;
 }
 
+// Keep only the fields that differ from the saved profile (compared as strings, since inputs can turn numbers into text)
+const getChangedFields = (fields) =>
+  Object.fromEntries(Object.entries(fields).filter(([key, value]) =>
+    String(value ?? '') !== String(profileData.value[key] ?? '')));
+
 const handleBioUpdate = async () => {
-  currentEditBioError.value = null;
+  if (isSavingBio.value) return;
+
+  const updatedUser = getChangedFields({
+    firstName: currentBioFirstName.value,
+    lastName: currentBioLastName.value,
+
+    age: currentBioAge.value,
+    gender: currentBioGender.value,
+    pronouns: currentBioPronouns.value,
+
+    country: currentBioCountry.value,
+    school: currentBioSchool.value,
+
+    major: currentBioMajor.value,
+    graduationYear: currentBioGradYear.value,
+    levelOfStudy: currentBioLevelOfStudy.value,
+
+    tShirtSize: currentBioTshirtSize.value,
+    hackathonsAttended: currentBioHacksAttended.value,
+
+    dietaryRestrictions: currentBioDietaryRestrictions.value
+  });
+
+  if (Object.keys(updatedUser).length === 0) {
+    toast.info("No changes to save");
+    return;
+  }
+
+  isSavingBio.value = true;
 
   try {
     const updateUserResp = await store.dispatch("updateProfile", {
       id: profileData.value.id,
-      updatedUser: {
-        firstName: currentBioFirstName.value,
-        lastName: currentBioLastName.value,
-
-        age: currentBioAge.value,
-        gender: currentBioGender.value,
-        pronouns: currentBioPronouns.value,
-
-        country: currentBioCountry.value,
-        school: currentBioSchool.value,
-
-        major: currentBioMajor.value,
-        graduationYear: currentBioGradYear.value,
-        levelOfStudy: currentBioLevelOfStudy.value,
-
-        tShirtSize: currentBioTshirtSize.value,
-        hackathonsAttended: currentBioHacksAttended.value,
-
-        dietaryRestrictions: currentBioDietaryRestrictions.value
-      }
+      updatedUser
     });
 
-    if (!updateUserResp.success)
+    if (!updateUserResp.success) {
+      toast.error(updateUserResp.message);
       return;
+    }
 
     profileData.value = store.getters.getProfile;
 
     await setCurrentDataToProfileData();
     await updateMinorStatus();
 
-    currentEditBioError.value = updateUserResp.errors;
+    toast.success("Profile updated");
   }
   catch (e) {
     console.error("Errors occurred while updating profile information.", e);
+    toast.error("Something went wrong updating your profile.");
+  }
+  finally {
+    isSavingBio.value = false;
   }
 }
 
@@ -468,25 +489,42 @@ const revertBioChanges = async () => {
 
 
 const handleAccountInfoUpdate = async () => {
-  currentEditAccountInfoError.value = null;
+  if (isSavingAccountInfo.value) return;
+
+  const updatedUser = getChangedFields({
+    mlhEmails: currentAccountInfoReceiveEmails.value,
+    phoneNumber: currentAccountInfoPhoneNumber.value,
+    linkedInUrl: currentAccountInfoLinkedInUrl.value
+  });
+
+  if (Object.keys(updatedUser).length === 0) {
+    toast.info("No changes to save");
+    return;
+  }
+
+  isSavingAccountInfo.value = true;
 
   try {
     const updateUserResp = await store.dispatch("updateProfile", {
       id: profileData.value.id,
-      updatedUser: {
-        mlhEmails: currentAccountInfoReceiveEmails.value,
-        phoneNumber: currentAccountInfoPhoneNumber.value,
-        linkedInUrl: currentAccountInfoLinkedInUrl.value
-      }
+      updatedUser
     });
 
-    if (updateUserResp.success)
+    if (!updateUserResp.success) {
+      toast.error(updateUserResp.message);
       return;
+    }
 
-    currentEditAccountInfoError.value = updateUserResp.errors;
+    profileData.value = store.getters.getProfile;
+
+    toast.success("Account info updated");
   }
   catch (e) {
     console.error("Errors occurred while updating profile information.", e);
+    toast.error("Something went wrong updating your account info.");
+  }
+  finally {
+    isSavingAccountInfo.value = false;
   }
 }
 
@@ -536,6 +574,7 @@ const handleChangePassword = async () => {
 
   await clearChangePasswordInputs();
   await closeChangePasswordPopup();
+  toast.success("Password changed");
 }
 
 const downloadFile = (filePath, filename) => {

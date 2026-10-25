@@ -56,6 +56,7 @@ import {BDropdown} from "bootstrap-vue-3";
 import router from "@/router/index.js";
 import { mapGetters } from "vuex";
 import { computed } from "vue";
+import { toast } from "@/utils/toast.js";
 
 export default {
   name: "NewNavBar",
@@ -100,6 +101,7 @@ export default {
     },
     async handleLogout() {
       await this.$store.dispatch('logout');
+      toast.info("Logged out");
       this.$router.push("/login");
     },
     async handleMenu() {

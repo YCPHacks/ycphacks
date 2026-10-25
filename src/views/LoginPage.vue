@@ -30,16 +30,6 @@
           />
         </div>
 
-        <div v-if="showAlert">
-          <b-alert
-            v-model="showAlert"
-            variant="danger"
-            class="error-box"
-            >
-            <span><strong>Error: </strong>{{message}}</span>
-          </b-alert>
-        </div>
-
         <button type="submit" class="btn">Sign In</button>
 
         <p class="footer-text">
@@ -52,6 +42,8 @@
 </template>
 
 <script>
+import { toast } from '@/utils/toast.js';
+
 export default {
   name: "LoginPage",
   data() {
@@ -59,15 +51,12 @@ export default {
       username: '',
       password: '',
       showPassword: false,
-      message: "",
-      showAlert: false,
       isLoading: false
     };
   },
   methods: {
     async handleSubmit() {
       this.isLoading = true;
-      this.showAlert = false;
 
       try {
         // Attempt login with entered credentials
@@ -81,10 +70,10 @@ export default {
           const enrollment = await this.$store.dispatch('fetchEnrollmentStatus');
           const needsEnrollment = enrollment.success && enrollment.data.event && !enrollment.data.isEnrolled;
 
+          toast.success(`Welcome back, ${this.$store.state.user.firstName}!`);
           this.$router.push(needsEnrollment ? '/enroll' : '/activities');
         } else {
-          this.message = result.message;
-          this.showAlert = true;
+          toast.error(result.message);
         }
 
       } finally {
@@ -203,18 +192,6 @@ input[type="password"]:focus {
 .footer-text a:hover,
 .footer-text router-link:hover {
   color: #4caf50;
-}
-
-.error-box {
-  background-color: rgba(255, 182, 193, 0.2); /* Translucent pink */
-  border: 1px solid #ffb6c1; /* Solid pink border */
-  color: #d81b60; /* Pink text */
-  padding: 14px;
-  border-radius: 8px;
-  margin: 15px 0;
-  font-size: 0.9rem;
-  text-align: center;
-  box-shadow: 0 2px 10px rgba(255, 182, 193, 0.1);
 }
 
 </style>
