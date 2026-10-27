@@ -2,33 +2,27 @@
   <nav class="navbar">
     <a
         id="mlh-trust-badge"
-        style="display:block;max-width:100px;min-width:60px;position:fixed;left:0px;top:0;width:10%;z-index:10000"
         href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
         target="_blank"
     >
       <img
           src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-white.svg"
           alt="Major League Hacking 2024 Hackathon Season"
-          style="width:100%"
       />
     </a>
 
-    <a
-        id="ycphacks-logo"
-        style="display:block;max-width:80px;min-width:60px;position:fixed;left:120px;top:2.5px;width:10%;z-index:10000"
-        href="/"
-    >
-      <img v-if="isDark"
-          src="../assets/fountain_black.png"
-          alt="YCP Hacks Fountain Logo"
-          style="width:100%"
+    <router-link id="ycphacks-logo" to="/">
+      <img
+        v-if="isDark"
+        src="../assets/fountain_black.png"
+        alt="YCP Hacks Fountain Logo"
       />
-      <img v-if="!isDark"
-           src="../assets/fountain_white.png"
-           alt="YCP Hacks Fountain Logo"
-           style="width:100%"
+      <img
+        v-else
+        src="../assets/fountain_white.png"
+        alt="YCP Hacks Fountain Logo"
       />
-    </a>
+    </router-link>
 
     <div class="nav">
       <div class="desktop-nav">
@@ -41,8 +35,8 @@
           <router-link class="nav-link" to="categories">Hack Categories</router-link>
 
           <div class="theme-switch">
-            <input type="checkbox" id="toggle" v-model="isDark" @change="toggleTheme" />
-            <label for="toggle" class="slider"></label>
+            <input type="checkbox" id="toggle-desktop" v-model="isDark" @change="toggleTheme" />
+            <label for="toggle-desktop" class="slider"></label>
           </div>
 
           <div class="dropdown user-dropdown">
@@ -56,8 +50,8 @@
       </div>
       <div class="mobile-nav">
         <div class="theme-switch">
-          <input type="checkbox" id="toggle" v-model="isDark" @change="toggleTheme" />
-          <label for="toggle" class="slider"></label>
+          <input type="checkbox" id="toggle-mobile" v-model="isDark" @change="toggleTheme" />
+          <label for="toggle-mobile" class="slider"></label>
         </div>
         <button class="dropdown" id="hamburger" @click="handleMenu()">
           ☰
@@ -157,10 +151,58 @@ export default {
 
 .navbar {
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 0 210px; /* Left padding reserves space for MLH badge + YCP logo */
+  box-sizing: border-box;
+  z-index: 9999;
 }
 
 .navbar a {
   text-decoration: none;
+}
+
+#mlh-trust-badge {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 15px;
+  width: 80px;
+  z-index: 10000;
+}
+
+#mlh-trust-badge img {
+  width: 100%;
+}
+
+#ycphacks-logo {
+  display: block;
+  position: fixed;
+  top: 10px;
+  left: 110px;
+  width: 70px;
+  z-index: 10000;
+}
+
+#ycphacks-logo img {
+  width: 100%;
+  height: auto;
+}
+
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-link {
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .dropdown {
@@ -178,6 +220,8 @@ export default {
   border-radius: 4px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 100;
+  color: black;
+  font-weight: bold;
 }
 
 .dropdown-menu li {
@@ -231,18 +275,26 @@ input:checked + .slider {
   display: none;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1150px) {
+  .navbar {
+    padding-left: 190px;
+  }
+
   .desktop-nav {
     display: none;
   }
 
   .mobile-nav{
     display: flex;
+    align-items: center;
+    gap: 15px;
   }
+
   #hamburger.dropdown {
     font-size: 24px;
-    display: flex;
-    margin-right: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
   }
 
   .nav-down {
@@ -250,19 +302,32 @@ input:checked + .slider {
     top: 100%;
     right: 0;
     background-color: white;
-    list-style: none;
-    margin: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 10px;
     border-radius: 4px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 100;
-    color: black;
-    font-weight: bold;
-    text-decoration: none;
-    display: inline-block;
   }
 
   .theme-switch {
     margin-right: 20px;
   }
+
+  @media (max-width: 480px) {
+  #mlh-trust-badge {
+    width: 60px;
+    left: 5px;
+  }
+  #ycphacks-logo {
+    width: 50px;
+    left: 75px;
+  }
+  .navbar {
+    padding-left: 135px;
+  }
+}
+
 }
 </style>
