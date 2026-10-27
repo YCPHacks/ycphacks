@@ -61,7 +61,7 @@ export default createStore({
     getProfile: (state) => state.profile,
     getActivities: (state) => state.activities,
     getEvent: (state) => state.event,
-    getUserTeamId: (state) => state.userTeamId,
+    getUserTeamId: (state) => state.user.teamId,
     getEnrollment: (state) => state.enrollment,
     isEnrolled: (state) => !!state.enrollment?.isEnrolled,
     isEmailVerified: (state) => true//!!state.user.isEmailVerified
@@ -152,16 +152,13 @@ export default createStore({
       try {
         const response = await axios.post(`${state.apiBaseUrl}/user/login`, { email, password });
         const data = response.data;
-          console.log(data);
         commit('setUser', new UserAdapter(data.data));
         document.cookie = `token=${data.data.token}; path=/;`;
 
-        // await dispatch('getActiveEvent');
-        await dispatch('fetchUserTeamStatus');
-
         return { success: true };
       } catch (err) {
-          return { success: false, message: err.response?.data?.message || 'Login failed'};
+          console.error(err);
+          return { success: false, message: 'Login failed'};
       }
     },
 
@@ -233,7 +230,7 @@ export default createStore({
             commit("setUser", user);
 
             // await dispatch('getActiveEvent');
-            await dispatch('fetchUserTeamStatus');
+            await dispatch('fetchUserTeamStatus', {userId: user.id});
 
             return { success: true, message: data.message };
         } catch (error) {
@@ -284,17 +281,11 @@ export default createStore({
           }
       },
 
-    async fetchUserTeamStatus({ commit, state, getters }){
-      if(!getters.isLoggedIn || !getters.getUser){
-        commit('setUserTeamId', null);
-        return;
-      }
-
-      const userId = getters.getUser.id;
-      const eventId = 1;  //getters.getEvent.id ||
+    async fetchUserTeamStatus({ commit, state, getters }, {userId}){
+      const eventId = getters.getEvent;
 
       try{
-        const response = await axios.get(`${state.apiBaseUrl}/teams/${userId}/team`, {
+        const response = await axios.get(`${state.apiBaseUrl}/teams/${userId}/team?eventId=${eventId}`, {
           params: { eventId }
         });
 
