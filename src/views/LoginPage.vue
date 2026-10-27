@@ -74,6 +74,7 @@ export default {
         const result = await this.$store.dispatch('loginUser', {
           email: this.username,
           password: this.password,
+          eventId: this.$store.state.eventId
         });
 
         if (result.success) {

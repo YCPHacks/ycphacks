@@ -4,13 +4,12 @@ import { formatDateToEST } from "@/utils/formatDate.js";
 
 // Optional: a small adapter for user objects
 class UserAdapter {
-  constructor({ id, email, firstName, lastName, token, role, isEmailVerified }) {
+  constructor({ id, email, firstName, lastName, token, isEmailVerified }) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
     this.token = token;
-    this.role = role;
     this.isEmailVerified = true//isEmailVerified;
   }
 }
@@ -148,9 +147,9 @@ export default createStore({
       }
       return response.ok;
     },
-    async loginUser({ commit, state, dispatch }, { email, password }) {
+    async loginUser({ commit, state, dispatch }, { email, password, eventId }) {
       try {
-        const response = await axios.post(`${state.apiBaseUrl}/user/login`, { email, password });
+        const response = await axios.post(`${state.apiBaseUrl}/user/login`, { email, password, eventId });
         const data = response.data;
           console.log(data);
         commit('setUser', new UserAdapter(data.data));
@@ -329,6 +328,10 @@ export default createStore({
       try {
         const response = await axios.post(`${state.apiBaseUrl}/user/${getters.getUser.id}/enrollment`);
         commit('setEnrollment', response.data.data);
+
+        const { userResponseDto, ...enrollment} = response.data.data;
+        commit('setUser', new  UserAdapter(userResponseDto));
+        document.cookie = `token=${userResponseDto.token}; path=/;`;
         return { success: true, message: response.data.message };
       } catch (err) {
         return { success: false, message: err.response?.data?.message || 'Failed to register for event' };
