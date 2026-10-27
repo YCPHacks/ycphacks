@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 import { formatDateToEST } from "@/utils/formatDate.js";
+import toasts from './toasts.js';
 
 // Optional: a small adapter for user objects
 class UserAdapter {
@@ -47,6 +48,9 @@ class ProfileAdapter {
 }
 
 export default createStore({
+  modules: {
+    toasts
+  },
   state: {
     user: null, 
     profile: null,
@@ -200,7 +204,8 @@ export default createStore({
                 updatedUser, { headers: {'Content-Type': 'application/json'}});
             const data = response.data;
 
-            const updatedProfile = new ProfileAdapter(data.data)
+            // The API only returns the fields that changed, so merge them into the existing profile
+            const updatedProfile = new ProfileAdapter({ ...state.profile, ...data.data })
             commit('setProfile', updatedProfile);
 
             return { success: true };

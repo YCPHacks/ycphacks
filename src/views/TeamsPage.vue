@@ -33,8 +33,6 @@
           </div>
 
           <form v-else @submit.prevent="handleSubmit">
-            <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
-            <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
 
             <div class="mb-3">
               <label for="projectName" class="form-label fw-bold">Project Name</label>
@@ -102,6 +100,7 @@
 import { mapGetters } from "vuex";
 import axios from 'axios';
 import store from "@/store/store.js";
+import { toast } from "@/utils/toast.js";
 
 export default {
   name: "TeamRegistrationPage",
@@ -110,8 +109,6 @@ export default {
       isLoading: true,
       isSubmitting: false,
     //   isSubmissionsOpen: true, 
-      errorMessage: null,
-      successMessage: null,
       teamData: {
         teamName: "",
         projectName: "",
@@ -152,7 +149,6 @@ export default {
   methods: {
     async fetchProjectDetails() {
       this.isLoading = true;
-      this.errorMessage = null;
 
       try {
         const url = `http://localhost:3000/teams/${this.teamId}/project-details`;
@@ -166,7 +162,7 @@ export default {
       } catch (error) {
         console.error("Error loading team data:", error);
         if (error.response && error.response.status !== 404) {
-             this.errorMessage = error.response?.data?.message || "Failed to load project details.";
+             toast.error(error.response?.data?.message || "Failed to load project details.");
         }
       } finally {
         this.isLoading = false;
@@ -180,8 +176,6 @@ export default {
       if (!this.isSubmissionTime || this.isSubmitting) return;
 
       this.isSubmitting = true;
-      this.errorMessage = null;
-      this.successMessage = null;
 
       try {
         // API Endpoint Assumption: PUT /teams/{teamId}/project-details
@@ -195,11 +189,11 @@ export default {
         
         const response = await axios.put(url, payload);
 
-        this.successMessage = response.data.message || "Project details updated successfully!";
+        toast.success(response.data.message || "Project details updated successfully!");
         
       } catch (error) {
         console.error("Submission failed:", error);
-        this.errorMessage = error.response?.data?.message || "Failed to save project details. Check your links and try again.";
+        toast.error(error.response?.data?.message || "Failed to save project details. Check your links and try again.");
       } finally {
         this.isSubmitting = false;
       }

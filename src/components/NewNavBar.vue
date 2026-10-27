@@ -86,6 +86,7 @@ import router from "@/router/index.js";
 import { mapGetters } from "vuex";
 import { computed } from "vue";
 import PasswordLink from "@/views/PasswordLinkPage.vue";
+import { toast } from "@/utils/toast.js";
 
 export default {
   name: "NewNavBar",
@@ -133,6 +134,7 @@ export default {
     },
     async handleLogout() {
       await this.$store.dispatch('logout');
+      toast.info("Logged out");
       this.$router.push("/login");
     },
     async handleMenu() {
