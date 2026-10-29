@@ -69,12 +69,14 @@ export default {
       this.isLoading = true;
       this.showAlert = false;
 
+      console.log(this.$store.state.event.id);
+
       try {
         // Attempt login with entered credentials
         const result = await this.$store.dispatch('loginUser', {
           email: this.username,
           password: this.password,
-          eventId: this.$store.state.eventId
+          eventId: this.$store.state.event.id
         });
 
         if (result.success) {
