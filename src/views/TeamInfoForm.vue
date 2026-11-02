@@ -3,7 +3,7 @@
     <header class="main-header">
       <div class="text-center">
         <h1 class="mb-2">
-          {{ teamData.teamName || 'Team Project Submission' }}
+          {{ projectDetails.teamName || 'Team Project' }}
         </h1>
         <hr class="header-line" />
       </div>
@@ -15,7 +15,7 @@
       <main class="col-md-12 col-lg-8 offset-lg-2">
         <div class="py-4 border rounded bg-white shadow-sm main-box">
 
-          <div v-if="!teamId" class="alert alert-danger text-center py-4">
+          <div v-if="!participant?.teamId" class="alert alert-danger text-center py-4">
             You must be part of a team to access project submission.
           </div>
 
@@ -23,9 +23,9 @@
             <p>Loading project data...</p>
           </div>
 
-          <div v-else-if="!isSubmissionTime" class="alert alert-warning text-center py-4">
-            <span v-if="getEvent && new Date() < new Date(getEvent.startDate)">
-                Submissions open when the event officially begins on {{ new Date(getEvent.startDate).toLocaleDateString() }}.
+          <div v-else-if="isSubmissionTime" class="alert alert-warning text-center py-4">
+            <span v-if="event && new Date() < new Date(event.startDate)">
+                Submissions open when the event officially begins on {{ new Date(event.startDate).toLocaleDateString() }}.
             </span>
             <span v-else>
                 Submissions are **closed**. You cannot make further changes.
@@ -40,7 +40,7 @@
               <label for="projectName" class="form-label fw-bold">Project Name</label>
               <input
                   id="projectName"
-                  v-model="teamData.projectName"
+                  v-model="projectDetailFields.projectName"
                   type="text"
                   class="form-control"
                   required
@@ -52,7 +52,7 @@
               <label for="projectDescription" class="form-label fw-bold">Project Description</label>
               <textarea
                   id="projectDescription"
-                  v-model="teamData.projectDescription"
+                  v-model="projectDetailFields.projectDescription"
                   class="form-control"
                   rows="4"
                   required
@@ -64,7 +64,7 @@
               <label for="githubLink" class="form-label fw-bold">GitHub Link</label>
               <input
                   id="githubLink"
-                  v-model="teamData.githubLink"
+                  v-model="projectDetailFields.githubLink"
                   type="url"
                   class="form-control"
                   placeholder="https://github.com/my-team/project"
@@ -77,7 +77,7 @@
               <label for="presentationLink" class="form-label fw-bold">Presentation Link</label>
               <input
                   id="presentationLink"
-                  v-model="teamData.presentationLink"
+                  v-model="projectDetailFields.presentationLink"
                   type="url"
                   class="form-control"
                   placeholder="https://slides.google.com/d/project-pitch"
@@ -98,114 +98,77 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { mapGetters } from "vuex";
 import axios from 'axios';
 import store from "@/store/store.js";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 
-export default {
-  name: "TeamRegistrationPage",
-  data() {
-    return {
-      isLoading: true,
-      isSubmitting: false,
-      //   isSubmissionsOpen: true,
-      errorMessage: null,
-      successMessage: null,
-      teamData: {
-        teamLeaderId: -1,
-        teamName: "",
-        projectName: "",
-        projectDescription: "",
-        presentationLink: "",
-        githubLink: "",
-      }
-    };
-  },
-  computed: {
-    ...mapGetters(["getUserTeamId", "getEvent"]),
+const event = computed(() => store.getters.getEvent);
+const participant = computed(() => store.getters.getParticipant);
+const projectDetails = computed(() => store.getters.getTeamProjectDetails);
 
-    teamId() {
-      return this.getUserTeamId;
+const isLoading = ref(true);
+const isSubmitting = ref(false);
+
+const projectDetailFields = reactive(async () => {
+      return {...projectDetails};
+});
+
+onMounted(async () => {
+    await store.dispatch('getActiveEvent');
+    await store.dispatch('fetchActiveParticipant');
+    await store.dispatch('fetchTeamProjectDetails');
+    isLoading.value = false;
+});
+
+watch(
+    () => store.state.team.projectDetails,
+    (newVals) => {
+      Object.assign(projectDetailFields, newVals)
     },
-    isSubmissionTime(){
-      const event = this.getEvent;
-      if (!event || !event.startDate || !event.endDate) {
-        // Assume open if data isn't loaded yet, matching your old console warning logic
-        return true;
+    { deep: true, immediate: true }
+)
+
+// isSubmissionTime(){
+//   const event = this.getEvent;
+//   if (!event || !event.startDate || !event.endDate) {
+//     // Assume open if data isn't loaded yet, matching your old console warning logic
+//     return true;
+//   }
+//
+//   const now = new Date();
+//   const startDate = new Date(event.startDate);
+//   const endDate = new Date(event.endDate);
+//
+//   // Submissions are active if (now >= startDate) AND (now < endDate)
+//   return now >= startDate && now < endDate;
+// },
+
+/**
+ * Submits the updated project details using direct Axios call.
+ */
+const handleSubmit = async () => {
+    // if (!this.isSubmissionTime || this.isSubmitting) return;
+
+    isSubmitting.value = true;
+
+    try {
+      const { success } = await store.dispatch('updateTeamProjectDetails', {projectDetails: projectDetailFields});
+
+      if (success) {
+        console.log("success on updating team project info");
       }
-
-      const now = new Date();
-      const startDate = new Date(event.startDate);
-      const endDate = new Date(event.endDate);
-
-      // Submissions are active if (now >= startDate) AND (now < endDate)
-      return now >= startDate && now < endDate;
-    },
-  },
-  mounted() {
-    if (this.teamId) {
-      this.fetchProjectDetails();
-    } else {
-      this.isLoading = false;
-    }
-  },
-  methods: {
-    async fetchProjectDetails() {
-      this.isLoading = true;
-      this.errorMessage = null;
-
-      try {
-        const url = `http://localhost:3000/teams/${this.teamId}/project-details`;
-        const response = await axios.get(url);
-
-        this.teamData = {
-          ...this.teamData,
-          ...response.data.data,
-        };
-
-      } catch (error) {
-        console.error("Error loading team data:", error);
-        if (error.response && error.response.status !== 404) {
-          this.errorMessage = error.response?.data?.message || "Failed to load project details.";
-        }
-      } finally {
-        this.isLoading = false;
-      }
-    },
-
-    /**
-     * Submits the updated project details using direct Axios call.
-     */
-    async handleSubmit() {
-      if (!this.isSubmissionTime || this.isSubmitting) return;
-
-      this.isSubmitting = true;
-      this.errorMessage = null;
-      this.successMessage = null;
-
-      try {
-        // API Endpoint Assumption: PUT /teams/{teamId}/project-details
-        const url = `http://localhost:3000/teams/${this.teamId}/project-details`;
-        const payload = {
-          projectName: this.teamData.projectName,
-          projectDescription: this.teamData.projectDescription,
-          presentationLink: this.teamData.presentationLink,
-          githubLink: this.teamData.githubLink,
-        };
-
-        const response = await axios.put(url, payload);
-
-        this.successMessage = response.data.message || "Project details updated successfully!";
-
-      } catch (error) {
-        console.error("Submission failed:", error);
-        this.errorMessage = error.response?.data?.message || "Failed to save project details. Check your links and try again.";
-      } finally {
-        this.isSubmitting = false;
+      else {
+        console.log("success on updating team project info")
       }
     }
-  },
+    catch (err) {
+      console.log(`error on thing: ${err}`);
+    }
+    finally {
+      isSubmitting.value = false;
+    }
 };
 </script>
 

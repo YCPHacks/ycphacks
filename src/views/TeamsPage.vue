@@ -42,7 +42,7 @@ const requests = ref(['None']);
 
 onMounted(async () => {
   await store.dispatch("getActiveEvent");
-  await store.dispatch("fetchUserTeamStatus", {userId: store.getters.getUser.id});
+  // await store.dispatch("fetchUserTeamStatus", {userId: store.getters.getUser.id});
 });
 
 
