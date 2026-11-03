@@ -14,6 +14,7 @@ import PasswordLinkPage from "@/views/PasswordLinkPage.vue";
 import EmailVerificationPage from "@/views/EmailVerification.vue";
 import VerifyPage from "@/views/VerifyPage.vue";
 import ProfilePage from "../views/ProfilePage.vue";
+import EnrollmentPage from "@/views/EnrollmentPage.vue";
 
 const routes = [
     {
@@ -73,6 +74,14 @@ const routes = [
         path: '/profile',
         name: 'Profile',
         component: ProfilePage
+    },
+    {
+        path: '/enroll',
+        name: 'Enroll',
+        component: EnrollmentPage,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/emailVerification',
