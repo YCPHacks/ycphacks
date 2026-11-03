@@ -133,8 +133,8 @@ export default {
       }
     },
     async handleLogout() {
-      await this.$store.dispatch('logout');
       toast.info("Logged out");
+      await this.$store.dispatch('logout');
       this.$router.push("/login");
     },
     async handleMenu() {

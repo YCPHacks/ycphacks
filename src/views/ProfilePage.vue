@@ -184,6 +184,22 @@
               </form>
             </div>
           </div>
+
+          <!-- Notifications -->
+          <div class="my-5">
+            <div class="ms-2">
+              <h2 class="group-header-text">Notifications</h2>
+            </div>
+
+            <div class="card info-group-body px-3 py-3">
+              <div class="form-check form-switch mx-2">
+                <input id="toast-preference" class="form-check-input" type="checkbox" role="switch"
+                       :checked="toastPreference" :disabled="isSavingToastPreference" @change="handleToastPreferenceChange"/>
+                <label class="form-check-label ms-2" for="toast-preference">Show pop-up notifications</label>
+              </div>
+              <p class="text-muted small mx-2 mb-0 mt-1">Error messages are always shown.</p>
+            </div>
+          </div>
         </main>
       </div>
 
@@ -328,6 +344,9 @@ const currentAccountInfoEmail = ref(null);
 const currentAccountInfoReceiveEmails = ref(null);
 const currentAccountInfoPhoneNumber = ref(null);
 const currentAccountInfoLinkedInUrl = ref(null);
+
+const toastPreference = computed(() => store.getters.getUser?.notificationPreference_toast ?? true);
+const isSavingToastPreference = ref(false);
 
 const passwordRandomAsteriskCount = 9*Math.random() + 9;
 const changePasswordError = ref(null);
@@ -575,6 +594,23 @@ const handleChangePassword = async () => {
   await clearChangePasswordInputs();
   await closeChangePasswordPopup();
   toast.success("Password changed");
+}
+
+const handleToastPreferenceChange = async (event) => {
+  isSavingToastPreference.value = true;
+  const enabled = event.target.checked;
+
+  const updateResp = await store.dispatch("updateToastPreference", enabled);
+  isSavingToastPreference.value = false;
+
+  if (!updateResp.success) {
+    event.target.checked = toastPreference.value;
+    toast.error(updateResp.message);
+    return;
+  }
+
+  // Only shows when turning toasts on, since non-error toasts are hidden once they're off
+  toast.success("Pop-up notifications on");
 }
 
 const downloadFile = (filePath, filename) => {

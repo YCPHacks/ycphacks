@@ -5,7 +5,7 @@ import toasts from './toasts.js';
 
 // Optional: a small adapter for user objects
 class UserAdapter {
-  constructor({ id, email, firstName, lastName, token, role, isEmailVerified }) {
+  constructor({ id, email, firstName, lastName, token, role, isEmailVerified, notificationPreference_toast }) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
@@ -13,6 +13,7 @@ class UserAdapter {
     this.token = token;
     this.role = role;
     this.isEmailVerified = true//isEmailVerified;
+    this.notificationPreference_toast = notificationPreference_toast ?? true;
   }
 }
 
@@ -211,6 +212,18 @@ export default createStore({
             return { success: true };
         } catch (err) {
             return { success: false, message: err.response?.data?.message || 'Update failed'};
+        }
+    },
+    async updateToastPreference({ commit, state }, enabled) {
+        try {
+            await axios.put(`${state.apiBaseUrl}/user/${state.user.id}`,
+                { notificationPreference_toast: enabled }, { headers: {'Content-Type': 'application/json'}});
+
+            commit('setUser', new UserAdapter({ ...state.user, notificationPreference_toast: enabled }));
+
+            return { success: true };
+        } catch (err) {
+            return { success: false, message: err.response?.data?.message || 'Failed to update notification preference'};
         }
     },
     async validateWithToken({ commit, state, dispatch }) {
