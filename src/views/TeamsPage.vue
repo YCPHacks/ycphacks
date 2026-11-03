@@ -4,14 +4,18 @@
 
     <div class="row mt-5">
       <div class="col col-md-3">
-        <CardListWithStaticHeader title="Team Members" :elements="members" class="my-5">
-          <template #element="{ elem, index }">
-            <div class="ml-1">{{ elem }}</div>
+        <CardListWithStaticHeader
+            title="Team Members"
+            :elements="members" class="my-5"
+            :element-class="testClassFunct"
+        >
+          <template #elements="{ elem: member, index }">
+            <div class="ml-1">{{ `${member.firstName} ${member.lastName}: ${member.id}` }}</div>
           </template>
         </CardListWithStaticHeader>
 
         <CardListWithStaticHeader title="Team Requests" :elements="requests">
-          <template #element="{ elem, index }">
+          <template #elements="{ elem, index }">
             {{ elem }}
           </template>
         </CardListWithStaticHeader>
@@ -27,7 +31,7 @@
 
 <script setup>
 
-import {ref, onMounted} from "vue";
+import {ref, onMounted, computed, watch} from "vue";
 import { useStore } from 'vuex';
 
 import CardListWithStaticHeader from "@/components/CardListWithStaticHeader.vue";
@@ -35,22 +39,25 @@ import TeamsInfoForm from "@/views/TeamInfoForm.vue";
 
 const store = useStore();
 
+const testClassFunct = (elem, index) => ({
+  'functorial-prop': elem?.id === teamLeaderId.value
+});
 
-const members = ref(['Evan', 'Logan', 'Nathan', 'Spencer', 'Tom']);
+const teamLeaderId = computed(() => store.getters.getTeamLeader);
+const members = computed(() => store.getters.getTeamMembers);
 const requests = ref(['None']);
-
 
 onMounted(async () => {
   await store.dispatch("getActiveEvent");
-  // await store.dispatch("fetchUserTeamStatus", {userId: store.getters.getUser.id});
+  await store.dispatch('fetchActiveParticipant');
+  await store.dispatch('fetchTeamLeader')
+  await store.dispatch('fetchTeamMembers');
 });
-
-
 
 </script>
 
 
-<style>
+<style scoped>
 .container-fluid.page-content {
   overflow: auto;
   height: auto;
@@ -71,9 +78,8 @@ onMounted(async () => {
   }
 }
 
-.test-fill {
-  background-color: lightgrey;
-  height: 500px;
+:deep(div.element.functorial-prop) {
+  background-color: darkblue;
 }
 
 </style>

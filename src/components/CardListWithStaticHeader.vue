@@ -8,8 +8,9 @@
         class="card element my-1"
         v-for="(elem, index) in elements"
         :key="elem?.id ?? index"
-    >
-      <slot name="element" :elem="elem" :index="index">
+        :class="elementClass(elem, index)"
+      >
+      <slot name="elements" :elem="elem" :index="index">
         {{ elem?.name ?? elem }}
       </slot>
     </div>
@@ -26,6 +27,10 @@ defineProps({
   elements: {
     type: Array,
     default: () => []
+  },
+  elementClass: {
+    type: Function,
+    default: () => ''
   }
 })
 

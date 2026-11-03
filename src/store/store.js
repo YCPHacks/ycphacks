@@ -54,6 +54,7 @@ export default createStore({
     activities: [],
     event: {},
     team: {
+      teamLeader: null,
       members: {},
       projectDetails: {}
     },
@@ -67,6 +68,8 @@ export default createStore({
     getProfile: (state) => state.profile,
     getActivities: (state) => state.activities,
     getEvent: (state) => state.event,
+    getTeamLeader: (state) => state.team.teamLeader,
+    getTeamMembers: (state) => state.team.members,
     getTeamProjectDetails: (state) => state.team.projectDetails,
     getEnrollment: (state) => state.enrollment,
     isEnrolled: (state) => !!state.enrollment?.isEnrolled,
@@ -104,6 +107,12 @@ export default createStore({
     },
     setParticipantTeamId(state, teamId){
       state.participant.teamId = teamId;
+    },
+    setTeamLeader(state, teamLeaderId) {
+      state.team.teamLeader = teamLeaderId
+    },
+    setTeamMembers(state, teamMembers) {
+      state.team.members = teamMembers;
     },
     setTeamProjectDetails(state, projectDetails) {
       state.team.projectDetails = projectDetails;
@@ -326,6 +335,28 @@ export default createStore({
         }
       },
 
+    async fetchTeamLeader({commit, state, getters}) {
+        const teamId = getters.getParticipant.teamId;
+
+        try {
+            const response = await axios.get(`${state.apiBaseUrl}/teams/${teamId}/teamLeader`);
+            const data = response.data;
+
+            commit('setTeamLeader', data.teamLeaderId);
+            return {success: true, message: "teamLeaderId fetched successfully"}
+        }
+        catch (err) {
+            if (!err.response)
+                return {success: false, message: "No response received."}
+
+            if (err.response.status === 400 || err.response.status === 404 || err.response.status === 500)
+                return {success: false, message: err.response.message}
+
+            return {success: false, message: "frontend error"};
+        }
+
+    },
+
     async fetchTeamProjectDetails({ commit, state, getters }){
       const teamId = getters.getParticipant.teamId;
 
@@ -340,6 +371,29 @@ export default createStore({
         console.error("Error fetching user team status: ", err);
         commit('setUserTeamId', null)
         return { success: false, message: "Failed to fetch team status" };
+      }
+    },
+
+    async fetchTeamMembers({commit, state, getters}) {
+      const teamId = getters.getParticipant.teamId;
+
+      try {
+          const response = await axios.get(`${state.apiBaseUrl}/teams/${teamId}/members`);
+
+          const data = response.data;
+          commit('setTeamMembers', data.teamMembers);
+          console.log(getters.getTeamMembers)
+
+          return {success: true, message: data.message};
+      }
+      catch (err) {
+          if (!err.response)
+              return {success: false, message: "No response received."}
+
+          if (err.response.status === 400 || err.response.status === 404 || err.response.status === 500)
+              return {success: false, message: err.response.message}
+
+          return {success: false, message: "frontend error"};
       }
     },
 
