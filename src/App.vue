@@ -5,6 +5,7 @@
 <!--    <UnverifiedNavBar v-else-if="!isVerified && !hideNavBar" />-->
     <NewNavBar v-else/><!---if="!hideNavBar" />-->
     <router-view />
+    <ToastContainer />
   </div>
 </template>
 
@@ -12,6 +13,7 @@
 import Navbar from './components/Navbar.vue';
 import NewNavBar from './components/NewNavBar.vue';
 import UnverifiedNavBar from './components/UnverifiedNavBar.vue';
+import ToastContainer from './components/ToastContainer.vue';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -20,6 +22,7 @@ export default {
     Navbar,
     UnverifiedNavBar,
     NewNavBar,
+    ToastContainer,
   },
   computed: {
     ...mapGetters(['isLoggedIn', 'isEmailVerified']),

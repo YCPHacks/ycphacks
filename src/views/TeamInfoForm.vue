@@ -9,22 +9,19 @@
           </div>
 
           <div v-else-if="isLoading" class="text-center py-5">
-            <p>Loading project data...</p>
+            <span>Loading project data...</span>
           </div>
 
-          <div v-else-if="isSubmissionTime" class="alert alert-warning text-center py-4">
-            <span v-if="event && new Date() < new Date(event.startDate)">
+          <div v-else-if="!isSubmissionTime" class="alert alert-warning text-center py-4">
+            <span v-if="event && priorToSubmissionTime">
                 Submissions open when the event officially begins on {{ new Date(event.startDate).toLocaleDateString() }}.
             </span>
-            <span v-else>
-                Submissions are **closed**. You cannot make further changes.
+            <span v-else-if="event && pastSubmissionTime">
+                Submissions are <b>closed</b>. You cannot make further changes.
             </span>
           </div>
 
           <form v-else @submit.prevent="handleSubmit">
-            <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
-            <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
-
             <div class="mb-3">
               <label for="projectName" class="form-label fw-bold">Project Name</label>
               <input
@@ -88,23 +85,59 @@
 </template>
 
 <script setup>
-import { mapGetters } from "vuex";
-import axios from 'axios';
 import store from "@/store/store.js";
 import {computed, onMounted, reactive, ref, watch} from "vue";
+
+import { toast } from "@/utils/toast.js";
+
 
 const event = computed(() => store.getters.getEvent);
 const participant = computed(() => store.getters.getParticipant);
 const projectDetails = computed(() => store.getters.getTeamProjectDetails);
 
-const isLoading = ref(true);
+
+const isLoading = ref(false);
 const isSubmitting = ref(false);
+
+
+const priorToSubmissionTime = computed(() => {
+  if (!event?.value || !event?.startDate?.value)
+    return false;
+
+  const now = new Date();
+  const startDate = new Date(event.startDate);
+
+  return false// now < startDate;
+});
+
+const isSubmissionTime = computed(() => {
+
+  if (!event.value || !event?.startDate || !event?.endDate)
+    return true;
+
+  const now = new Date();
+  const startDate = new Date(event.startDate);
+  const endDate = new Date(event.endDate);
+
+  return true// now >= startDate && now < endDate;
+});
+
+const pastSubmissionTime = computed(() => {
+  if (!event.value || !event?.endDate)
+    return false;
+
+  const now = new Date();
+  const endDate = new Date(event.endDate);
+
+  return now >= endDate;
+});
 
 const projectDetailFields = reactive(async () => {
       return {...projectDetails};
 });
 
 onMounted(async () => {
+    isLoading.value = true;
     await store.dispatch('getActiveEvent');
     await store.dispatch('fetchActiveParticipant');
     await store.dispatch('fetchTeamProjectDetails');
@@ -119,37 +152,38 @@ watch(
     { deep: true, immediate: true }
 )
 
-// isSubmissionTime(){
-//   const event = this.getEvent;
-//   if (!event || !event.startDate || !event.endDate) {
-//     // Assume open if data isn't loaded yet, matching your old console warning logic
-//     return true;
-//   }
-//
-//   const now = new Date();
-//   const startDate = new Date(event.startDate);
-//   const endDate = new Date(event.endDate);
-//
-//   // Submissions are active if (now >= startDate) AND (now < endDate)
-//   return now >= startDate && now < endDate;
-// },
-
 /**
  * Submits the updated project details using direct Axios call.
  */
 const handleSubmit = async () => {
-    // if (!this.isSubmissionTime || this.isSubmitting) return;
+
+  if (!isSubmissionTime.value) {
+    await toast.warning("Wait for submission window to open.");
+    return;
+  }
+
+  if (isSubmitting.value) {
+    await toast.warning("Wait for previous submission to finish.");
+    return;
+  }
 
     isSubmitting.value = true;
 
     try {
-      const { success } = await store.dispatch('updateTeamProjectDetails', {projectDetails: projectDetailFields});
+      const {
+        success, message
+      } = await store.dispatch(
+          'updateTeamProjectDetails',  {
+          projectDetails: projectDetailFields
+      });
 
       if (success) {
         console.log("success on updating team project info");
+        await toast.success(message || "Project details updated successfully!");
       }
       else {
-        console.log("success on updating team project info")
+        console.log("failure on updating team project info");
+        await toast.error(message || "Failed to save project details. Check your links and try again.");
       }
     }
     catch (err) {
@@ -165,10 +199,6 @@ const handleSubmit = async () => {
 
 .main-header h1 {
   font-size: clamp(2rem, 3vw + 1rem, 3rem)
-}
-
-.header-line {
-  width: 95%;
 }
 
 </style>

@@ -1,4 +1,3 @@
-
 <template>
   <div class="container-top mt-2">
     <header class="main-header">
