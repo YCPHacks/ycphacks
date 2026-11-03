@@ -1,27 +1,40 @@
 
 <template>
-  <div class="container-fluid page-content mx-auto">
+  <div class="container-top mt-2">
+    <header class="main-header">
+      <div class="text-center">
+        <h1 class="mb-2">
+          {{ projectDetails.teamName || 'Team Project' }}
+        </h1>
+        <hr class="header-line" />
+      </div>
+    </header>
+  </div>
 
-    <div class="row mt-5">
-      <div class="col col-md-3">
+  <div class="container-fluid page-content">
+    <div class="row flex col-12">
+      <div class="col flex-column col-12 col-sm-4">
         <CardListWithStaticHeader
-            title="Team Members"
-            :elements="members" class="my-5"
-            :element-class="testClassFunct"
-        >
-          <template #elements="{ elem: member, index }">
-            <div class="ml-1">{{ `${member.firstName} ${member.lastName}: ${member.id}` }}</div>
-          </template>
-        </CardListWithStaticHeader>
-
-        <CardListWithStaticHeader title="Team Requests" :elements="requests">
+            class="mt-5"
+            title="Team Requests"
+            :elements="requests">
           <template #elements="{ elem, index }">
             {{ elem }}
           </template>
         </CardListWithStaticHeader>
-      </div>
 
-      <div class="col col-md-9">
+        <CardListWithStaticHeader
+            class="mt-5"
+            title="Team Members"
+            :elements="members"
+            :element-class="testClassFunct"
+        >
+          <template #elements="{ elem: member, index }">
+            <div class="ml-1">{{ `${member.firstName} ${member.lastName}` }}</div>
+          </template>
+        </CardListWithStaticHeader>
+      </div>
+      <div class="col flex-column col-12 col-sm-8">
           <TeamsInfoForm/>
       </div>
     </div>
@@ -31,7 +44,7 @@
 
 <script setup>
 
-import {ref, onMounted, computed, watch} from "vue";
+import {ref, onMounted, computed} from "vue";
 import { useStore } from 'vuex';
 
 import CardListWithStaticHeader from "@/components/CardListWithStaticHeader.vue";
@@ -43,6 +56,7 @@ const testClassFunct = (elem, index) => ({
   'functorial-prop': elem?.id === teamLeaderId.value
 });
 
+const projectDetails = computed(() => store.getters.getTeamProjectDetails);
 const teamLeaderId = computed(() => store.getters.getTeamLeader);
 const members = computed(() => store.getters.getTeamMembers);
 const requests = ref(['None']);
@@ -50,7 +64,8 @@ const requests = ref(['None']);
 onMounted(async () => {
   await store.dispatch("getActiveEvent");
   await store.dispatch('fetchActiveParticipant');
-  await store.dispatch('fetchTeamLeader')
+  await store.dispatch('fetchTeamProjectDetails');
+  await store.dispatch('fetchTeamLeader');
   await store.dispatch('fetchTeamMembers');
 });
 
@@ -61,8 +76,6 @@ onMounted(async () => {
 .container-fluid.page-content {
   overflow: auto;
   height: auto;
-
-  padding-top: 100px;
 }
 
 .container-fluid.page-content {

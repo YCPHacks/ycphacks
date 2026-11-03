@@ -1,11 +1,11 @@
 
 <template>
   <div class="card main-card">
-    <h4 class="title">
+    <h4 class="title ps-1">
       {{title}}
     </h4>
     <div
-        class="card element my-1"
+        class="card element my-1 px-1"
         v-for="(elem, index) in elements"
         :key="elem?.id ?? index"
         :class="elementClass(elem, index)"
@@ -42,7 +42,7 @@ defineProps({
 
 .main-card {
   padding: 2px;
-  background-color: #3e6d3d;
+  background-color: #006a40;
   color: #222222;
 }
 

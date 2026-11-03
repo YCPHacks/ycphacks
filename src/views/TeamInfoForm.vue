@@ -1,19 +1,8 @@
 <template>
-  <div class="container-top">
-    <header class="main-header">
-      <div class="text-center">
-        <h1 class="mb-2">
-          {{ projectDetails.teamName || 'Team Project' }}
-        </h1>
-        <hr class="header-line" />
-      </div>
-    </header>
-  </div>
-
-  <div class="container-fluid">
+  <div class="container-fluid px-0">
     <div class="row align-items-start mt-5">
-      <main class="col-md-12 col-lg-8 offset-lg-2">
-        <div class="py-4 border rounded bg-white shadow-sm main-box">
+      <main class="col-12">
+        <div class="py-2 pt-4 px-4 border rounded bg-white shadow-sm main-box">
 
           <div v-if="!participant?.teamId" class="alert alert-danger text-center py-4">
             You must be part of a team to access project submission.
