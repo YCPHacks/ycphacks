@@ -1,16 +1,18 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 import { formatDateToEST } from "@/utils/formatDate.js";
+import toasts from './toasts.js';
 
 // Optional: a small adapter for user objects
 class UserAdapter {
-  constructor({ id, email, firstName, lastName, token, isEmailVerified }) {
+  constructor({ id, email, firstName, lastName, token, isEmailVerified, notificationPreference_toast }) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
     this.token = token;
     this.isEmailVerified = true//isEmailVerified;
+    this.notificationPreference_toast = notificationPreference_toast ?? true;
   }
 }
 
@@ -46,21 +48,33 @@ class ProfileAdapter {
 }
 
 export default createStore({
+  modules: {
+    toasts
+  },
   state: {
-    user: null, 
+    user: null,
+    participant: {},
     profile: null,
     activities: [],
     event: {},
+    team: {
+      teamLeader: null,
+      members: {},
+      projectDetails: {}
+    },
     enrollment: null,
     apiBaseUrl: import.meta.env.VITE_API_BASE_URL
   },
   getters: {
     isLoggedIn: (state) => !!state.user,
     getUser: (state) => state.user,
+    getParticipant: (state) => state.participant,
     getProfile: (state) => state.profile,
     getActivities: (state) => state.activities,
     getEvent: (state) => state.event,
-    getUserTeamId: (state) => state.userTeamId,
+    getTeamLeader: (state) => state.team.teamLeader,
+    getTeamMembers: (state) => state.team.members,
+    getTeamProjectDetails: (state) => state.team.projectDetails,
     getEnrollment: (state) => state.enrollment,
     isEnrolled: (state) => !!state.enrollment?.isEnrolled,
     isEmailVerified: (state) => true//!!state.user.isEmailVerified
@@ -68,6 +82,9 @@ export default createStore({
   mutations: {
     setUser(state, user) {
       state.user = user;
+    },
+    setParticipant(state, participant) {
+        state.participant = participant;
     },
     setUserEmailVerification(state, user, isEmailVerified) {
         state.user.ieEmailVerified = isEmailVerified;
@@ -92,8 +109,17 @@ export default createStore({
     clearEvent(state) {
         state.event = null;
     },
-    setUserTeamId(state, teamId){
-      state.userTeamId = teamId;
+    setParticipantTeamId(state, teamId){
+      state.participant.teamId = teamId;
+    },
+    setTeamLeader(state, teamLeaderId) {
+      state.team.teamLeader = teamLeaderId
+    },
+    setTeamMembers(state, teamMembers) {
+      state.team.members = teamMembers;
+    },
+    setTeamProjectDetails(state, projectDetails) {
+      state.team.projectDetails = projectDetails;
     },
     setEnrollment(state, enrollment) {
       state.enrollment = enrollment;
@@ -155,12 +181,10 @@ export default createStore({
         commit('setUser', new UserAdapter(data.data));
         document.cookie = `token=${data.data.token}; path=/;`;
 
-        // await dispatch('getActiveEvent');
-        await dispatch('fetchUserTeamStatus');
-
         return { success: true };
       } catch (err) {
-          return { success: false, message: err.response?.data?.message || 'Login failed'};
+          console.error(err);
+          return { success: false, message: 'Login failed'};
       }
     },
 
@@ -199,12 +223,25 @@ export default createStore({
                 updatedUser, { headers: {'Content-Type': 'application/json'}});
             const data = response.data;
 
-            const updatedProfile = new ProfileAdapter(data.data)
+            // The API only returns the fields that changed, so merge them into the existing profile
+            const updatedProfile = new ProfileAdapter({ ...state.profile, ...data.data })
             commit('setProfile', updatedProfile);
 
             return { success: true };
         } catch (err) {
             return { success: false, message: err.response?.data?.message || 'Update failed'};
+        }
+    },
+    async updateToastPreference({ commit, state }, enabled) {
+        try {
+            await axios.put(`${state.apiBaseUrl}/user/${state.user.id}`,
+                { notificationPreference_toast: enabled }, { headers: {'Content-Type': 'application/json'}});
+
+            commit('setUser', new UserAdapter({ ...state.user, notificationPreference_toast: enabled }));
+
+            return { success: true };
+        } catch (err) {
+            return { success: false, message: err.response?.data?.message || 'Failed to update notification preference'};
         }
     },
     async validateWithToken({ commit, state, dispatch }) {
@@ -232,7 +269,7 @@ export default createStore({
             commit("setUser", user);
 
             // await dispatch('getActiveEvent');
-            await dispatch('fetchUserTeamStatus');
+            // await dispatch('fetchUserTeamStatus', {userId: user.id});
 
             return { success: true, message: data.message };
         } catch (error) {
@@ -277,34 +314,104 @@ export default createStore({
               event.endDate = new Date (formatDateToEST(event.endDate));
 
               commit("setEvent", event);
+
               return {success: true, message: response.data.message, event: event};
           } catch (error) {
               return {success: false, message: error.response?.data?.message || "Error fetching active event"};
           }
       },
 
-    async fetchUserTeamStatus({ commit, state, getters }){
-      if(!getters.isLoggedIn || !getters.getUser){
-        commit('setUserTeamId', null);
-        return;
-      }
+      async fetchActiveParticipant({commit, state, getters}) {
+        try {
 
-      const userId = getters.getUser.id;
-      const eventId = 1;  //getters.getEvent.id ||
+            const response = await axios.get(
+                `${state.apiBaseUrl}/participant?eventId=${this.state.event.id}&userId=${this.getters.getUser.id}`
+            );
+
+            const data = response.data.data;
+            commit("setParticipant", data.participant);
+
+            return {success: true, message: "participant fetched successfully"}
+        }
+        catch (err) {
+            if (!err.response) {
+                return {success: false, message: "no response returned"};
+            }
+            console.log(err.response);
+
+            // invalid args or no participant found
+            if (err.response.status === 400 || err.response.status === 404) {
+                return {success: false, message: err.response.data.message};
+            }
+
+            // API error
+            if (err.response.status === 500) {
+                return {success: false, message: "API error"};
+            }
+
+            return {success: false, message: "frontend error"};
+        }
+      },
+
+    async fetchTeamLeader({commit, state, getters}) {
+        const teamId = getters.getParticipant.teamId;
+
+        try {
+            const response = await axios.get(`${state.apiBaseUrl}/teams/${teamId}/teamLeader`);
+            const data = response.data;
+
+            commit('setTeamLeader', data.teamLeaderId);
+            return {success: true, message: "teamLeaderId fetched successfully"}
+        }
+        catch (err) {
+            if (!err.response)
+                return {success: false, message: "No response received."}
+
+            if (err.response.status === 400 || err.response.status === 404 || err.response.status === 500)
+                return {success: false, message: err.response.message}
+
+            return {success: false, message: "frontend error"};
+        }
+
+    },
+
+    async fetchTeamProjectDetails({ commit, state, getters }){
+      const teamId = getters.getParticipant.teamId;
 
       try{
-        const response = await axios.get(`${state.apiBaseUrl}/teams/${userId}/team`, {
-          params: { eventId }
-        });
+        const response = await axios.get(`${state.apiBaseUrl}/teams/${teamId}/project-details`);
 
-        const teamId = response.data.teamId || null;
+        const data = response.data.data || null;
 
-        commit('setUserTeamId', teamId);
-        return { success: true }
+        commit('setTeamProjectDetails', data.projectDetails);
+        return { success: true, message: "Successfully fetched team's project details" }
       }catch(err){
         console.error("Error fetching user team status: ", err);
         commit('setUserTeamId', null)
         return { success: false, message: "Failed to fetch team status" };
+      }
+    },
+
+    async fetchTeamMembers({commit, state, getters}) {
+      const teamId = getters.getParticipant.teamId;
+
+      try {
+          const response = await axios.get(`${state.apiBaseUrl}/teams/${teamId}/members`);
+
+          const data = response.data;
+          commit('setTeamMembers', data.teamMembers);
+          console.log(getters.getTeamMembers)
+
+          return {success: true, message: data.message};
+      }
+      catch (err) {
+          if (!err.response)
+              return {success: false, message: "No response received."}
+
+          if (err.response.status === 400 || err.response.status === 404 || err.response.status === 500)
+              return {success: false, message: err.response.message}
+
+          return {success: false, message: "frontend error"};
       }
     },
 
@@ -322,6 +429,29 @@ export default createStore({
         commit('setEnrollment', null);
         return { success: false, message: err.response?.data?.message || 'Failed to fetch enrollment status' };
       }
+    },
+
+    async updateTeamProjectDetails({commit, state, getters}, { projectDetails })  {
+
+        try {
+            const payload = {
+                projectName: projectDetails.projectName,
+                projectDescription: projectDetails.projectDescription,
+                presentationLink: projectDetails.presentationLink,
+                githubLink: projectDetails.githubLink,
+            };
+
+            console.log(projectDetails);
+            const response = await axios.put(`${state.apiBaseUrl}/teams/${getters.getParticipant.teamId}/project-details`, payload);
+            const message = response.data.message;
+            console.log("Response message: " + message)
+
+            return { success: true, message: message || "Project details updated successfully!" };
+
+        } catch (err) {
+            console.log("Error: " + err);
+            return { success: false, error: err.response?.data?.error || "Failed to save project details. Check your links and try again." };
+        }
     },
 
     async enrollInActiveEvent({ commit, state, getters }) {

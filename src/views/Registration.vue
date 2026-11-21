@@ -6,29 +6,7 @@
       Your browser does not support the video tag.
     </video>
 
-    <div v-if="isRegistered" class="card p-4 text-center shadow-sm">
-      <b-alert
-          v-if="showAlert"
-          :modelValue="dismissCountDown"
-          variant="success"
-          @close-countdown="dismissSeconds = $event"
-      >
-        <span>Your account has been created! You are being redirected to {{ hasActiveEvent ? 'event registration' : 'the landing page' }} in {{ dismissSeconds/1000 }} {{ dismissSeconds/1000 === 1 ? 'second' : 'seconds' }}...</span>
-        <b-progress
-            variant="success"
-            :max="dismissCountDown"
-            :value="dismissSeconds"
-            height="4px"
-        >
-        </b-progress>
-      </b-alert>
-      <div class="text-success">
-        <i class="bi bi-check-circle" style="font-size: 3rem;"></i>
-        <h4 class="mt-3">Account Created</h4>
-      </div>
-    </div>
-
-    <div v-else class="card p-4 shadow-sm position-relative">
+    <div class="card p-4 shadow-sm position-relative">
       <div v-if="isLoading" class="loading-overlay">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
@@ -435,6 +413,7 @@
 import store from '../store/store.js';
 import {BFormInput} from "bootstrap-vue-3";
 import majorData from "../assets/majors.json"
+import { toast } from '@/utils/toast.js';
 
 export default {
   components: {BFormInput},
@@ -462,14 +441,10 @@ export default {
         mlhPrivacyPolicy: true,
         mlhEmails: false
       },
-      isRegistered: false,
-      hasActiveEvent: false,
       isLoading: false,
       message: '',
       errors: {},
       showAlert: false,
-      dismissSeconds: 0, // Variable to keep track of how long alert has been rendered
-      dismissCountDown: 5000, // Alert will last 5 seconds
 
       options: {
         countries: [
@@ -533,22 +508,17 @@ export default {
       if (result.success) {
         // Only send new users to the enrollment page when there's an active event to register for
         const enrollment = await store.dispatch('fetchEnrollmentStatus');
-        this.hasActiveEvent = enrollment.success && !!enrollment.data.event;
-        this.isRegistered = true;
-      } else {
-        this.message = result.message;
-        this.errors = result.errors;
+        const hasActiveEvent = enrollment.success && !!enrollment.data.event;
+
+        toast.success('Account created!');
+        this.$router.push(hasActiveEvent ? '/enroll' : '/');
+        return;
       }
 
-      if (!this.errors) this.errors = {};
+      this.message = result.message;
+      this.errors = result.errors || {};
       this.isLoading = false;
       this.showAlert = true;
-
-      if (this.isRegistered) {
-        setTimeout(() => {
-          this.$router.push(this.hasActiveEvent ? '/enroll' : '/');
-        }, this.dismissCountDown);
-      }
     }
   }
 };

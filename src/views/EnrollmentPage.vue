@@ -40,10 +40,6 @@
               <span v-else>Not Registered &cross;</span>
             </div>
 
-            <div v-if="enrollError" class="alert alert-danger p-2 mb-3" role="alert">
-              <i class="bi bi-exclamation-triangle-fill"></i> {{ enrollError }}
-            </div>
-
             <div v-if="isEnrolled">
               <p>You're registered for {{ event.eventName }}. See you there!</p>
               <router-link class="btn btn-form-submit" to="/">Go to Home</router-link>
@@ -68,13 +64,13 @@
 
 import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
+import { toast } from '@/utils/toast.js'
 
 const store = useStore();
 
 const isLoading = ref(true);
 const isEnrolling = ref(false);
 const loadError = ref(null);
-const enrollError = ref(null);
 
 const enrollment = computed(() => store.getters.getEnrollment);
 const event = computed(() => enrollment.value?.event);
@@ -103,13 +99,14 @@ onMounted(async () => {
 })
 
 const handleEnroll = async () => {
-  enrollError.value = null;
   isEnrolling.value = true;
 
   const result = await store.dispatch("enrollInActiveEvent");
 
-  if (!result.success) {
-    enrollError.value = result.message;
+  if (result.success) {
+    toast.success(`You're registered for ${event.value.eventName}!`);
+  } else {
+    toast.error(result.message);
     // Refresh in case the status changed (e.g. already registered in another tab)
     await store.dispatch("fetchEnrollmentStatus");
   }

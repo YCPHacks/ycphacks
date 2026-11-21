@@ -10,23 +10,19 @@
 
   <div class="container-fluid">
     <button class="verify" @click="sendEmailVerification" :disabled="loading">{{ loading ? "Sending..." : "Resend Email Verification" }}</button>
-    <p v-if = "error" class="error-message">
-      {{ error }}
-    </p>
   </div>
 </template>
 
 <script>
 import {mapGetters} from "vuex";
 import router from "@/router/index.js";
+import { toast } from '@/utils/toast.js';
 
 export default {
   name: "EmailVerification",
 
   data() {
     return {
-      message: "",
-      error: "",
       loading: false,
       email: ""
     };
@@ -58,18 +54,16 @@ export default {
         const data = await response.json();
 
         if (!response.ok) {
-          this.error = data.message;
-          this.message = "";
+          toast.error(data.message);
           return;
         }
 
-        this.message = data.message || "Email sent";
-        this.error = "";
+        toast.success(data.message || "Email sent");
         this.email = "";
 
       } catch (err) {
         console.error(err);
-        this.error = "Something went wrong. Please try again.";
+        toast.error("Something went wrong. Please try again.");
 
       } finally {
         this.loading = false;
@@ -88,13 +82,6 @@ export default {
   margin: 0 auto;
   width: 50%;
   height: 20vh; /* full viewport height */
-}
-
-.error-message {
-  font-weight: bolder;
-  font-size: 30px;
-  display: block;
-  color: #008350;
 }
 
 @media (max-width: 768px) {
