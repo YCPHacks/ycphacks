@@ -162,9 +162,6 @@
 
                 </div>
 
-                <!-- I want a line inbetween the subsections, but i don't feel like making it look nice rn-->
-                <!--TODO: <hr class="form-line"/>-->
-
                 <div class="mb-4 mt-3 mx-2">
                   <h4 class="mb-1 ms-2">Phone Number</h4>
                   <input v-model="currentAccountInfoPhoneNumber" type="tel" class="form-control" required/>

@@ -107,7 +107,7 @@ const priorToSubmissionTime = computed(() => {
   const now = new Date();
   const startDate = new Date(event.startDate);
 
-  return false// now < startDate;
+  return false// TODO: now < startDate;
 });
 
 const isSubmissionTime = computed(() => {
@@ -119,7 +119,7 @@ const isSubmissionTime = computed(() => {
   const startDate = new Date(event.startDate);
   const endDate = new Date(event.endDate);
 
-  return true// now >= startDate && now < endDate;
+  return true// TODO: now >= startDate && now < endDate;
 });
 
 const pastSubmissionTime = computed(() => {

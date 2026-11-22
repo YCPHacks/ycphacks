@@ -60,7 +60,7 @@ export default createStore({
     event: {},
     team: {
       teamLeader: null,
-      members: {},
+      members: [],
       projectDetails: {}
     },
     enrollment: null,
@@ -74,6 +74,7 @@ export default createStore({
     getActivities: (state) => state.activities,
     getEvent: (state) => state.event,
     getTeamLeader: (state) => state.team.teamLeader,
+    getTeamId: (state) => state.participant?.teamId,
     getTeamMembers: (state) => state.team.members,
     getTeamProjectDetails: (state) => state.team.projectDetails,
     getEnrollment: (state) => state.enrollment,
@@ -356,6 +357,9 @@ export default createStore({
     async fetchTeamLeader({commit, state, getters}) {
         const teamId = getters.getParticipant.teamId;
 
+        if (!teamId)
+            return {success: true, message: "Participant is not a member of any team."};
+
         try {
             const response = await axios.get(`${state.apiBaseUrl}/teams/${teamId}/teamLeader`);
             const data = response.data;
@@ -376,7 +380,10 @@ export default createStore({
     },
 
     async fetchTeamProjectDetails({ commit, state, getters }){
-      const teamId = getters.getParticipant.teamId;
+      const teamId = getters.getTeamId;
+
+      if (!teamId)
+          return {success: true, message: "Participant is not a member of any team."};
 
       try{
         const response = await axios.get(`${state.apiBaseUrl}/teams/${teamId}/project-details`);
@@ -387,13 +394,16 @@ export default createStore({
         return { success: true, message: "Successfully fetched team's project details" }
       }catch(err){
         console.error("Error fetching user team status: ", err);
-        commit('setUserTeamId', null)
+        commit('setParticipantTeamId', null)
         return { success: false, message: "Failed to fetch team status" };
       }
     },
 
     async fetchTeamMembers({commit, state, getters}) {
-      const teamId = getters.getParticipant.teamId;
+      const teamId = getters.getTeamId;
+
+      if (!teamId)
+          return {success: true, message: "Participant is not a member of any team."};
 
       try {
           const response = await axios.get(`${state.apiBaseUrl}/teams/${teamId}/members`);
@@ -442,7 +452,7 @@ export default createStore({
             };
 
             console.log(projectDetails);
-            const response = await axios.put(`${state.apiBaseUrl}/teams/${getters.getParticipant.teamId}/project-details`, payload);
+            const response = await axios.put(`${state.apiBaseUrl}/teams/${getters.getTeamId}/project-details`, payload);
             const message = response.data.message;
             console.log("Response message: " + message)
 
@@ -452,6 +462,70 @@ export default createStore({
             console.log("Error: " + err);
             return { success: false, error: err.response?.data?.error || "Failed to save project details. Check your links and try again." };
         }
+    },
+
+    async updateTeamLeader({commit, state, getters}, newTeamLeaderId) {
+
+        if (newTeamLeaderId === getters.getTeamLeader)
+            return;
+
+        if (!getters.getTeamMembers.map(m => m.id).includes(newTeamLeaderId))
+            return;
+
+        try {
+            await axios.put(
+                `${state.apiBaseUrl}/teams/${getters.getTeamProjectDetails.id}/teamLeader`,
+                { newTeamLeaderId: newTeamLeaderId }
+            );
+
+            commit('setTeamLeader', newTeamLeaderId);
+            return { success: true, message: 'Updated team leader successfully' };
+
+        } catch (err) {
+            if (!err.response)
+                return { success: false, message: "No response received." }
+
+            if (err.response.status === 400 || err.response.status === 404 || err.response.status === 500)
+                return { success: false, message: err.response.data.message };
+
+            return { success: false, message: 'Unknown error' };
+        }
+    },
+
+    async removeTeamMember({commit, state, getters}, teamMemberId) {
+
+      if (!getters.getTeamMembers.map(m => m.id).includes(teamMemberId))
+          return;
+
+      try {
+          await axios.put(`${state.apiBaseUrl}/teams/unassign`, {
+            'participantId': teamMemberId
+          });
+
+          // removed self as team member
+          if (teamMemberId === getters.getParticipant.id) {
+              commit('setTeamProjectDetails', {});
+              commit('setTeamMembers', []);
+              commit('setParticipantTeamId', null);
+              commit('setTeamLeader', null);
+          }
+
+          // team leader removed another member
+          else {
+              commit('setTeamMembers', getters.getTeamMembers.filter(member => member.id !== teamMemberId));
+          }
+
+          return { success: true, message: 'Updated team leader successfully' };
+
+      } catch (err) {
+          if (!err.response)
+              return { success: false, message: "No response received." }
+
+          if (err.response.status === 400 || err.response.status === 404 || err.response.status === 500)
+              return { success: false, message: err.response.data.message };
+
+          return { success: false, message: 'Unknown error' };
+      }
     },
 
     async enrollInActiveEvent({ commit, state, getters }) {
