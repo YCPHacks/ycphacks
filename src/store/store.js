@@ -478,6 +478,13 @@ export default createStore({
           console.error("Cannot fetch staff: Missing event ID.");
           return [];
       }
+
+            try {
+                const response = await axios.get(`${state.apiBaseUrl}/user/all/participant?eventId=${eventId}`);
+                const permissions = response.data.data;
+            } catch (error) {
+                console.error("Error fetching permissions:", error);
+            }
       
       // Use the base URL and append the specific route: /user/event/:eventId/staff
       const url = `${state.apiBaseUrl}/user/event/${eventId}/staff`;
