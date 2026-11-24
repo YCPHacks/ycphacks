@@ -100,14 +100,14 @@
 
             <div v-if="outgoingTeamingRequestDropdownIsOpen(index)">
               <div class="row">
-                <div class="col my-1 d-flex align-items-center justify-content-center">
-                  <button
-                      class="card px-3"
-                      @click="rescindTeamingRequest(index)"
-                  >
-                    Rescind Request
-                  </button>
-                </div>
+<!--                <div class="col my-1 d-flex align-items-center justify-content-center">-->
+<!--                  <button-->
+<!--                      class="card px-3"-->
+<!--                      @click="rescindTeamingRequest(index)"-->
+<!--                  >-->
+<!--                    Rescind Request-->
+<!--                  </button>-->
+<!--                </div>-->
                 <div class="col my-1 d-flex align-items-center justify-content-center">
                   <button
                       class="card px-3"
