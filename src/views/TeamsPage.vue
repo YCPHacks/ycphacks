@@ -1,5 +1,5 @@
 <template>
-  <div class="container-top mt-2">
+  <div class="container-top mt-2 theme-text-primary">
     <header class="main-header">
       <div class="text-center">
         <h1 class="mb-2">

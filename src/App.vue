@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="theme-bg-primary">
     <Navbar v-if="!isLoggedIn" />
     <!-- Show Navbar on all other pages -->
 <!--    <UnverifiedNavBar v-else-if="!isVerified && !hideNavBar" />-->
@@ -66,14 +66,15 @@ html, body{
 .header-line{
   width: clamp(70%, 70%, 75%);
   margin: 0.5rem auto 0;
-  border-top: 5px solid #fff;
+  border-top-width: 5px;
+  border-top-style: solid;
 }
 
 hr.form-line {
   width: clamp(80%, 90%, 90%);
   margin: 0.5rem auto 0;
-  border-top: 5px solid #fff;
-  color: #222
+  border-top-width: 5px;
+  border-top-style: solid;
 }
 
 .container-top {

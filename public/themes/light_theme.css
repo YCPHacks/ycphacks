@@ -1,0 +1,11 @@
+:root {
+    --primary-bg: #d3d3d3;
+    --secondary-bg: #231F20;
+    --surface-bg: #FAF9F6;
+    --surface-hover: #fbfbfd;
+
+    --primary-text: #006f3c;
+    --secondary-text: #008350;
+    --accent-color: #008350;
+    --border-color: #006f3c;
+}

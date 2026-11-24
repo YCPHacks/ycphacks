@@ -16,7 +16,7 @@
     </div>
 
     <!-- About Section -->
-    <div class="container-top" id="about">
+    <div class="container-top theme-text-primary" id="about">
       <header class="main-header">
         <div class="text-center py-4">
           <h1 class="mb-2">About</h1>
@@ -49,7 +49,7 @@
     <Activities />
 
     <!-- FAQ Section -->
-    <div class="container-top" id="faq">
+    <div class="container-top theme-text-primary" id="faq">
       <header class="main-header">
         <div class="text-center py-4">
           <h1 class="mb-2">FAQ</h1>
@@ -72,7 +72,7 @@
     </div>
 
     <!-- Prizes -->
-    <div class="container-top" id="prizes">
+    <div class="container-top theme-text-primary" id="prizes">
 
       <header class="main-header">
         <div class="text-center py-4">
@@ -104,7 +104,7 @@
     </div>
 
     <!-- Sponsors -->
-    <div class="container-top py-4" id="sponsors">
+    <div class="container-top py-4 theme-text-primary" id="sponsors">
       <header class="main-header">
         <div class="text-center">
           <h1 class="mb-2">Sponsors</h1>
@@ -122,7 +122,7 @@
     </div>
 
     <!-- Staff -->
-    <div class="container-top" id="staff-team">
+    <div class="container-top theme-text-primary" id="staff-team">
 
       <header class="main-header">
         <div class="text-center py-4">

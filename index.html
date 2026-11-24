@@ -8,6 +8,15 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YCP Hacks</title>
+    
+    <link id="theme-stylesheet" rel="stylesheet" href="/themes/dark_theme.css">
+    <script>
+        // Immediately apply saved theme before first paint to prevent flash
+        const savedTheme = localStorage.getItem('app-theme');
+        if (savedTheme) {
+            document.getElementById('theme-stylesheet').setAttribute('href', `/themes/${savedTheme}_theme.css`);
+        }
+    </script>
 </head>
 <body>
 <div id="app"></div>

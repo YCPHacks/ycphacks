@@ -67,7 +67,8 @@ export default createStore({
       projectDetails: {}
     },
     enrollment: null,
-    apiBaseUrl: import.meta.env.VITE_API_BASE_URL
+    apiBaseUrl: import.meta.env.VITE_API_BASE_URL,
+    theme: localStorage.getItem('app-theme') || 'dark'
   },
   getters: {
     isLoggedIn: (state) => !!state.user,
@@ -84,7 +85,9 @@ export default createStore({
     getOutgoingTeamRequests: (state) => state.team.teamingRequests.outgoing,
     getEnrollment: (state) => state.enrollment,
     isEnrolled: (state) => !!state.enrollment?.isEnrolled,
-    isEmailVerified: (state) => true//!!state.user.isEmailVerified
+    isEmailVerified: (state) => true,//!!state.user.isEmailVerified
+    getTheme: (state) => state.theme,
+    isLightTheme: (state) => state.theme === 'light'
   },
   mutations: {
     setUser(state, user) {
@@ -155,6 +158,15 @@ export default createStore({
     },
     setEnrollment(state, enrollment) {
       state.enrollment = enrollment;
+    },
+    setTheme(state, themeName) {
+      state.theme = themeName;
+      localStorage.setItem('app-theme', themeName);
+
+      const themeLink = document.getElementById('theme-stylesheet');
+      if (themeLink) {
+        themeLink.setAttribute('href', `/themes/${themeName}_theme.css`);
+      }
     }
   },
   actions: {
@@ -748,6 +760,15 @@ export default createStore({
           // Return an empty array on failure
           return []; 
       }
+    },
+
+    toggleTheme({ commit, state }) {
+      const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
+      commit('setTheme', nextTheme);
+    },
+
+    changeTheme({ commit }, themeName) {
+      commit('setTheme', themeName);
     }
   }
 });

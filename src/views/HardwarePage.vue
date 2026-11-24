@@ -1,5 +1,5 @@
 <template>
-  <div class="container-top">
+  <div class="container-top theme-text-primary">
     <header class="main-header">
       <div class="text-center py-4">
         <h1 class="mb-2">Hardware</h1>
