@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isLoading" class="container-top" id="schedule">
     <div v-if="event && Object.keys(event).length > 0" class="container-top">
-      <div class="container-top">
+      <div class="container-top theme-text-primary">
         <header class="main-header">
           <div class="text-center py-4">
             <h1 class="mb-2">Activities</h1>
@@ -11,7 +11,7 @@
       </div>
 
 
-      <div class="container-fluid">
+      <div class="container-fluid theme-text-accent">
         <div class="row justify-content-center">
           <div v-for="(activities, date) in groupedActivities" :key="date">
           <h3 id="day-tag" class="text-center">

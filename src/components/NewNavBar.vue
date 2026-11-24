@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar">
+  <nav class="navbar theme-bg-secondary">
     <a
         id="mlh-trust-badge"
         href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
@@ -13,7 +13,7 @@
 
     <router-link id="ycphacks-logo" to="/">
       <img
-        v-if="isDark"
+        v-if="!isLightTheme"
         src="../assets/fountain_black.png"
         alt="YCP Hacks Fountain Logo"
       />
@@ -27,46 +27,46 @@
     <div class="nav">
       <div class="desktop-nav">
         <div class="nav-right" v-if="isLoggedIn">
-          <router-link class="nav-link" to="/">Home</router-link>
-          <router-link class = "nav-link" to="/checkin">Check In</router-link>
-          <router-link class="nav-link" to="/teams">Team Information</router-link>
-          <router-link class="nav-link" to="/activities">Activities</router-link>
-          <router-link class="nav-link" to="/hardware">Hardware</router-link>
-          <router-link class="nav-link" to="categories">Hack Categories</router-link>
+          <router-link class="nav-link theme-text-secondary" to="/">Home</router-link>
+          <router-link class = "nav-link theme-text-secondary" to="/checkin">Check In</router-link>
+          <router-link class="nav-link theme-text-secondary" to="/teams">Team Information</router-link>
+          <router-link class="nav-link theme-text-secondary" to="/activities">Activities</router-link>
+          <router-link class="nav-link theme-text-secondary" to="/hardware">Hardware</router-link>
+          <router-link class="nav-link theme-text-secondary" to="categories">Hack Categories</router-link>
 
           <div class="theme-switch">
-            <input type="checkbox" id="toggle-desktop" v-model="isDark" @change="toggleTheme" />
+            <input type="checkbox" id="toggle-desktop" :checked="isLightTheme" @change="toggleTheme" />
             <label for="toggle-desktop" class="slider"></label>
           </div>
 
           <div class="dropdown user-dropdown">
-            <button class="dropdown-button" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
-            <ul class="dropdown-menu user-menu" v-if="menuDropdownVisible">
-              <li><router-link class="nav-link" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
-              <li><router-link class="nav-link" to="/enroll" @click="menuDropdownVisible = false">Event Registration</router-link></li>
-              <li><button class="nav-link" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
+            <button class="dropdown-button theme-text-secondary" @click="menuDropdownVisible = !menuDropdownVisible">Menu ▾</button>
+            <ul class="dropdown-menu user-menu theme-bg-surface" v-if="menuDropdownVisible">
+              <li><router-link class="nav-link theme-text-secondary" to="/profile" @click="menuDropdownVisible = false">Profile</router-link></li>
+              <li><router-link class="nav-link theme-text-secondary" to="/enroll" @click="menuDropdownVisible = false">Event Registration</router-link></li>
+              <li><button class="nav-link theme-text-secondary" @click="handleLogout(); menuDropdownVisible = false">Logout</button></li>
             </ul>
           </div>
         </div>
       </div>
       <div class="mobile-nav">
         <div class="theme-switch">
-          <input type="checkbox" id="toggle-mobile" v-model="isDark" @change="toggleTheme" />
+          <input type="checkbox" id="toggle-mobile" :checked="isLightTheme" @change="toggleTheme" />
           <label for="toggle-mobile" class="slider"></label>
         </div>
-        <button class="dropdown" id="hamburger" @click="handleMenu()">
+        <button class="dropdown theme-text-secondary" id="hamburger" @click="handleMenu()">
           ☰
         </button>
-        <div class="nav-down" v-if="isLoggedIn && isOpen">
-          <router-link class="nav-link" to="/" @click="isOpen = false">Home</router-link>
-          <router-link class="nav-link" to="/checkin" @click="isOpen = false">Check In</router-link>
-          <router-link class="nav-link" to="/teams" @click="isOpen = false">Team Information</router-link>
-          <router-link class="nav-link" to="/activities" @click="isOpen = false">Activities</router-link>
-          <router-link class="nav-link" to="/hardware" @click="isOpen = false">Hardware</router-link>
-          <router-link class="nav-link" to="categories" @click="isOpen = false">Hack Categories</router-link>
-          <router-link class="nav-link" to="/profile" @click="isOpen = false">Profile</router-link>
-          <router-link class="nav-link" to="/enroll" @click="isOpen = false">Event Registration</router-link>
-          <button class="nav-link" @click="handleLogout(); isOpen = false">Logout</button>
+        <div class="nav-down theme-bg-surface" v-if="isLoggedIn && isOpen">
+          <router-link class="nav-link theme-text-secondary" to="/" @click="isOpen = false">Home</router-link>
+          <router-link class="nav-link theme-text-secondary" to="/checkin" @click="isOpen = false">Check In</router-link>
+          <router-link class="nav-link theme-text-secondary" to="/teams" @click="isOpen = false">Team Information</router-link>
+          <router-link class="nav-link theme-text-secondary" to="/activities" @click="isOpen = false">Activities</router-link>
+          <router-link class="nav-link theme-text-secondary" to="/hardware" @click="isOpen = false">Hardware</router-link>
+          <router-link class="nav-link theme-text-secondary" to="categories" @click="isOpen = false">Hack Categories</router-link>
+          <router-link class="nav-link theme-text-secondary" to="/profile" @click="isOpen = false">Profile</router-link>
+          <router-link class="nav-link theme-text-secondary" to="/enroll" @click="isOpen = false">Event Registration</router-link>
+          <button class="nav-link theme-text-secondary" @click="handleLogout(); isOpen = false">Logout</button>
         </div>
       </div>
     </div>
@@ -80,6 +80,7 @@ import router from "@/router/index.js";
 import { mapGetters } from "vuex";
 import { computed } from "vue";
 import PasswordLink from "@/views/PasswordLinkPage.vue";
+import { mapActions } from "vuex/dist/vuex.cjs.js";
 import { toast } from "@/utils/toast.js";
 
 export default {
@@ -89,12 +90,11 @@ export default {
     return {
       menuDropdownVisible: false,
       // isLoggedIn: true,
-      isDark: true,
       isOpen: false,
     };
   },
   computed: {
-    ...mapGetters(['isLoggedIn', 'getIsEmailVerified']),
+    ...mapGetters(['isLoggedIn', 'getIsEmailVerified', 'isLightTheme']),
     isInTeam(){
       return !!this.$store.getters.getUserTeamId;
     }
@@ -109,9 +109,7 @@ export default {
     document.removeEventListener('click', this.closeMenusOutside);
   },
   methods: {
-    toggleTheme() {
-        document.body.classList.toggle('light');
-    },
+    ...mapActions(['toggleTheme']),
     closeMenusOutside(event){
       const dropdownElements = this.$el.querySelectorAll('.dropdown');
       let clickInsideDropdown = false;
@@ -217,14 +215,12 @@ export default {
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: white;
   list-style: none;
   padding: 10px;
   margin: 0;
   border-radius: 4px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 100;
-  color: black;
   font-weight: bold;
 }
 
@@ -233,7 +229,6 @@ export default {
 }
 
 .dropdown-menu {
-  color: black;
   font-weight: bold;
   text-decoration: none;
   display: inline-block;
@@ -270,11 +265,6 @@ input:checked + .slider::before {
   transform: translateX(26px);
 }
 
-/* Optional: change track color when checked */
-input:checked + .slider {
-  background-color: #008350; /* darker track */
-}
-
 .mobile-nav{
   display: none;
 }
@@ -305,7 +295,6 @@ input:checked + .slider {
     position: absolute;
     top: 100%;
     right: 0;
-    background-color: white;
     display: flex;
     flex-direction: column;
     padding: 15px;

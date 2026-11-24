@@ -4,7 +4,7 @@
   <div class="container-top">
 
     <!-- Header -->
-    <header class="main-header">
+    <header class="main-header theme-text-primary">
       <div class="text-center py-4">
         <h1 class="mb-2">Hacks Categories</h1>
         <hr class="header-line" />
@@ -16,7 +16,7 @@
     <div class="container-fluid">
 
         <!-- Centered dropdown -->
-        <div class="dropdown-row">
+        <div class="dropdown-row theme-text-primary">
           <div class="event-dropdown">
             <label for="event-select-label">Select Event:</label>
             <select id="event-select" v-model="selectedEventId" @change="fetchCategories">
@@ -62,10 +62,10 @@
         </ul> <!-- end categories list -->
 
         <!-- No events or categories message -->
-        <div v-if="!events.length" class="no-events-message">
+        <div v-if="!events.length" class="no-events-message theme-text-primary">
           No events found.
         </div>
-        <div v-if="!categories.length && selectedEventId" class="no-categories-message">
+        <div v-if="!categories.length && selectedEventId" class="no-categories-message theme-text-primary">
           No categories found for this event.
         </div>
 

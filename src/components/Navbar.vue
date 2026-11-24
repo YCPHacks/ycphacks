@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar">
+  <nav class="navbar theme-bg-secondary">
     <a
       id="mlh-trust-badge"
       style="display:block;max-width:100px;min-width:60px;position:fixed;left:0px;top:0;width:10%;z-index:10000"
@@ -19,26 +19,38 @@
         href="/"
     >
       <img
-           src="../assets/fountain_black.png"
-           alt="YCP Hacks Fountain Logo"
-           style="width:100%"
+        v-if="!isLightTheme"
+        src="../assets/fountain_black.png"
+        alt="YCP Hacks Fountain Logo"
+        style="width:100%"
+      />
+      <img
+        v-else
+        src="../assets/fountain_white.png"
+        alt="YCP Hacks Fountain Logo"
+        style="width:100%"
       />
     </a>
 
     <div class="nav">
-      <router-link to="/register" class="nav-link">Register</router-link>
-      <router-link to="/login" class="nav-link">Login</router-link>
+      <router-link to="/register" class="nav-link theme-class-secondary">Register</router-link>
+      <router-link to="/login" class="nav-link theme-class-secondary">Login</router-link>
     </div>
   </nav>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Navbar",
   data() {
     return {
       dropdownVisible: false,
     };
+  },
+  computed: {
+    ...mapGetters(["isLightTheme"]),
   },
   methods: {
     toggleDropdown() {
@@ -56,7 +68,6 @@ export default {
   z-index: 9999;
   width: 100%;
   height: 60px;
-  background-color: #008350;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -64,7 +75,6 @@ export default {
 }
 
 .navbar a {
-  color: white;
   text-decoration: none;
   font-weight: bold;
 }
@@ -76,7 +86,6 @@ export default {
 .dropdown-button {
   background: none;
   border: none;
-  color: white;
   font-size: 16px;
   cursor: pointer;
 }
@@ -98,7 +107,6 @@ export default {
 }
 
 .dropdown-menu .nav-link {
-  color: white;
   text-decoration: none;
   font-weight: bold;
 }
@@ -113,7 +121,6 @@ export default {
 }
 
 .nav-link {
-  color: white;
   text-decoration: none;
 }
 
