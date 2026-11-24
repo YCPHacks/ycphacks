@@ -59,6 +59,10 @@ export default createStore({
     activities: [],
     event: {},
     team: {
+      teamingRequests: {
+        incoming: [],
+        outgoing: []
+      },
       teamLeader: null,
       members: [],
       projectDetails: {}
@@ -77,6 +81,8 @@ export default createStore({
     getTeamId: (state) => state.participant?.teamId,
     getTeamMembers: (state) => state.team.members,
     getTeamProjectDetails: (state) => state.team.projectDetails,
+    getIncomingTeamRequests: (state) => state.team.teamingRequests.incoming,
+    getOutgoingTeamRequests: (state) => state.team.teamingRequests.outgoing,
     getEnrollment: (state) => state.enrollment,
     isEnrolled: (state) => !!state.enrollment?.isEnrolled,
     isEmailVerified: (state) => true//!!state.user.isEmailVerified
@@ -122,6 +128,31 @@ export default createStore({
     },
     setTeamProjectDetails(state, projectDetails) {
       state.team.projectDetails = projectDetails;
+    },
+    addIncomingTeamingRequest(state, teamingRequest) {
+      state.team.teamingRequests.incoming.push(teamingRequest);
+    },
+    setIncomingTeamingRequests(state, teamingRequests) {
+      state.team.teamingRequests.incoming = teamingRequests;
+    },
+    removeIncomingTeamingRequest(state, {teamId, participantId}) {
+      state.team.teamingRequests.incoming = state.team.teamingRequests.incoming.filter((request) =>
+          !(request.participantId === participantId && request.team.teamId === teamId)
+      );
+    },
+    addOutgoingTeamingRequest(state, teamingRequest) {
+      state.team.teamingRequests.outgoing.push(teamingRequest);
+    },
+    removeOutgoingTeamingRequest(state, {teamId, participantId}) {
+        state.team.teamingRequests.outgoing = state.team.teamingRequests.outgoing.filter((request) =>
+            !(request.participant.id === participantId && request.teamId === teamId)
+        );
+    },
+    setOutgoingTeamingRequests(state, teamingRequests) {
+        state.team.teamingRequests.outgoing = teamingRequests;
+    },
+    clearOutgoingTeamingRequest(state) {
+      state.team.teamingRequests.outgoing = [];
     },
     setEnrollment(state, enrollment) {
       state.enrollment = enrollment;
@@ -416,12 +447,8 @@ export default createStore({
       }
       catch (err) {
           if (!err.response)
-              return {success: false, message: "No response received."}
-
-          if (err.response.status === 400 || err.response.status === 404 || err.response.status === 500)
-              return {success: false, message: err.response.message}
-
-          return {success: false, message: "frontend error"};
+              return {success: false, message: "No response received or frontend error."}
+          return {success: false, message: err.response.message}
       }
     },
 
@@ -440,6 +467,152 @@ export default createStore({
         return { success: false, message: err.response?.data?.message || 'Failed to fetch enrollment status' };
       }
     },
+
+    async fetchIncomingTeamingRequests({commit, state, getters}) {
+        const participantId = getters.getParticipant?.id;
+
+        if (!participantId)
+            return {success: false, message: "User is not registered as a participant."}
+
+        try {
+            const response = await axios.get(`${state.apiBaseUrl}/participant/${participantId}/incomingTeamingRequests`)
+
+            const data = response.data;
+            commit('setIncomingTeamingRequests', data.teamingRequests);
+
+            return {success: true, message: message};
+        } catch (err) {
+            if (!err.response)
+                return {success: false, message: "Frontend error."}
+
+            if (err.response.status === 400 || err.response.status === 404 || err.response.status === 500)
+                return {success: false, message: err.response.message}
+
+            return {success: false, message: ""};
+        }
+    },
+
+    async acceptTeamingRequest({commit, state, getters}, acceptingTeamId)  {
+
+        if (!acceptingTeamId)
+            return;
+
+        const participantId = getters.getParticipant.id;
+        if (!participantId)
+            return;
+
+        try {
+            const response = await axios.post(
+              `${state.apiBaseUrl}/participant/${participantId}/acceptTeamingRequest`, {
+                    teamId: acceptingTeamId
+                }
+            );
+
+            commit('removeIncomingTeamingRequest', {
+                teamId: acceptingTeamId,
+                participantId: participantId
+            });
+
+            const message = response.data.message;
+            console.log("Response message: " + message);
+
+            return { success: true, message: message || "Accepted teaming request successfully!" };
+
+        } catch (err) {
+            console.log("Error: " + err);
+            return { success: false, error: err.response?.data?.error || "Failed to accept teaming request." };
+        }
+    },
+
+    async declineTeamingRequest({commit, state, getters}, decliningTeamId)  {
+
+        if (!decliningTeamId)
+            return;
+
+        const participantId = getters.getParticipant.id;
+        if (!participantId)
+            return;
+
+        try {
+            const response = await axios.post(
+                `${state.apiBaseUrl}/participant/${participantId}/declineTeamingRequest`, {
+                    teamId: decliningTeamId
+                }
+            );
+
+            commit('removeIncomingTeamingRequest', {
+                teamId: decliningTeamId,
+                participantId: participantId
+            });
+
+            const message = response.data.message;
+            console.log("Response message: " + message);
+
+            return { success: true, message: message || "Project details updated successfully!" };
+
+        } catch (err) {
+            console.log("Error: " + err);
+            return { success: false, error: err.response?.data?.error || "Failed to save project details. Check your links and try again." };
+        }
+    },
+
+    async fetchOutgoingTeamingRequests({commit, state, getters}) {
+        const teamId = getters.getTeamId;
+
+        if (!teamId)
+            return {success: false, message: "Participant is not a member of team"}
+
+        try {
+            const response = await axios.get(`${state.apiBaseUrl}/teams/${teamId}/outgoingTeamingRequests`)
+
+            const data = response.data;
+            console.log(data);
+            commit('setOutgoingTeamingRequests', data.teamingRequests);
+
+        } catch (err) {
+            console.log(err);
+            if (!err.response)
+                return {success: false, message: "Frontend error."}
+
+            if (err.response.status === 400 || err.response.status === 404 || err.response.status === 500)
+                return {success: false, message: err.response.message}
+
+            return {success: false, message: ""};
+        }
+    },
+
+      async rescindTeamingRequest({commit, state, getters}, rescindingParticipantId)  {
+
+        if (!rescindingParticipantId)
+            return;
+
+        const teamId = getters.getTeamId;
+        if (!teamId)
+            return;
+
+        try {
+            const response = await axios.post(
+                    `${state.apiBaseUrl}/teams/${teamId}/rescindTeamingRequest`, {
+                    participantId: rescindingParticipantId
+                }
+            );
+
+            commit('removeOutgoingTeamingRequest', {
+                teamId: teamId,
+                participantId: rescindingParticipantId
+            });
+
+            const message = response.data.message;
+            console.log("Response message: " + message);
+
+            return { success: true, message: message || "Project details updated successfully!" };
+
+        } catch (err) {
+            console.log("Error: " + err);
+            return { success: false, error: err.response?.data?.error || "Failed to save project details. Check your links and try again." };
+        }
+    },
+
 
     async updateTeamProjectDetails({commit, state, getters}, { projectDetails })  {
 
@@ -478,7 +651,10 @@ export default createStore({
                 { newTeamLeaderId: newTeamLeaderId }
             );
 
+            if (getters.getParticipant.id === getters.getTeamLeader)
+                commit('clearOutgoingTeamingRequest');
             commit('setTeamLeader', newTeamLeaderId);
+
             return { success: true, message: 'Updated team leader successfully' };
 
         } catch (err) {

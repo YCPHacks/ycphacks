@@ -132,9 +132,16 @@ const pastSubmissionTime = computed(() => {
   return now >= endDate;
 });
 
-const projectDetailFields = reactive(async () => {
-      return {...projectDetails};
-});
+const projectDetailFields = reactive({});
+
+watch(
+    projectDetails,
+    (newVals) => {
+      Object.assign(projectDetailFields, newVals)
+    },
+    { deep: true, immediate: true }
+)
+
 
 onMounted(async () => {
     isLoading.value = true;
@@ -144,13 +151,6 @@ onMounted(async () => {
     isLoading.value = false;
 });
 
-watch(
-    () => store.state.team.projectDetails,
-    (newVals) => {
-      Object.assign(projectDetailFields, newVals)
-    },
-    { deep: true, immediate: true }
-)
 
 /**
  * Submits the updated project details using direct Axios call.

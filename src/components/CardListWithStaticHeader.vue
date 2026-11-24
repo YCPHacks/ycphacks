@@ -4,6 +4,10 @@
     <h4 class="title ps-1">
       {{title}}
     </h4>
+    <slot
+        name="beforeElements"
+        class="px-1"
+    />
     <div
         class="card element my-1 px-1"
         v-for="(elem, index) in elements"
@@ -26,7 +30,7 @@ defineProps({
   },
   elements: {
     type: Array,
-    default: () => []
+    default: () => ['None']
   },
   elementClass: {
     type: Function,

@@ -14,11 +14,110 @@
     <div class="row flex col-12">
       <div class="col flex-column col-12 col-sm-4">
         <CardListWithStaticHeader
+            v-if="!isParticipantTeamLeader"
+
             class="mt-5"
-            title="Team Requests"
-            :elements="requests">
-          <template #elements="{ elem, index }">
-            {{ elem }}
+            title="Incoming Team Requests"
+            :elements="incomingRequests">
+          <template #elements="{ elem: request, index }">
+            <div class="row">
+              <div class="col">
+                {{ request?.team?.teamName }}
+              </div>
+
+              <div class="col-auto">
+                <div
+                    role="button"
+                    @click="toggleIncomingTeamingRequestDropdown(index)"
+                >
+                  <i v-if="incomingTeamingRequestDropdownIsOpen(index)" class="bi bi-chevron-down icon-bold cursor-pointer"></i>
+                  <i v-else class="bi bi-chevron-left icon-bold cursor-pointer"></i>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="incomingTeamingRequestDropdownIsOpen(index)">
+              <div class="row">
+                <div class="col my-1 d-flex align-items-center justify-content-center">
+                  <button
+                      class="card px-3"
+                      @click="acceptTeamingRequest(index)"
+                  >
+                    Accept
+                  </button>
+                </div>
+                <div class="col my-1 d-flex align-items-center justify-content-center">
+                  <button
+                      class="card px-3"
+                      @click="declineTeamingRequest(index)"
+                  >
+                    Decline
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </template>
+        </CardListWithStaticHeader>
+
+        <CardListWithStaticHeader
+            v-else
+
+            class="mt-5"
+            title="Outgoing Team Requests"
+            :elements="outgoingRequests">
+<!--          <template #beforeElements>-->
+<!--            <select-->
+<!--                v-model="searchedParticipants"-->
+<!--                multiple-->
+<!--                class="form-control"-->
+<!--                required-->
+<!--                :size="Math.min(5, filteredParticipantsByName.length + 1)"-->
+<!--            >-->
+<!--              <option-->
+<!--                  v-for="p in filteredParticipantsByName"-->
+<!--                  :key="p.id" :value="p.id" >-->
+<!--                {{ formatParticipants(p) }}-->
+<!--              </option>-->
+<!--            </select>-->
+<!--          </template>-->
+          <template #elements="{ elem: request, index }">
+            <div class="row">
+              <div class="col">
+                {{ `${request?.participant?.firstName} ${request?.participant?.lastName}` }}
+              </div>
+
+              <div class="col-auto">
+                <div
+                    role="button"
+                    @click="toggleOutgoingTeamingRequestDropdown(index)"
+                >
+                  <i v-if="outgoingTeamingRequestDropdownIsOpen(index)" class="bi bi-chevron-down icon-bold cursor-pointer"></i>
+                  <i v-else class="bi bi-chevron-left icon-bold cursor-pointer"></i>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="outgoingTeamingRequestDropdownIsOpen(index)">
+              <div class="row">
+                <div class="col my-1 d-flex align-items-center justify-content-center">
+                  <button
+                      class="card px-3"
+                      @click="rescindTeamingRequest(index)"
+                  >
+                    Rescind Request
+                  </button>
+                </div>
+                <div class="col my-1 d-flex align-items-center justify-content-center">
+                  <button
+                      class="card px-3"
+                      @click="rescindTeamingRequest(index)"
+                  >
+                    Rescind Request
+                  </button>
+                </div>
+              </div>
+            </div>
           </template>
         </CardListWithStaticHeader>
 
@@ -47,19 +146,19 @@
                   >
                     <div
                         role="button"
-                        @click="toggleDropdown(index)"
+                        @click="toggleMemberDropdown(index)"
                     >
-                      <i v-if="dropdownIsOpen(index)" class="bi bi-chevron-down icon-bold cursor-pointer"></i>
+                      <i v-if="memberDropdownIsOpen(index)" class="bi bi-chevron-down icon-bold cursor-pointer"></i>
                       <i v-else class="bi bi-chevron-left icon-bold cursor-pointer"></i>
                     </div>
                   </div>
                 </div>
 
-                <div v-if="dropdownIsOpen(index)">
+                <div v-if="memberDropdownIsOpen(index)">
                   <div class="row">
                     <div class="col my-1 d-flex align-items-center justify-content-center">
                       <button
-                          class="red card px-3"
+                          class="card px-3"
                           @click="isParticipantTeamLeader? removeTeamMember(index) : leaveTeam(index)"
                       >
                         {{isParticipantTeamLeader? 'Remove Team Member' : 'Leave Team'}}
@@ -69,7 +168,7 @@
                         class="col my-1 d-flex align-items-center justify-content-center"
                         v-if="isParticipantTeamLeader"
                     >
-                      <button class="red card px-3" @click="makeTeamLeader(index)">Make Team Leader</button>
+                      <button class="card px-3" @click="makeTeamLeader(index)">Make Team Leader</button>
                     </div>
                   </div>
                 </div>
@@ -98,16 +197,27 @@ const store = useStore();
 
 
 const openMemberDropdown = ref(null);
-
+const openIncomingTeamingRequestDropdown = ref(null);
+const openOutgoingTeamingRequestDropdown = ref(null);
 
 const projectDetails = computed(() => store.getters.getTeamProjectDetails);
 const participantId = computed(() => store.getters.getParticipant.id);
 const teamLeaderId = computed(() => store.getters.getTeamLeader);
 const members = computed(() => store.getters.getTeamMembers);
-const requests = ref(['None']);
+const incomingRequests = computed(() => store.getters.getIncomingTeamRequests);
+const outgoingRequests = computed(() => store.getters.getOutgoingTeamRequests);
+// const availableParticipants = computed(() => []);
 
 
-const isParticipantTeamLeader = computed((index) =>
+// const filteredParticipantsByName = computed(() => {
+//   const q = query.value.trim().toLowerCase()
+//   if (!q) return props.participants
+//   return props.participants.filter(p =>
+//       String(p.name ?? '').toLowerCase().includes(q)
+//   )
+// })
+
+const isParticipantTeamLeader = computed(() =>
     participantId.value === teamLeaderId.value
 );
 
@@ -123,25 +233,128 @@ const giveMemberTeamLeaderClass = (elem, _) => ({
   'functorial-prop': elem?.id === teamLeaderId.value
 });
 
-const dropdownIsOpen = (index) => (
+
+const memberDropdownIsOpen = (index) => (
   openMemberDropdown.value === index
 );
 
-const toggleDropdown = (index) => {
-  if (dropdownIsOpen(index))
+const toggleMemberDropdown = (index) => {
+  if (memberDropdownIsOpen(index))
     openMemberDropdown.value = null;
   else
     openMemberDropdown.value = index;
 };
 
 
+const incomingTeamingRequestDropdownIsOpen = (index) => (
+    openIncomingTeamingRequestDropdown.value === index
+);
+
+const toggleIncomingTeamingRequestDropdown = (index) => {
+  if (incomingTeamingRequestDropdownIsOpen(index))
+    openIncomingTeamingRequestDropdown.value = null;
+  else
+    openIncomingTeamingRequestDropdown.value = index;
+};
+
+
+const outgoingTeamingRequestDropdownIsOpen = (index) => (
+    openOutgoingTeamingRequestDropdown.value === index
+);
+
+const toggleOutgoingTeamingRequestDropdown = (index) => {
+  if (outgoingTeamingRequestDropdownIsOpen(index))
+    openOutgoingTeamingRequestDropdown.value = null;
+  else
+    openOutgoingTeamingRequestDropdown.value = index;
+};
+
+
 onMounted(async () => {
+  await initializePageData();
+});
+
+
+const initializePageData = async () => {
   await store.dispatch("getActiveEvent");
   await store.dispatch('fetchActiveParticipant');
+
+  await initializeTeamData();
+};
+
+const initializeTeamData = async () => {
+  console.log("initializing team data...");
   await store.dispatch('fetchTeamProjectDetails');
-  await store.dispatch('fetchTeamLeader');
   await store.dispatch('fetchTeamMembers');
-});
+  await store.dispatch('fetchTeamLeader');
+
+  await store.dispatch('fetchIncomingTeamingRequests');
+  if (isParticipantTeamLeader.value)
+    await store.dispatch('fetchOutgoingTeamingRequests');
+}
+
+
+const acceptTeamingRequest = async (acceptingTeamIndex) => {
+
+  const acceptingTeamId = incomingRequests.value[acceptingTeamIndex].team?.teamId;
+  if (!acceptingTeamId)
+    return;
+
+  if (!isParticipantTeamLeader)
+    return;
+
+  const response = await store.dispatch("acceptTeamingRequest", acceptingTeamId);
+  if (response.success)
+    await initializeTeamData();
+  else
+    console.log("failure");
+
+  toggleIncomingTeamingRequestDropdown(acceptingTeamIndex);
+};
+
+const declineTeamingRequest = async (decliningTeamIndex) => {
+
+  const decliningTeamId = incomingRequests.value[decliningTeamIndex].team?.teamId;
+  if (!decliningTeamId)
+    return;
+
+  const response = await store.dispatch("declineTeamingRequest", decliningTeamId);
+
+  toggleIncomingTeamingRequestDropdown(decliningTeamIndex);
+};
+
+
+const sendTeamingRequest = async (acceptingTeamIndex) => {
+
+  const acceptingTeamId = incomingRequests.value[acceptingTeamIndex].team?.teamId;
+  if (!acceptingTeamId)
+    return;
+
+  if (!isParticipantTeamLeader)
+    return;
+
+  const response = await store.dispatch("acceptTeamingRequest", acceptingTeamId);
+  if (response.success)
+    await initializeTeamData();
+  else
+    console.log("failure");
+
+  toggleIncomingTeamingRequestDropdown(acceptingTeamIndex);
+};
+
+const rescindTeamingRequest = async (decliningParticipantIndex) => {
+
+  const rescindingParticipantId = outgoingRequests.value[decliningParticipantIndex].participant.id;
+  if (!rescindingParticipantId)
+    return;
+
+  if (!isParticipantTeamLeader.value)
+    return;
+
+  const response = await store.dispatch("rescindTeamingRequest", rescindingParticipantId);
+
+  toggleIncomingTeamingRequestDropdown(decliningParticipantIndex);
+};
 
 
 const removeTeamMember = async (teamMemberIndex) => {
@@ -160,7 +373,7 @@ const removeTeamMember = async (teamMemberIndex) => {
     return;
 
   const response = await store.dispatch("removeTeamMember", removingTeamMemberId);
-  toggleDropdown(teamMemberIndex);
+  toggleMemberDropdown(teamMemberIndex);
 };
 
 const leaveTeam = async (participantTeamMemberIndex) => {
@@ -175,7 +388,7 @@ const leaveTeam = async (participantTeamMemberIndex) => {
     return;
 
   const response = await store.dispatch("removeTeamMember", participantId.value);
-  toggleDropdown(participantTeamMemberIndex);
+  toggleMemberDropdown(participantTeamMemberIndex);
 };
 
 const makeTeamLeader = async (teamMemberIndex) => {
@@ -191,8 +404,11 @@ const makeTeamLeader = async (teamMemberIndex) => {
     return;
 
   const response = await store.dispatch("updateTeamLeader", newTeamLeaderId);
-  toggleDropdown(teamMemberIndex);
+  toggleMemberDropdown(teamMemberIndex);
 };
+
+
+
 
 
 </script>
