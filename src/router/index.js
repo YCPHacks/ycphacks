@@ -104,6 +104,7 @@ router.beforeEach(async (to, from, next) => {
     let isAuthenticated = !!store.state.user;
 
     if (!isAuthenticated) {
+        console.log('I am not authenticated!!!');
         const result = await store.dispatch('validateWithToken');
         isAuthenticated = result.success;
     }

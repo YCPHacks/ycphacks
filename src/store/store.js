@@ -5,13 +5,12 @@ import toasts from './toasts.js';
 
 // Optional: a small adapter for user objects
 class UserAdapter {
-  constructor({ id, email, firstName, lastName, token, role, isEmailVerified, notificationPreference_toast }) {
+  constructor({ id, email, firstName, lastName, token, isEmailVerified, notificationPreference_toast }) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
     this.token = token;
-    this.role = role;
     this.isEmailVerified = true//isEmailVerified;
     this.notificationPreference_toast = notificationPreference_toast ?? true;
   }
@@ -174,10 +173,11 @@ export default createStore({
       }
       return response.ok;
     },
-    async loginUser({ commit, state, dispatch }, { email, password }) {
+    async loginUser({ commit, state, dispatch }, { email, password, eventId }) {
       try {
-        const response = await axios.post(`${state.apiBaseUrl}/user/login`, { email, password });
+        const response = await axios.post(`${state.apiBaseUrl}/user/login`, { email, password, eventId });
         const data = response.data;
+          console.log(data);
         commit('setUser', new UserAdapter(data.data));
         document.cookie = `token=${data.data.token}; path=/;`;
 
@@ -458,6 +458,10 @@ export default createStore({
       try {
         const response = await axios.post(`${state.apiBaseUrl}/user/${getters.getUser.id}/enrollment`);
         commit('setEnrollment', response.data.data);
+
+        const { userResponseDto, ...enrollment} = response.data.data;
+        commit('setUser', new  UserAdapter(userResponseDto));
+        document.cookie = `token=${userResponseDto.token}; path=/;`;
         return { success: true, message: response.data.message };
       } catch (err) {
         return { success: false, message: err.response?.data?.message || 'Failed to register for event' };
@@ -474,6 +478,13 @@ export default createStore({
           console.error("Cannot fetch staff: Missing event ID.");
           return [];
       }
+
+            try {
+                const response = await axios.get(`${state.apiBaseUrl}/user/all/participant?eventId=${eventId}`);
+                const permissions = response.data.data;
+            } catch (error) {
+                console.error("Error fetching permissions:", error);
+            }
       
       // Use the base URL and append the specific route: /user/event/:eventId/staff
       const url = `${state.apiBaseUrl}/user/event/${eventId}/staff`;
