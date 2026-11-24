@@ -58,11 +58,14 @@ export default {
     async handleSubmit() {
       this.isLoading = true;
 
+      console.log(this.$store.state.event.id);
+
       try {
         // Attempt login with entered credentials
         const result = await this.$store.dispatch('loginUser', {
           email: this.username,
           password: this.password,
+          eventId: this.$store.state.event.id
         });
 
         if (result.success) {
